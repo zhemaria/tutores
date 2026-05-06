@@ -29,7 +29,6 @@
             --gray-700: #4A5568;
             --gray-900: #2D3748;
             --success: #48BB78;
-            --user-bubble: #4A6FA5;
             --bot-bubble: #FFFFFF;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
             --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
@@ -420,7 +419,7 @@
         }
 
         .message.user .msg-bubble {
-            background: var(--user-bubble);
+            background: var(--primary);
             color: var(--white);
             border-top-right-radius: 4px;
         }
@@ -453,6 +452,11 @@
             border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
             margin: 10px 0;
             font-size: 0.88rem;
+        }
+
+        .message.user .msg-bubble .example-box {
+            background: rgba(255,255,255,0.15);
+            color: var(--white);
         }
 
         .msg-time {
@@ -585,7 +589,7 @@
             flex-shrink: 0;
         }
 
-        .send-btn:hover {
+        .send-btn:hover:not(:disabled) {
             background: var(--primary-dark);
             transform: scale(1.05);
         }
@@ -752,27 +756,6 @@
             from { opacity: 0; }
             to { opacity: 1; }
         }
-
-        .divider-msg {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 0.75rem;
-            color: var(--gray-500);
-            position: relative;
-        }
-
-        .divider-msg::before,
-        .divider-msg::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            width: calc(50% - 60px);
-            height: 1px;
-            background: var(--gray-200);
-        }
-
-        .divider-msg::before { left: 0; }
-        .divider-msg::after { right: 0; }
     </style>
 </head>
 <body>
@@ -785,34 +768,34 @@
         <p>Tu tutor personal amigable</p>
     </div>
     <div class="sidebar-modules">
-        <div class="module-section-title">Módulos de Estudio</div>
+        <div class="module-section-title">Módulos de estudio</div>
 
-        <button class="module-btn" onclick="selectModule('math')">
-            <div class="module-icon icon-math">🔢</div>
+        <button class="module-btn" data-module="math" aria-label="Módulo de Matemáticas">
+            <div class="module-icon icon-math" aria-hidden="true">🔢</div>
             <div class="module-label">
                 <span>Matemáticas</span>
                 <span>Álgebra, fracciones, geometría</span>
             </div>
         </button>
 
-        <button class="module-btn" onclick="selectModule('rla')">
-            <div class="module-icon icon-rla">📖</div>
+        <button class="module-btn" data-module="rla" aria-label="Módulo de Artes del Lenguaje">
+            <div class="module-icon icon-rla" aria-hidden="true">📖</div>
             <div class="module-label">
                 <span>Artes del Lenguaje</span>
                 <span>Lectura, gramática, ensayo</span>
             </div>
         </button>
 
-        <button class="module-btn" onclick="selectModule('social')">
-            <div class="module-icon icon-social">🏛️</div>
+        <button class="module-btn" data-module="social" aria-label="Módulo de Estudios Sociales">
+            <div class="module-icon icon-social" aria-hidden="true">🏛️</div>
             <div class="module-label">
                 <span>Estudios Sociales</span>
                 <span>Cívica, historia, economía</span>
             </div>
         </button>
 
-        <button class="module-btn" onclick="selectModule('science')">
-            <div class="module-icon icon-science">🔬</div>
+        <button class="module-btn" data-module="science" aria-label="Módulo de Ciencias">
+            <div class="module-icon icon-science" aria-hidden="true">🔬</div>
             <div class="module-label">
                 <span>Ciencias</span>
                 <span>Biología, física, ciencias de la Tierra</span>
@@ -821,16 +804,16 @@
 
         <div class="module-section-title">Recursos</div>
 
-        <button class="module-btn" onclick="showTips()">
-            <div class="module-icon icon-tips">💡</div>
+        <button class="module-btn" id="tipsModuleBtn" aria-label="Ver consejos de estudio">
+            <div class="module-icon icon-tips" aria-hidden="true">💡</div>
             <div class="module-label">
-                <span>Consejos de Estudio</span>
+                <span>Consejos de estudio</span>
                 <span>Tips para tener éxito</span>
             </div>
         </button>
     </div>
     <div class="sidebar-footer">
-        <div class="profe-avatar-small">👨‍🏫</div>
+        <div class="profe-avatar-small" aria-hidden="true">👨‍🏫</div>
         <div class="sidebar-footer-text">
             <strong>Profe GED</strong> en línea<br>
             Listo para ayudarte
@@ -841,60 +824,60 @@
 <main class="chat-main">
     <div class="chat-header">
         <div class="chat-header-left">
-            <button class="menu-toggle" id="menuToggle" onclick="toggleSidebar()">☰</button>
-            <div class="profe-avatar">👨‍🏫</div>
+            <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú lateral">☰</button>
+            <div class="profe-avatar" aria-hidden="true">👨‍🏫</div>
             <div class="chat-header-info">
                 <h2>Profe GED Amigable</h2>
                 <span>En línea</span>
             </div>
         </div>
         <div class="chat-header-actions">
-            <button class="header-btn" onclick="showTips()" title="Consejos">💡</button>
-            <button class="header-btn" onclick="clearChat()" title="Nuevo chat">🔄</button>
+            <button class="header-btn" id="headerTipsBtn" title="Consejos" aria-label="Ver consejos de estudio">💡</button>
+            <button class="header-btn" id="headerClearBtn" title="Nuevo chat" aria-label="Iniciar nuevo chat">🔄</button>
         </div>
     </div>
 
     <div class="messages-container" id="messagesContainer">
         <div class="welcome-screen" id="welcomeScreen">
-            <div class="welcome-avatar">👨‍🏫</div>
+            <div class="welcome-avatar" aria-hidden="true">👨‍🏫</div>
             <h2>¡Bienvenido! Soy tu Profe GED</h2>
             <p>Estoy aquí para ayudarte a obtener tu diploma de secundaria. No hay preguntas tontas, ¡pregúntame lo que quieras!</p>
-            <div class="quick-topics">
-                <button class="quick-topic-btn" onclick="askQuestion('¿Cómo saco un porcentaje?')">
-                    <span class="qt-icon">📊</span>
+            <div class="quick-topics" id="quickTopics">
+                <button class="quick-topic-btn" data-question="¿Cómo saco un porcentaje?">
+                    <span class="qt-icon" aria-hidden="true">📊</span>
                     <span class="qt-title">Calcular porcentajes</span>
                     <span class="qt-desc">Descuentos, propinas y más</span>
                 </button>
-                <button class="quick-topic-btn" onclick="askQuestion('¿Qué es una variable en álgebra?')">
-                    <span class="qt-icon">✖️</span>
+                <button class="quick-topic-btn" data-question="¿Qué es una variable en álgebra?">
+                    <span class="qt-icon" aria-hidden="true">✖️</span>
                     <span class="qt-title">Variables en álgebra</span>
-                    <span class="qt-desc">Entender la famosa "x"</span>
+                    <span class="qt-desc">Entender la famosa &quot;x&quot;</span>
                 </button>
-                <button class="quick-topic-btn" onclick="askQuestion('¿Qué es la idea principal?')">
-                    <span class="qt-icon">📝</span>
+                <button class="quick-topic-btn" data-question="¿Qué es la idea principal?">
+                    <span class="qt-icon" aria-hidden="true">📝</span>
                     <span class="qt-title">Idea principal</span>
                     <span class="qt-desc">Clave para el ensayo</span>
                 </button>
-                <button class="quick-topic-btn" onclick="askQuestion('¿Qué es la separación de poderes?')">
-                    <span class="qt-icon">⚖️</span>
+                <button class="quick-topic-btn" data-question="¿Qué es la separación de poderes?">
+                    <span class="qt-icon" aria-hidden="true">⚖️</span>
                     <span class="qt-title">Separación de poderes</span>
                     <span class="qt-desc">Gobierno de EE.UU.</span>
                 </button>
-                <button class="quick-topic-btn" onclick="askQuestion('¿Qué es la fotosíntesis?')">
-                    <span class="qt-icon">🌱</span>
+                <button class="quick-topic-btn" data-question="¿Qué es la fotosíntesis?">
+                    <span class="qt-icon" aria-hidden="true">🌱</span>
                     <span class="qt-title">Fotosíntesis</span>
                     <span class="qt-desc">Cómo se alimentan las plantas</span>
                 </button>
-                <button class="quick-topic-btn" onclick="askQuestion('¿Cómo escribo un buen ensayo para el GED?')">
-                    <span class="qt-icon">✍️</span>
+                <button class="quick-topic-btn" data-question="¿Cómo escribo un buen ensayo para el GED?">
+                    <span class="qt-icon" aria-hidden="true">✍️</span>
                     <span class="qt-title">Escribir un ensayo</span>
                     <span class="qt-desc">Pasos para el RLA</span>
                 </button>
             </div>
         </div>
 
-        <div class="typing-indicator" id="typingIndicator">
-            <div class="msg-avatar" style="background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);">👨‍🏫</div>
+        <div class="typing-indicator" id="typingIndicator" aria-live="polite">
+            <div class="msg-avatar" style="background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);" aria-hidden="true">👨‍🏫</div>
             <div class="typing-bubble">
                 <div class="typing-dot"></div>
                 <div class="typing-dot"></div>
@@ -905,68 +888,74 @@
 
     <div class="input-area">
         <div class="suggestions-row" id="suggestionsRow">
-            <button class="suggestion-chip" onclick="askQuestion('¿Qué es una fracción?')">Fracciones</button>
-            <button class="suggestion-chip" onclick="askQuestion('¿Cómo encuentro el área de un triángulo?')">Área del triángulo</button>
-            <button class="suggestion-chip" onclick="askQuestion('¿Qué es un sustantivo?')">Sustantivos</button>
-            <button class="suggestion-chip" onclick="askQuestion('¿Qué es la Constitución?')">Constitución</button>
-            <button class="suggestion-chip" onclick="askQuestion('¿Qué es la gravedad?')">Gravedad</button>
+            <button class="suggestion-chip" data-question="¿Qué es una fracción?">Fracciones</button>
+            <button class="suggestion-chip" data-question="¿Cómo encuentro el área de un triángulo?">Área del triángulo</button>
+            <button class="suggestion-chip" data-question="¿Cómo resuelvo una ecuación?">Ecuaciones</button>
+            <button class="suggestion-chip" data-question="¿Qué es un sustantivo?">Sustantivos</button>
+            <button class="suggestion-chip" data-question="¿Qué es la Constitución?">Constitución</button>
+            <button class="suggestion-chip" data-question="¿Qué es la gravedad?">Gravedad</button>
+            <button class="suggestion-chip" data-question="¿Qué es la célula?">Célula</button>
         </div>
         <div class="input-row">
             <div class="input-wrapper">
-                <textarea class="msg-input" id="msgInput" placeholder="Escribe tu pregunta aquí..." rows="1" onkeydown="handleKeyDown(event)"></textarea>
+                <textarea class="msg-input" id="msgInput" placeholder="Escribe tu pregunta aquí..." rows="1" aria-label="Escribe tu pregunta"></textarea>
             </div>
-            <button class="send-btn" id="sendBtn" onclick="sendMessage()">➤</button>
+            <button class="send-btn" id="sendBtn" aria-label="Enviar mensaje">➤</button>
         </div>
     </div>
 </main>
 
-<div class="tips-overlay" id="tipsOverlay" onclick="closeTips(event)">
-    <div class="tips-modal" onclick="event.stopPropagation()">
-        <h3>💡 Consejos para Estudiar</h3>
+<div class="tips-overlay" id="tipsOverlay" role="dialog" aria-modal="true" aria-labelledby="tipsTitle">
+    <div class="tips-modal">
+        <h3 id="tipsTitle">💡 Consejos para estudiar</h3>
         <ul>
-            <li><span>🧠</span><div><strong>Cero miedo:</strong> No hay preguntas tontas. Cada duda que resuelves es un paso más cerca de tu diploma.</div></li>
-            <li><span>🎯</span><div><strong>Practica el razonamiento:</strong> El GED es más de "razonar" que de memorizar fechas. Piensa en el "porqué" de las cosas.</div></li>
-            <li><span>⏰</span><div><strong>Consistencia es clave:</strong> Estudia 20 minutos al día en lugar de 5 horas un solo día. Tu cerebro aprende mejor con práctica constante.</div></li>
-            <li><span>📱</span><div><strong>Usa la vida diaria:</strong> Las compras, las recetas, las noticias... todo puede ser tu material de estudio.</div></li>
-            <li><span>💪</span><div><strong>No te rindas:</strong> Muchos adultos antes que tú lo lograron. ¡Tú también puedes!</div></li>
+            <li><span aria-hidden="true">🧠</span><div><strong>Cero miedo:</strong> No hay preguntas tontas. Cada duda que resuelves es un paso más cerca de tu diploma.</div></li>
+            <li><span aria-hidden="true">🎯</span><div><strong>Practica el razonamiento:</strong> El GED es más de "razonar" que de memorizar fechas. Piensa en el "porqué" de las cosas.</div></li>
+            <li><span aria-hidden="true">⏰</span><div><strong>Consistencia es clave:</strong> Estudia 20 minutos al día en lugar de 5 horas un solo día. Tu cerebro aprende mejor con práctica constante.</div></li>
+            <li><span aria-hidden="true">📱</span><div><strong>Usa la vida diaria:</strong> Las compras, las recetas, las noticias... todo puede ser tu material de estudio.</div></li>
+            <li><span aria-hidden="true">💪</span><div><strong>No te rindas:</strong> Muchos adultos antes que tú lo lograron. ¡Tú también puedes!</div></li>
         </ul>
-        <button class="close-modal" onclick="document.getElementById('tipsOverlay').classList.remove('visible')">¡Entendido, gracias Profe!</button>
+        <button class="close-modal" id="closeTipsBtn">¡Entendido, gracias Profe!</button>
     </div>
 </div>
 
 <script>
-    const messagesContainer = document.getElementById('messagesContainer');
-    const typingIndicator = document.getElementById('typingIndicator');
-    const msgInput = document.getElementById('msgInput');
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    const sendBtn = document.getElementById('sendBtn');
+'use strict';
 
+(function() {
+    const messagesContainer = document.getElementById('messagesContainer');
+    const typingIndicator   = document.getElementById('typingIndicator');
+    const msgInput          = document.getElementById('msgInput');
+    const welcomeScreen     = document.getElementById('welcomeScreen');
+    const sendBtn           = document.getElementById('sendBtn');
+    const sidebar           = document.getElementById('sidebar');
+    const sidebarOverlay    = document.getElementById('sidebarOverlay');
+    const tipsOverlay       = document.getElementById('tipsOverlay');
+
+    let pendingTimer = null; // permite cancelar la respuesta si se limpia el chat
+
+    // ===================================================================
+    //  Base de respuestas (HTML estático y controlado por el desarrollador)
+    // ===================================================================
     const responseDatabase = {
         'porcentaje': `¡Excelente pregunta! Los porcentajes son más fáciles de lo que parecen. 😊
-
 <p>Imagina que vas a la tienda y unos <strong>pantalones de $40</strong> tienen el <strong>20% de descuento</strong>. El porcentaje es solo una parte de un total de 100.</p>
-
 <div class="example-box">
 <strong>Ejemplo del súper:</strong><br>
 Para saber cuánto te descuentan: <strong>40 × 0.20 = $8</strong><br>
 Entonces pagas: $40 - $8 = <strong>$32</strong>
 </div>
-
 <p><strong>La fórmula sencilla:</strong></p>
 <ol>
 <li>Convierte el porcentaje a decimal (20% → 0.20, solo divide entre 100)</li>
 <li>Multiplica el total por ese decimal</li>
 <li>¡Listo! Ya sabes la cantidad</li>
 </ol>
-
 <p>💡 <strong>Truco rápido:</strong> El 10% de cualquier número es solo mover el punto decimal un lugar a la izquierda. El 10% de $40 es $4. El 20% es el doble: $8.</p>
-
 <p>¿Te gustaría que practiquemos con otro ejemplo? ¡Tú puedes con esto! 💪</p>`,
 
         'variable': `¡Hola! No te preocupes, al principio asusta pero es más común de lo que crees. 😊
-
 <p>Una <strong>variable</strong> es simplemente un espacio vacío o una <strong>"caja misteriosa"</strong> donde guardamos un número que aún no conocemos. En matemáticas la llamamos casi siempre <strong>'x'</strong>.</p>
-
 <div class="example-box">
 <strong>Ejemplo de la vida diaria:</strong><br><br>
 Imagina que vas a comprar tortillas. Sabes que el total fue <strong>$10</strong>, y compraste un paquete de queso de <strong>$6</strong> y unos kilos de tortilla, pero no recuerdas cuánto costaron las tortillas.<br><br>
@@ -974,58 +963,55 @@ Tu ecuación sería:<br>
 <strong>$6 (queso) + x (tortillas) = $10</strong><br><br>
 Aquí la <strong>'x'</strong> es la variable. Si restamos lo que sabemos, descubrimos que la <strong>'x'</strong> vale <strong>$4</strong>.
 </div>
-
 <p>¡Eso es el álgebra! Es jugar al detective para encontrar el número que falta. 🔍</p>
-
 <p>¿Te gustaría que hagamos un ejercicio parecido juntos? ¡Tú puedes! 💪</p>`,
 
-        'idea principal': `¡Muy buena pregunta! Esto es clave para la parte de lectura del GED. 📚
+        'ecuacion': `¡Resolver ecuaciones es como resolver un misterio! 🔍
+<p>Una <strong>ecuación</strong> es una igualdad donde hay un número que no conocemos.</p>
+<div class="example-box">
+<strong>Ejemplo cotidiano:</strong><br>
+Fuiste al mercado y gastaste <strong>$25</strong> en total. Sabes que las frutas costaron <strong>$12</strong>, pero no recuerdas cuánto pagaste por las verduras.<br><br>
+<strong>12 + x = 25</strong><br><br>
+Para encontrar <strong>x</strong>, restas 12 de ambos lados:<br>
+<strong>x = 25 - 12 = 13</strong><br><br>
+¡Las verduras costaron <strong>$13</strong>!
+</div>
+<p><strong>Regla de oro:</strong> Lo que hagas de un lado de la ecuación, debes hacerlo del otro lado para mantener el equilibrio.</p>
+<p>¿Quieres practicar con más ejemplos? ¡Cada problema resuelto te acerca más a tu diploma! 💪</p>`,
 
+        'idea_principal': `¡Muy buena pregunta! Esto es clave para la parte de lectura del GED. 📚
 <p>La <strong>idea principal</strong> es el mensaje más importante de un texto.</p>
-
 <p>Piénsalo así:</p>
 <ul>
 <li>Es como el <strong>título de una noticia</strong> de periódico.</li>
 <li>Si tuvieras que contarle a un amigo de qué trata una película en <strong>una sola frase</strong>, esa es la idea principal.</li>
 </ul>
-
 <div class="example-box">
 <strong>Ejemplo:</strong><br>
 Texto: "María fue al mercado. Compró frutas, verduras y pan. Pagó con su tarjeta. Regresó a casa y preparó una deliciosa comida."<br><br>
 <strong>Idea principal:</strong> María fue al mercado a comprar alimentos para cocinar.
 </div>
-
 <p><strong>Tip para el examen:</strong> Pregúntate "¿De qué trata esto?" después de leer un párrafo. La respuesta es la idea principal.</p>
-
 <p>¿Quieres que practiquemos con otro texto? ¡Sigue así! 🌟</p>`,
 
-        'separación de poderes': `¡Gran pregunta! Esto es muy importante para Estudios Sociales. 🏛️
-
+        'separacion_poderes': `¡Gran pregunta! Esto es muy importante para Estudios Sociales. 🏛️
 <p>La <strong>separación de poderes</strong> es como en una casa: uno cocina, otro limpia y otro administra el dinero para que <strong>nadie mande más que el otro</strong>.</p>
-
 <p>En EE.UU. se divide en <strong>tres poderes</strong>:</p>
-
 <ol>
 <li>📜 <strong>Poder Legislativo</strong> (el Congreso) → Los que <strong>hacen las leyes</strong></li>
 <li>⚡ <strong>Poder Ejecutivo</strong> (el Presidente) → Los que <strong>ejecutan las leyes</strong></li>
 <li>⚖️ <strong>Poder Judicial</strong> (las Cortes) → Los que <strong>vigilan que se cumplan</strong></li>
 </ol>
-
 <div class="example-box">
 <strong>Ejemplo cotidiano:</strong><br>
 Piensa en una familia: los papás deciden las reglas de la casa (legislativo), los hijos las cumplen (ejecutivo), y los abuelos se aseguran de que todos jueguen limpio (judicial). ¡Todos tienen su papel!
 </div>
-
 <p>Este sistema evita que una sola persona tenga demasiado poder. Fue idea de los fundadores de EE.UU.</p>
-
 <p>¿Quieres saber más sobre el gobierno? ¡Estás aprendiendo muy bien! 🇺🇸</p>`,
 
-        'fotosíntesis': `¡Excelente pregunta! La fotosíntesis es uno de los procesos más fascinantes de la naturaleza. 🌱
-
+        'fotosintesis': `¡Excelente pregunta! La fotosíntesis es uno de los procesos más fascinantes de la naturaleza. 🌱
 <p>La <strong>fotosíntesis</strong> es el proceso por el cual las plantas <strong>"cocinan" su propio alimento</strong> usando la luz del sol.</p>
-
 <p>Es como si la planta fuera un <strong>panel solar</strong> que convierte luz en energía para crecer. ☀️</p>
-
 <div class="example-box">
 <strong>¿Qué necesita la planta?</strong><br>
 ☀️ <strong>Luz del sol</strong> (como la estufa para cocinar)<br>
@@ -1035,15 +1021,11 @@ Piensa en una familia: los papás deciden las reglas de la casa (legislativo), l
 🍃 <strong>Azúcar</strong> (su alimento)<br>
 🌬️ <strong>Oxígeno</strong> (¡el que nosotros respiramos!)
 </div>
-
 <p>💡 <strong>Dato curioso:</strong> ¡Sin fotosíntesis no tendríamos oxígeno! Las plantas son como fábricas de aire limpio.</p>
-
 <p>¿Te gustaría saber más sobre cómo funciona la naturaleza? ¡Cada pregunta te acerca más a tu meta! 🌟</p>`,
 
         'ensayo': `¡Claro que sí! Escribir un buen ensayo para el GED es más fácil si sigues estos pasos. ✍️
-
 <p><strong>La estructura básica de un ensayo es como hacer un sándwich:</strong></p>
-
 <ol>
 <li>🍞 <strong>Introducción (pan de arriba):</strong>
 <ul>
@@ -1067,46 +1049,34 @@ Piensa en una familia: los papás deciden las reglas de la casa (legislativo), l
 </ul>
 </li>
 </ol>
-
 <div class="example-box">
 <strong>Tip del Profe:</strong> Antes de escribir, haz un mini-esquema en la hoja de borrador. Así no te pierdes. ¡5 minutos de planear te ahorran 15 de confusión!
 </div>
-
 <p><strong>Recuerda:</strong> No necesitas palabras complicadas. Lo importante es que tus ideas se entiendan claramente.</p>
-
 <p>¿Quieres que practiquemos con un tema de ejemplo? ¡Vas muy bien! 💪</p>`,
 
-        'fracción': `¡Las fracciones son súper útiles en la vida diaria! 🍕
-
+        'fraccion': `¡Las fracciones son súper útiles en la vida diaria! 🍕
 <p>Una <strong>fracción</strong> representa una <strong>parte de un todo</strong>.</p>
-
 <p>Piénsalo como una <strong>pizza</strong>:</p>
 <ul>
 <li>Si la pizza tiene <strong>8 rebanadas</strong> y tú comes <strong>3</strong>, comiste <strong>3/8</strong> de la pizza.</li>
 <li>El número de abajo (8) dice en cuántas partes se dividió el todo.</li>
 <li>El número de arriba (3) dice cuántas partes tomaste.</li>
 </ul>
-
 <div class="example-box">
 <strong>Ejemplo en la cocina:</strong><br>
 Una receta dice "1/2 taza de harina". Si no tienes la medida de 1/2, puedes usar la de 1/4... <strong>¡dos veces!</strong><br><br>
 1/4 + 1/4 = 2/4 = 1/2 ✅
 </div>
-
 <p><strong>Tip:</strong> Las fracciones son como repartir cosas. Si entiendes el reparto, entiendes las fracciones.</p>
-
 <p>¿Quieres practicar con ejercicios? ¡No te rindas, tú puedes! 🌟</p>`,
 
-        'área de un triángulo': `¡El área del triángulo es muy práctica! 📐
-
+        'area_triangulo': `¡El área del triángulo es muy práctica! 📐
 <p><strong>La fórmula es:</strong></p>
-
 <div class="example-box">
 <strong>Área = (base × altura) ÷ 2</strong>
 </div>
-
 <p>¿Por qué se divide entre 2? Porque un triángulo es como <strong>la mitad de un rectángulo</strong>.</p>
-
 <div class="example-box">
 <strong>Ejemplo cotidiano:</strong><br>
 Imagina que quieres pintar la pared triangular de tu casa.<br>
@@ -1115,22 +1085,17 @@ Imagina que quieres pintar la pared triangular de tu casa.<br>
 <strong>Área = (6 × 4) ÷ 2 = 24 ÷ 2 = 12 metros²</strong><br><br>
 Necesitas pintura para cubrir 12 metros cuadrados.
 </div>
-
 <p><strong>Pasos:</strong></p>
 <ol>
 <li>Multiplica la base por la altura</li>
 <li>Divide el resultado entre 2</li>
 <li>¡Esa es el área!</li>
 </ol>
-
 <p>¿Te gustaría practicar con otro ejercicio? ¡Sigue adelante! 💪</p>`,
 
         'sustantivo': `¡Los sustantivos son la base del idioma! 📝
-
 <p>Un <strong>sustantivo</strong> es una palabra que nombra a una <strong>persona, lugar, cosa o idea</strong>.</p>
-
 <p>Piénsalo así: si puedes tocarlo, verlo o pensarlo, tiene un sustantivo.</p>
-
 <div class="example-box">
 <strong>Ejemplos:</strong><br>
 👤 <strong>Persona:</strong> María, doctor, profesor<br>
@@ -1138,128 +1103,110 @@ Necesitas pintura para cubrir 12 metros cuadrados.
 📦 <strong>Cosa:</strong> mesa, teléfono, pizza<br>
 💭 <strong>Idea:</strong> amor, libertad, felicidad
 </div>
-
 <p><strong>Tip para el GED:</strong> En el examen te van a pedir que identifiques errores en textos. Si sabes qué tipo de palabra es cada una, ¡es más fácil encontrar los errores!</p>
-
 <p>¿Quieres que veamos otros tipos de palabras? ¡Estás haciendo un gran trabajo! 🌟</p>`,
 
-        'constitución': `¡La Constitución es la base de todo el sistema de EE.UU.! 📜
-
+        'constitucion': `¡La Constitución es la base de todo el sistema de EE.UU.! 📜
 <p>La <strong>Constitución de los Estados Unidos</strong> es el documento más importante del país. Es como las <strong>"reglas del juego"</strong> que todos deben seguir.</p>
-
 <p>Firmada en <strong>1787</strong>, establece:</p>
-
 <ol>
 <li>🏛️ <strong>Cómo funciona el gobierno</strong> (los tres poderes)</li>
 <li>🛡️ <strong>Los derechos de los ciudadanos</strong> (la Declaración de Derechos)</li>
 <li>⚖️ <strong>Las reglas que ningún político puede cambiar fácilmente</strong></li>
 </ol>
-
 <div class="example-box">
 <strong>Ejemplo cotidiano:</strong><br>
 La Constitución es como el reglamento de un edificio de apartamentos. Establece qué pueden y no pueden hacer los residentes, quién toma las decisiones importantes, y protege los derechos de todos.
 </div>
-
 <p>Las primeras 10 enmiendas se llaman la <strong>Declaración de Derechos</strong> (Bill of Rights) e incluyen la libertad de expresión, religión y prensa.</p>
-
 <p>¿Quieres saber más sobre algún derecho en particular? ¡Estás aprendiendo mucho! 🇺🇸</p>`,
 
         'gravedad': `¡La gravedad es una fuerza que experimentamos todos los días! 🍎
-
 <p>La <strong>gravedad</strong> es la fuerza que <strong>atrae los objetos unos hacia otros</strong>. En la Tierra, nos jala hacia el centro del planeta.</p>
-
 <p>Es por eso que:</p>
 <ul>
 <li>Las cosas <strong>caen hacia abajo</strong> cuando las sueltas</li>
 <li>Nuestros pies se mantienen en el suelo</li>
 <li>La Luna gira alrededor de la Tierra</li>
 </ul>
-
 <div class="example-box">
 <strong>Ejemplo cotidiano:</strong><br>
 Cuando dejas caer una llave, cae al suelo porque la gravedad la jala. Si estuvieras en la Luna (que tiene menos gravedad), la misma llave caería mucho más lento. ¡Por eso los astronautas parecen flotar!
 </div>
-
 <p>💡 <strong>Dato:</strong> Isaac Newton se dio cuenta de la gravedad cuando vio caer una manzana de un árbol. ¡Las grandes ideas pueden venir de cosas simples!</p>
-
 <p>¿Tienes más preguntas de ciencias? ¡La curiosidad es tu mejor herramienta! 🌟</p>`,
 
-        'ecuación': `¡Resolver ecuaciones es como resolver un misterio! 🔍
-
-<p>Una <strong>ecuación</strong> es una igualdad donde hay un número que no conocemos.</p>
-
+        'celula': `¡La célula es la unidad básica de la vida! 🔬
+<p>Todos los seres vivos —desde una bacteria hasta una ballena— estamos hechos de <strong>células</strong>. Es como el ladrillo con el que se construye todo lo viviente.</p>
 <div class="example-box">
-<strong>Ejemplo cotidiano:</strong><br>
-Fuiste al mercado y gastaste <strong>$25</strong> en total. Sabes que las frutas costaron <strong>$12</strong>, pero no recuerdas cuánto pagaste por las verduras.<br><br>
-<strong>12 + x = 25</strong><br><br>
-Para encontrar <strong>x</strong>, restas 12 de ambos lados:<br>
-<strong>x = 25 - 12 = 13</strong><br><br>
-¡Las verduras costaron <strong>$13</strong>!
+<strong>Las partes principales de una célula:</strong><br>
+🛡️ <strong>Membrana:</strong> la "piel" que la rodea y decide qué entra y qué sale<br>
+🧠 <strong>Núcleo:</strong> el "cerebro", donde está el ADN con las instrucciones<br>
+🥣 <strong>Citoplasma:</strong> el "relleno" gelatinoso donde flotan las demás partes<br>
+⚡ <strong>Mitocondria:</strong> la "central eléctrica" que produce energía
 </div>
+<p><strong>Tipos de células:</strong></p>
+<ul>
+<li>🧫 <strong>Procariotas:</strong> simples, sin núcleo (bacterias)</li>
+<li>🌱 <strong>Eucariotas:</strong> con núcleo (plantas, animales, hongos)</li>
+</ul>
+<p>💡 <strong>Dato curioso:</strong> ¡Tu cuerpo tiene unos 37 billones de células trabajando ahora mismo!</p>
+<p>¿Quieres saber más sobre alguna parte en particular? 🌟</p>`,
 
-<p><strong>Regla de oro:</strong> Lo que hagas de un lado de la ecuación, debes hacerlo del otro lado para mantener el equilibrio.</p>
+        'promedio': `¡El promedio (o media) es uno de los temas favoritos del GED! 📊
+<p>El <strong>promedio</strong> te dice cuál es el "valor típico" de un grupo de números.</p>
+<div class="example-box">
+<strong>La fórmula:</strong><br>
+Promedio = (suma de todos los números) ÷ (cuántos números hay)
+</div>
+<div class="example-box">
+<strong>Ejemplo de la vida diaria:</strong><br>
+Tus calificaciones del semestre fueron: <strong>80, 90, 70, 100</strong><br><br>
+1) Sumas: 80 + 90 + 70 + 100 = <strong>340</strong><br>
+2) Divides entre cuántas notas hay (4): 340 ÷ 4 = <strong>85</strong><br><br>
+¡Tu promedio es 85! 🎉
+</div>
+<p><strong>Datos relacionados que el GED suele preguntar:</strong></p>
+<ul>
+<li><strong>Mediana:</strong> el número del medio cuando los ordenas</li>
+<li><strong>Moda:</strong> el número que más se repite</li>
+<li><strong>Rango:</strong> la diferencia entre el más grande y el más pequeño</li>
+</ul>
+<p>¿Quieres que veamos la mediana o la moda? ¡Vas muy bien! 💪</p>`,
 
-<p>¿Quieres practicar con más ejemplos? ¡Cada problema resuelto te acerca más a tu diploma! 💪</p>`,
+        'historia_eeuu': `¡La historia de EE.UU. es como una novela de aventuras! 🇺🇸
+<p>Aquí van los <strong>hitos esenciales</strong> que el GED suele preguntar:</p>
+<ol>
+<li>🏴 <strong>1776 – Declaración de Independencia:</strong> las 13 colonias se separan de Inglaterra.</li>
+<li>📜 <strong>1787 – La Constitución:</strong> se establecen las reglas del nuevo país.</li>
+<li>⚔️ <strong>1861-1865 – Guerra Civil:</strong> Norte vs. Sur. Lincoln gana y se abole la esclavitud.</li>
+<li>🌍 <strong>1914-1918 – Primera Guerra Mundial</strong> y <strong>1939-1945 – Segunda Guerra Mundial.</strong></li>
+<li>✊ <strong>1950s-60s – Movimiento de derechos civiles:</strong> Martin Luther King Jr., Rosa Parks.</li>
+<li>🚀 <strong>1969 – Llegada a la Luna.</strong></li>
+</ol>
+<div class="example-box">
+<strong>Tip del Profe:</strong> No te aprendas las fechas exactas, sino las <strong>causas y consecuencias</strong>. El GED pregunta más "¿por qué pasó?" que "¿en qué año?".
+</div>
+<p>¿Quieres profundizar en alguna época? ¡Cada paso cuenta! 🌟</p>`,
 
         'default': `¡Buena pregunta! Déjame explicarte de forma sencilla. 😊
-
 <p>Para el examen GED, lo más importante es <strong>entender el concepto</strong>, no solo memorizarlo.</p>
-
 <p>Te sugiero que me preguntes sobre temas específicos como:</p>
 <ul>
-<li>🔢 <strong>Matemáticas:</strong> porcentajes, fracciones, álgebra, geometría</li>
+<li>🔢 <strong>Matemáticas:</strong> porcentajes, fracciones, álgebra, geometría, promedio</li>
 <li>📖 <strong>Lenguaje:</strong> idea principal, gramática, cómo escribir el ensayo</li>
-<li>🏛️ <strong>Sociales:</strong> gobierno, historia, economía</li>
-<li>🔬 <strong>Ciencias:</strong> biología, física, ciencias de la Tierra</li>
+<li>🏛️ <strong>Sociales:</strong> gobierno, Constitución, historia</li>
+<li>🔬 <strong>Ciencias:</strong> célula, fotosíntesis, gravedad</li>
 </ul>
-
 <p>Puedes preguntarme cualquier cosa específica y te la explico con ejemplos de la vida diaria. ¡No hay preguntas tontas!</p>
-
 <p>¿Sobre qué tema te gustaría aprender? ¡Estoy aquí para ayudarte! 💪</p>`
     };
 
-    function getResponse(userMessage) {
-        const msg = userMessage.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-        if (msg.includes('porcentaje') || msg.includes('por ciento') || msg.includes('descuento')) {
-            return responseDatabase['porcentaje'];
-        }
-        if (msg.includes('variable') || msg.includes('algebra') || msg.includes('ecuacion')) {
-            return responseDatabase['variable'];
-        }
-        if (msg.includes('idea principal') || msg.includes('comprension lectora') || msg.includes('lectura')) {
-            return responseDatabase['idea principal'];
-        }
-        if (msg.includes('separacion de poderes') || msg.includes('tres poderes') || msg.includes('legislativo') || msg.includes('ejecutivo') || msg.includes('judicial')) {
-            return responseDatabase['separación de poderes'];
-        }
-        if (msg.includes('fotosintesis') || msg.includes('planta') || msg.includes('clorofila')) {
-            return responseDatabase['fotosíntesis'];
-        }
-        if (msg.includes('ensayo') || msg.includes('escribir') || msg.includes('escritura') || msg.includes('redactar')) {
-            return responseDatabase['ensayo'];
-        }
-        if (msg.includes('fraccion') || msg.includes('fracciones') || msg.includes('numerador') || msg.includes('denominador')) {
-            return responseDatabase['fracción'];
-        }
-        if (msg.includes('area') || msg.includes('triangulo') || msg.includes('geometria')) {
-            return responseDatabase['área de un triángulo'];
-        }
-        if (msg.includes('sustantivo') || msg.includes('gramatica') || msg.includes('verbo') || msg.includes('adjetivo')) {
-            return responseDatabase['sustantivo'];
-        }
-        if (msg.includes('constitucion') || msg.includes('derechos') || msg.includes('enmienda') || msg.includes('bill of rights')) {
-            return responseDatabase['constitución'];
-        }
-        if (msg.includes('gravedad') || msg.includes('gravedad') || msg.includes('newton') || msg.includes('caer')) {
-            return responseDatabase['gravedad'];
-        }
-        if (msg.includes('ecuacion') || msg.includes('ecuaciones') || msg.includes('resolver') || msg.includes('despejar')) {
-            return responseDatabase['ecuación'];
-        }
-        if (msg.includes('hola') || msg.includes('buenos') || msg.includes('buenas') || msg.includes('saludos')) {
-            return `¡Hola! 👋 ¡Qué gusto saludarte! Soy el Profe GED y estoy aquí para ayudarte.
-
+    // ===================================================================
+    //  Saludos especiales
+    // ===================================================================
+    const SPECIAL_RESPONSES = {
+        saludo: `¡Hola! 👋 ¡Qué gusto saludarte! Soy el Profe GED y estoy aquí para ayudarte.
 <p>Puedes preguntarme sobre:</p>
 <ul>
 <li>🔢 <strong>Matemáticas</strong> (porcentajes, fracciones, álgebra)</li>
@@ -1267,41 +1214,105 @@ Para encontrar <strong>x</strong>, restas 12 de ambos lados:<br>
 <li>🏛️ <strong>Estudios Sociales</strong> (gobierno, historia)</li>
 <li>🔬 <strong>Ciencias</strong> (biología, física)</li>
 </ul>
+<p>¿Qué te gustaría aprender hoy? ¡No hay preguntas tontas! 😊</p>`,
 
-<p>¿Qué te gustaría aprender hoy? ¡No hay preguntas tontas! 😊</p>`;
-        }
-        if (msg.includes('gracias') || msg.includes('thank')) {
-            return `¡De nada! 😊 Me da mucho gusto poder ayudarte.
-
+        gracias: `¡De nada! 😊 Me da mucho gusto poder ayudarte.
 <p>Recuerda: cada pregunta que haces es un paso más cerca de tu diploma. ¡Sigue así!</p>
+<p>¿Hay algo más en lo que pueda ayudarte? ¡Aquí estaré! 💪</p>`,
 
-<p>¿Hay algo más en lo que pueda ayudarte? ¡Aquí estaré! 💪</p>`;
-        }
-        if (msg.includes('miedo') || msg.includes('dificil') || msg.includes('no puedo') || msg.includes('imposible')) {
-            return `Entiendo perfectamente cómo te sientes. 😊 Déjame decirte algo importante:
-
+        animo: `Entiendo perfectamente cómo te sientes. 😊 Déjame decirte algo importante:
 <p><strong>No eres el primero ni serás el último</strong> en sentirse así. Muchos adultos que ahora tienen su diploma GED sintieron exactamente lo mismo.</p>
-
 <p>Lo que pasa es que:</p>
 <ul>
 <li>🧠 Tu cerebro aprende cosas nuevas cada día sin que te des cuenta</li>
 <li>📚 Los conceptos del GED se pueden entender con paciencia</li>
 <li>💡 Yo te los explico con ejemplos de tu vida diaria</li>
 </ul>
-
 <div class="example-box">
 Piensa en cuando aprendiste algo nuevo (conducir, cocinar, usar el teléfono). Al principio parecía difícil, ¿verdad? Pero con práctica, se volvió natural. ¡Esto es igual!
 </div>
+<p>Estudia <strong>20 minutos al día</strong> y verás resultados. ¡Yo te acompaño en cada paso! 💪</p>`
+    };
 
-<p>Estudia <strong>20 minutos al día</strong> y verás resultados. ¡Yo te acompaño en cada paso! 💪</p>`;
+    // ===================================================================
+    //  Helpers
+    // ===================================================================
+    function normalize(str) {
+        return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    /** Escapa HTML para evitar inyecciones cuando se renderiza texto del usuario. */
+    function escapeHTML(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    /** Verifica si una palabra completa aparece en el texto (no como sub-cadena). */
+    function hasWord(text, word) {
+        const re = new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+        return re.test(text);
+    }
+
+    /** Verifica si CUALQUIERA de un array de palabras está como palabra completa. */
+    function hasAnyWord(text, words) {
+        return words.some(w => hasWord(text, w));
+    }
+
+    // ===================================================================
+    //  Lógica de selección de respuesta
+    //  Las reglas se evalúan en orden; la primera coincidencia gana.
+    // ===================================================================
+    const intents = [
+        // --- Saludos / emocional (primero, para no chocar con materias) ---
+        { keywords: ['hola', 'buenos dias', 'buenas tardes', 'buenas noches', 'saludos', 'hey', 'que tal'], response: SPECIAL_RESPONSES.saludo },
+        { keywords: ['gracias', 'thank you', 'thanks'],                                                     response: SPECIAL_RESPONSES.gracias  },
+        { keywords: ['miedo', 'no puedo', 'imposible', 'me rindo', 'frustrado', 'frustrada'],               response: SPECIAL_RESPONSES.animo    },
+
+        // --- Matemáticas (orden importa: lo más específico arriba) ---
+        { keywords: ['porcentaje', 'por ciento', 'descuento', 'propina'],         response: responseDatabase['porcentaje']     },
+        { keywords: ['ecuacion', 'ecuaciones', 'despejar', 'resolver para x'],    response: responseDatabase['ecuacion']       },
+        { keywords: ['variable', 'algebra', 'incognita'],                         response: responseDatabase['variable']       },
+        { keywords: ['fraccion', 'fracciones', 'numerador', 'denominador'],       response: responseDatabase['fraccion']       },
+        { keywords: ['triangulo', 'area de triangulo', 'geometria'],              response: responseDatabase['area_triangulo'] },
+        { keywords: ['promedio', 'media', 'mediana', 'moda', 'estadistica'],      response: responseDatabase['promedio']       },
+
+        // --- Artes del Lenguaje ---
+        { keywords: ['idea principal', 'tema central', 'comprension lectora'],    response: responseDatabase['idea_principal'] },
+        { keywords: ['ensayo', 'redactar', 'escritura', 'extended response'],     response: responseDatabase['ensayo']         },
+        { keywords: ['sustantivo', 'gramatica', 'verbo', 'adjetivo', 'pronombre'],response: responseDatabase['sustantivo']     },
+
+        // --- Estudios Sociales ---
+        { keywords: ['separacion de poderes', 'tres poderes', 'legislativo', 'ejecutivo', 'judicial'],
+                                                                                  response: responseDatabase['separacion_poderes'] },
+        { keywords: ['constitucion', 'enmienda', 'bill of rights', 'declaracion de derechos'],
+                                                                                  response: responseDatabase['constitucion']   },
+        { keywords: ['historia', 'guerra civil', 'lincoln', 'independencia'],     response: responseDatabase['historia_eeuu']  },
+
+        // --- Ciencias ---
+        { keywords: ['fotosintesis', 'clorofila'],                                response: responseDatabase['fotosintesis']   },
+        { keywords: ['gravedad', 'gravitacion', 'newton', 'peso', 'caida libre'], response: responseDatabase['gravedad']       },
+        { keywords: ['celula', 'celulas', 'mitocondria', 'nucleo', 'membrana'],   response: responseDatabase['celula']         }
+    ];
+
+    function getResponse(userMessage) {
+        const msg = normalize(userMessage);
+        for (const intent of intents) {
+            if (hasAnyWord(msg, intent.keywords)) {
+                return intent.response;
+            }
         }
-
         return responseDatabase['default'];
     }
 
+    // ===================================================================
+    //  UI
+    // ===================================================================
     function getCurrentTime() {
-        const now = new Date();
-        return now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        return new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
     }
 
     function addMessage(content, isUser) {
@@ -1310,17 +1321,22 @@ Piensa en cuando aprendiste algo nuevo (conducir, cocinar, usar el teléfono). A
         }
 
         const msgDiv = document.createElement('div');
-        msgDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+        msgDiv.className = 'message ' + (isUser ? 'user' : 'bot');
 
         const avatarEmoji = isUser ? '👤' : '👨‍🏫';
 
-        msgDiv.innerHTML = `
-            <div class="msg-avatar">${avatarEmoji}</div>
-            <div class="msg-content">
-                <div class="msg-bubble">${content}</div>
-                <div class="msg-time">${getCurrentTime()}</div>
-            </div>
-        `;
+        // Para mensajes del usuario, escapamos para evitar XSS.
+        // Para mensajes del bot, el contenido es HTML estático controlado por nosotros.
+        const safeContent = isUser
+            ? escapeHTML(content).replace(/\n/g, '<br>')
+            : content;
+
+        msgDiv.innerHTML =
+            '<div class="msg-avatar" aria-hidden="true">' + avatarEmoji + '</div>' +
+            '<div class="msg-content">' +
+                '<div class="msg-bubble">' + safeContent + '</div>' +
+                '<div class="msg-time">' + getCurrentTime() + '</div>' +
+            '</div>';
 
         messagesContainer.insertBefore(msgDiv, typingIndicator);
         scrollToBottom();
@@ -1331,6 +1347,8 @@ Piensa en cuando aprendiste algo nuevo (conducir, cocinar, usar el teléfono). A
     }
 
     function showTyping() {
+        // Asegura que el indicador esté al final del contenedor
+        messagesContainer.appendChild(typingIndicator);
         typingIndicator.classList.add('visible');
         scrollToBottom();
     }
@@ -1350,13 +1368,15 @@ Piensa en cuando aprendiste algo nuevo (conducir, cocinar, usar el teléfono). A
         showTyping();
         sendBtn.disabled = true;
 
-        const delay = 1200 + Math.random() * 1500;
+        const delay = 800 + Math.random() * 700; // 0.8s – 1.5s, más ágil
 
-        setTimeout(() => {
+        if (pendingTimer) clearTimeout(pendingTimer);
+        pendingTimer = setTimeout(() => {
             hideTyping();
             const response = getResponse(text);
             addMessage(response, false);
             sendBtn.disabled = false;
+            pendingTimer = null;
         }, delay);
     }
 
@@ -1365,42 +1385,35 @@ Piensa en cuando aprendiste algo nuevo (conducir, cocinar, usar el teléfono). A
         sendMessage();
     }
 
-    function handleKeyDown(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
+    /** Para clicks de módulo en el sidebar: muestra mensaje del BOT, no del usuario. */
+    function showBotMessageOnly(content) {
+        if (pendingTimer) {
+            clearTimeout(pendingTimer);
+            pendingTimer = null;
         }
+        showTyping();
+        sendBtn.disabled = true;
+        pendingTimer = setTimeout(() => {
+            hideTyping();
+            addMessage(content, false);
+            sendBtn.disabled = false;
+            pendingTimer = null;
+        }, 700);
     }
 
-    // Auto-resize textarea
-    msgInput.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = Math.min(this.scrollHeight, 120) + 'px';
-    });
-
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('sidebarOverlay');
-        sidebar.classList.toggle('open');
-        overlay.classList.toggle('visible');
-    }
-
-    document.getElementById('sidebarOverlay').addEventListener('click', toggleSidebar);
-
-    function selectModule(module) {
+    function selectModule(moduleKey, btnEl) {
         document.querySelectorAll('.module-btn').forEach(btn => btn.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        if (btnEl) btnEl.classList.add('active');
 
-        const moduleQuestions = {
-            'math': '¿Qué tema de matemáticas te gustaría practicar? Puedo ayudarte con porcentajes, fracciones, álgebra o geometría.',
-            'rla': '¿En qué parte de Artes del Lenguaje necesitas ayuda? Lectura, gramática o el ensayo.',
-            'social': '¿Qué tema de Estudios Sociales quieres repasar? Gobierno, historia o economía.',
-            'science': '¿Qué área de ciencias te interesa? Biología, física o ciencias de la Tierra.'
+        const moduleIntros = {
+            math:    `¡Vamos con <strong>matemáticas</strong>! 🔢<p>Puedo ayudarte con: porcentajes, fracciones, álgebra, ecuaciones, geometría (área del triángulo) o estadística (promedio, mediana). ¿Cuál te interesa primero?</p>`,
+            rla:     `¡Bienvenido a <strong>Artes del Lenguaje</strong>! 📖<p>Aquí practicamos: idea principal, gramática (sustantivos, verbos, adjetivos) y cómo escribir un ensayo paso a paso. ¿Por dónde empezamos?</p>`,
+            social:  `¡<strong>Estudios Sociales</strong>, vamos! 🏛️<p>Podemos repasar: la Constitución, la separación de poderes, la historia de EE.UU. y temas de cívica. ¿Qué te llama la atención?</p>`,
+            science: `¡<strong>Ciencias</strong>, mi materia favorita! 🔬<p>Te puedo explicar: la célula, la fotosíntesis, la gravedad y muchos temas más. ¿Qué quieres descubrir hoy?</p>`
         };
 
-        if (moduleQuestions[module]) {
-            msgInput.value = moduleQuestions[module];
-            sendMessage();
+        if (moduleIntros[moduleKey]) {
+            showBotMessageOnly(moduleIntros[moduleKey]);
         }
 
         if (window.innerWidth <= 768) {
@@ -1408,33 +1421,91 @@ Piensa en cuando aprendiste algo nuevo (conducir, cocinar, usar el teléfono). A
         }
     }
 
+    function toggleSidebar() {
+        sidebar.classList.toggle('open');
+        sidebarOverlay.classList.toggle('visible');
+    }
+
     function showTips() {
-        document.getElementById('tipsOverlay').classList.add('visible');
+        tipsOverlay.classList.add('visible');
         if (window.innerWidth <= 768) {
-            document.getElementById('sidebar').classList.remove('open');
-            document.getElementById('sidebarOverlay').classList.remove('visible');
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('visible');
         }
     }
 
-    function closeTips(e) {
-        if (e.target === document.getElementById('tipsOverlay')) {
-            document.getElementById('tipsOverlay').classList.remove('visible');
-        }
+    function hideTips() {
+        tipsOverlay.classList.remove('visible');
     }
 
     function clearChat() {
+        // Cancela respuesta pendiente
+        if (pendingTimer) {
+            clearTimeout(pendingTimer);
+            pendingTimer = null;
+        }
+        hideTyping();
+        sendBtn.disabled = false;
+
         const messages = messagesContainer.querySelectorAll('.message');
         messages.forEach(msg => msg.remove());
 
         if (welcomeScreen) {
             welcomeScreen.style.display = 'flex';
         }
+
+        document.querySelectorAll('.module-btn').forEach(btn => btn.classList.remove('active'));
     }
 
-    // Initial focus
+    // ===================================================================
+    //  Event listeners (en lugar de onclick inline)
+    // ===================================================================
+    sendBtn.addEventListener('click', sendMessage);
+
+    msgInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    msgInput.addEventListener('input', function() {
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+    });
+
+    document.getElementById('menuToggle').addEventListener('click', toggleSidebar);
+    sidebarOverlay.addEventListener('click', toggleSidebar);
+
+    document.getElementById('headerTipsBtn').addEventListener('click', showTips);
+    document.getElementById('headerClearBtn').addEventListener('click', clearChat);
+    document.getElementById('tipsModuleBtn').addEventListener('click', showTips);
+    document.getElementById('closeTipsBtn').addEventListener('click', hideTips);
+
+    tipsOverlay.addEventListener('click', e => {
+        if (e.target === tipsOverlay) hideTips();
+    });
+
+    // Cerrar modal con tecla Escape
+    document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && tipsOverlay.classList.contains('visible')) {
+            hideTips();
+        }
+    });
+
+    // Botones de módulo (sidebar)
+    document.querySelectorAll('.module-btn[data-module]').forEach(btn => {
+        btn.addEventListener('click', () => selectModule(btn.dataset.module, btn));
+    });
+
+    // Quick-topic buttons (welcome screen) y suggestion chips
+    document.querySelectorAll('[data-question]').forEach(el => {
+        el.addEventListener('click', () => askQuestion(el.dataset.question));
+    });
+
+    // Foco inicial
     msgInput.focus();
+})();
 </script>
 </body>
 </html>
-
-
