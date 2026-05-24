@@ -1,1 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading Coach &middot; English Pronunciation Trainer</title>
+<style>
+  :root{
+    --ink:#1a1410;
+    --paper:#f4ede0;
+    --card:#fbf6ec;
+    --accent:#9c3618;
+    --accent-soft:#e8d5c4;
+    --highlight:#f2c14e;
+    --muted:#8a7d6b;
+    --line:#d8c9b2;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    background:
+      radial-gradient(ellipse at top, #f7f0e2 0%, var(--paper) 60%),
+      var(--paper);
+    color:var(--ink);
+    font-family:Georgia,'Times New Roman',serif;
+    line-height:1.6;
+    padding:32px 20px 60px;
+    display:flex;
+    justify-content:center;
+  }
+  .wrap{width:100%;max-width:860px;}
 
+  header{
+    border-bottom:2px solid var(--ink);
+    padding-bottom:14px;
+    margin-bottom:6px;
+  }
+  .kicker{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.32em;
+    font-size:11px;
+    color:var(--accent);
+    font-weight:700;
+  }
+  h1{
+    font-size:42px;
+    font-weight:400;
+    letter-spacing:-.5px;
+    margin-top:6px;
+    line-height:1.1;
+  }
+  h1 em{font-style:italic;color:var(--accent);}
+  .tagline{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:13px;
+    color:var(--muted);
+    margin-top:10px;
+  }
+
+  .panel{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:22px;
+    margin-top:24px;
+    box-shadow:0 8px 30px -18px rgba(40,25,10,.5);
+  }
+
+  label.fld{
+    display:block;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.18em;
+    color:var(--muted);
+    margin-bottom:8px;
+    font-weight:700;
+  }
+  textarea{
+    width:100%;
+    min-height:200px;
+    resize:vertical;
+    background:#fffdf8;
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:16px;
+    font-family:Georgia,serif;
+    font-size:17px;
+    line-height:1.7;
+    color:var(--ink);
+  }
+  textarea:focus{outline:2px solid var(--accent-soft);border-color:var(--accent);}
+
+  /* The live-reading stage */
+  .stage{
+    display:none;
+    background:#fffdf8;
+    border:1px solid var(--line);
+    border-radius:3px;
+    padding:22px;
+    font-size:21px;
+    line-height:1.95;
+    max-height:340px;
+    overflow-y:auto;
+  }
+  .stage.on{display:block;}
+  .word{transition:background .12s,color .12s;border-radius:3px;padding:1px 2px;}
+  .word.active{
+    background:var(--highlight);
+    color:var(--ink);
+    box-shadow:0 0 0 3px var(--highlight);
+  }
+  .word.done{color:var(--muted);}
+
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+    align-items:center;
+  }
+  button{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:13px;
+    font-weight:700;
+    letter-spacing:.04em;
+    padding:12px 20px;
+    border-radius:3px;
+    border:1px solid var(--ink);
+    cursor:pointer;
+    transition:transform .08s,background .15s,color .15s;
+  }
+  button:active{transform:translateY(1px);}
+  button:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .btn-primary:hover:not(:disabled){background:#7d2a12;}
+  .btn-ghost{background:transparent;color:var(--ink);}
+  .btn-ghost:hover:not(:disabled){background:var(--accent-soft);}
+
+  .sliders{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px 28px;
+    margin-top:22px;
+  }
+  @media(max-width:560px){.sliders{grid-template-columns:1fr;}}
+  .slider-row .head{
+    display:flex;justify-content:space-between;
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:11px;text-transform:uppercase;letter-spacing:.16em;
+    color:var(--muted);font-weight:700;margin-bottom:7px;
+  }
+  .slider-row .val{color:var(--accent);}
+  input[type=range]{width:100%;accent-color:var(--accent);height:22px;}
+  select{
+    width:100%;
+    font-family:Georgia,serif;
+    font-size:15px;
+    padding:9px 10px;
+    border:1px solid var(--line);
+    border-radius:3px;
+    background:#fffdf8;
+    color:var(--ink);
+  }
+
+  /* preset speed pills */
+  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+  .pill{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:11px;font-weight:700;letter-spacing:.04em;
+    padding:6px 12px;border-radius:20px;
+    border:1px solid var(--line);background:transparent;color:var(--muted);
+  }
+  .pill.sel{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+
+  .meta{
+    display:flex;flex-wrap:wrap;gap:24px;
+    margin-top:22px;padding-top:18px;
+    border-top:1px solid var(--line);
+    font-family:'Helvetica Neue',Arial,sans-serif;
+  }
+  .metric .label{
+    font-size:10px;text-transform:uppercase;letter-spacing:.18em;
+    color:var(--muted);font-weight:700;
+  }
+  .metric .num{
+    font-family:Georgia,serif;font-size:30px;color:var(--ink);
+    margin-top:2px;font-variant-numeric:tabular-nums;
+  }
+  .metric .num.warn{color:var(--accent);}
+
+  .note{
+    font-family:'Helvetica Neue',Arial,sans-serif;
+    font-size:12px;color:var(--muted);
+    margin-top:24px;line-height:1.6;
+  }
+  .note strong{color:var(--ink);}
+  .warnbox{
+    display:none;
+    background:#fbe8e2;border:1px solid #d99;
+    color:#7d2a12;border-radius:3px;
+    padding:12px 14px;margin-top:18px;
+    font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;
+  }
+  .warnbox.on{display:block;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="kicker">Pronunciation Studio</div>
+    <h1>The Reading <em>Coach</em></h1>
+  </header>
+  <p class="tagline">Paste any English text &mdash; it reads aloud, word by word, at the pace you set.</p>
+
+  <div class="panel">
+    <label class="fld" for="src">Your text</label>
+    <textarea id="src" placeholder="Paste or type the English text you want to rehearse&hellip;"></textarea>
+
+    <div id="stage" class="stage" aria-live="polite"></div>
+
+    <div class="warnbox" id="warnbox">
+      Your browser reported no English voices. Try Chrome or Edge, where English voices are built in.
+    </div>
+
+    <div class="controls">
+      <button class="btn-primary" id="play">&#9654;&nbsp; Read aloud</button>
+      <button class="btn-ghost" id="pause" disabled>&#10073;&#10073;&nbsp; Pause</button>
+      <button class="btn-ghost" id="stop" disabled>&#9632;&nbsp; Stop</button>
+      <button class="btn-ghost" id="edit" style="display:none;">&#9998;&nbsp; Edit text</button>
+    </div>
+
+    <div class="sliders">
+      <div class="slider-row">
+        <div class="head"><span>Voice</span></div>
+        <select id="voice"></select>
+      </div>
+      <div class="slider-row">
+        <div class="head"><span>Speed</span><span class="val" id="rateVal">1.00&times;</span></div>
+        <input type="range" id="rate" min="0.5" max="1.5" step="0.05" value="1">
+        <div class="pills">
+          <button class="pill" data-rate="0.7">Slow practice</button>
+          <button class="pill sel" data-rate="1">Natural</button>
+          <button class="pill" data-rate="1.15">Brisk</button>
+        </div>
+      </div>
+      <div class="slider-row">
+        <div class="head"><span>Pitch</span><span class="val" id="pitchVal">1.00</span></div>
+        <input type="range" id="pitch" min="0.6" max="1.4" step="0.05" value="1">
+      </div>
+      <div class="slider-row">
+        <div class="head"><span>Volume</span><span class="val" id="volVal">100%</span></div>
+        <input type="range" id="vol" min="0" max="1" step="0.05" value="1">
+      </div>
+    </div>
+
+    <div class="meta">
+      <div class="metric">
+        <div class="label">Words</div>
+        <div class="num" id="mWords">0</div>
+      </div>
+      <div class="metric">
+        <div class="label">Est. duration</div>
+        <div class="num" id="mEst">0:00</div>
+      </div>
+      <div class="metric">
+        <div class="label">Elapsed</div>
+        <div class="num" id="mElapsed">0:00</div>
+      </div>
+    </div>
+
+    <p class="note">
+      <strong>Tip for the GED address:</strong> rehearse first on <strong>Slow practice</strong>
+      to nail every sound, then switch to <strong>Natural</strong> and watch the elapsed timer &mdash;
+      a ceremonial speech should land near two minutes. The highlighted word shows you
+      exactly where the voice is, so you can read along out loud and match it.
+    </p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const synth = window.speechSynthesis;
+
+  const els = {
+    src:document.getElementById('src'),
+    stage:document.getElementById('stage'),
+    play:document.getElementById('play'),
+    pause:document.getElementById('pause'),
+    stop:document.getElementById('stop'),
+    edit:document.getElementById('edit'),
+    voice:document.getElementById('voice'),
+    rate:document.getElementById('rate'),
+    pitch:document.getElementById('pitch'),
+    vol:document.getElementById('vol'),
+    rateVal:document.getElementById('rateVal'),
+    pitchVal:document.getElementById('pitchVal'),
+    volVal:document.getElementById('volVal'),
+    mWords:document.getElementById('mWords'),
+    mEst:document.getElementById('mEst'),
+    mElapsed:document.getElementById('mElapsed'),
+    warnbox:document.getElementById('warnbox'),
+    pills:document.querySelectorAll('.pill')
+  };
+
+  let voices = [];
+  let wordSpans = [];
+  let timerId = null;
+  let startTime = 0;
+
+  if(!synth){
+    els.warnbox.textContent = "This browser does not support speech synthesis. Try Chrome or Edge.";
+    els.warnbox.classList.add('on');
+    els.play.disabled = true;
+  }
+
+  // ---- Voices ----
+  function loadVoices(){
+    const all = synth.getVoices();
+    voices = all.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+    els.voice.innerHTML = '';
+    if(voices.length === 0){
+      els.warnbox.classList.add('on');
+      const o = document.createElement('option');
+      o.textContent = 'No English voice found';
+      els.voice.appendChild(o);
+      return;
+    }
+    els.warnbox.classList.remove('on');
+    voices.forEach((v,i)=>{
+      const o = document.createElement('option');
+      o.value = i;
+      o.textContent = v.name + '  (' + v.lang + ')' + (v.default ? '  \u2605' : '');
+      els.voice.appendChild(o);
+    });
+    // Prefer a US English voice by default
+    const us = voices.findIndex(v => v.lang.toLowerCase() === 'en-us');
+    els.voice.value = us >= 0 ? us : 0;
+  }
+  loadVoices();
+  if(synth) synth.onvoiceschanged = loadVoices;
+
+  // ---- Word counting + duration estimate ----
+  function countWords(t){
+    const m = t.trim().match(/\S+/g);
+    return m ? m.length : 0;
+  }
+  function fmt(sec){
+    sec = Math.round(sec);
+    const m = Math.floor(sec/60);
+    const s = sec%60;
+    return m + ':' + String(s).padStart(2,'0');
+  }
+  function refreshMeta(){
+    const w = countWords(els.src.value);
+    els.mWords.textContent = w;
+    // ~150 wpm at rate 1.0, scaled by chosen rate
+    const wpm = 150 * parseFloat(els.rate.value);
+    const est = w > 0 ? (w / wpm) * 60 : 0;
+    els.mEst.textContent = fmt(est);
+    els.mEst.classList.toggle('warn', est > 125); // over ~2 min
+  }
+  els.src.addEventListener('input', refreshMeta);
+
+  // ---- Sliders ----
+  function syncLabels(){
+    els.rateVal.innerHTML = parseFloat(els.rate.value).toFixed(2) + '&times;';
+    els.pitchVal.textContent = parseFloat(els.pitch.value).toFixed(2);
+    els.volVal.textContent = Math.round(parseFloat(els.vol.value)*100) + '%';
+  }
+  els.rate.addEventListener('input', ()=>{ syncLabels(); refreshMeta(); markPill(); });
+  els.pitch.addEventListener('input', syncLabels);
+  els.vol.addEventListener('input', syncLabels);
+
+  function markPill(){
+    els.pills.forEach(p=>{
+      p.classList.toggle('sel', parseFloat(p.dataset.rate) === parseFloat(els.rate.value));
+    });
+  }
+  els.pills.forEach(p=>{
+    p.addEventListener('click', ()=>{
+      els.rate.value = p.dataset.rate;
+      syncLabels(); refreshMeta(); markPill();
+    });
+  });
+
+  // ---- Build the highlightable stage ----
+  function buildStage(text){
+    els.stage.innerHTML = '';
+    wordSpans = [];
+    // Split on whitespace but keep the words; track char offsets
+    const tokens = text.split(/(\s+)/);
+    let offset = 0;
+    tokens.forEach(tok=>{
+      if(/^\s+$/.test(tok) || tok === ''){
+        els.stage.appendChild(document.createTextNode(tok));
+        offset += tok.length;
+      }else{
+        const span = document.createElement('span');
+        span.className = 'word';
+        span.textContent = tok;
+        span.dataset.start = offset;
+        span.dataset.end = offset + tok.length;
+        els.stage.appendChild(span);
+        wordSpans.push(span);
+        offset += tok.length;
+      }
+    });
+  }
+
+  function highlightAt(charIndex){
+    let activeIdx = -1;
+    wordSpans.forEach((s,i)=>{
+      const st = +s.dataset.start, en = +s.dataset.end;
+      if(charIndex >= st && charIndex < en){ activeIdx = i; }
+    });
+    wordSpans.forEach((s,i)=>{
+      s.classList.toggle('active', i === activeIdx);
+      s.classList.toggle('done', activeIdx >= 0 && i < activeIdx);
+    });
+    if(activeIdx >= 0){
+      wordSpans[activeIdx].scrollIntoView({block:'center', behavior:'smooth'});
+    }
+  }
+
+  function clearHighlight(){
+    wordSpans.forEach(s=>s.classList.remove('active','done'));
+  }
+
+  // ---- Elapsed timer ----
+  function startTimer(){
+    startTime = Date.now();
+    timerId = setInterval(()=>{
+      els.mElapsed.textContent = fmt((Date.now()-startTime)/1000);
+    }, 200);
+  }
+  function stopTimer(){
+    if(timerId){ clearInterval(timerId); timerId = null; }
+  }
+
+  // ---- Speech control ----
+  let utter = null;
+
+  function setReadingMode(on){
+    els.stage.classList.toggle('on', on);
+    els.src.style.display = on ? 'none' : '';
+    els.edit.style.display = on ? '' : 'none';
+  }
+
+  function startReading(){
+    const text = els.src.value.trim();
+    if(!text){ els.src.focus(); return; }
+    if(synth.speaking || synth.paused){ synth.cancel(); }
+
+    buildStage(text);
+    setReadingMode(true);
+
+    utter = new SpeechSynthesisUtterance(text);
+    if(voices.length){
+      utter.voice = voices[+els.voice.value] || voices[0];
+    }
+    utter.rate = parseFloat(els.rate.value);
+    utter.pitch = parseFloat(els.pitch.value);
+    utter.volume = parseFloat(els.vol.value);
+    utter.lang = utter.voice ? utter.voice.lang : 'en-US';
+
+    utter.onboundary = function(e){
+      if(e.name === 'word' || e.charIndex != null){
+        highlightAt(e.charIndex);
+      }
+    };
+    utter.onstart = function(){
+      els.play.disabled = true;
+      els.pause.disabled = false;
+      els.stop.disabled = false;
+      els.mElapsed.textContent = '0:00';
+      startTimer();
+    };
+    utter.onend = function(){
+      stopTimer();
+      clearHighlight();
+      els.play.disabled = false;
+      els.pause.disabled = true;
+      els.stop.disabled = true;
+      els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
+    };
+    utter.onerror = utter.onend;
+
+    synth.speak(utter);
+  }
+
+  els.play.addEventListener('click', startReading);
+
+  els.pause.addEventListener('click', ()=>{
+    if(synth.speaking && !synth.paused){
+      synth.pause();
+      stopTimer();
+      els.pause.innerHTML = '&#9654;&nbsp; Resume';
+    }else if(synth.paused){
+      synth.resume();
+      startTime = Date.now() - (parseElapsed())*1000;
+      startTimer();
+      els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
+    }
+  });
+
+  function parseElapsed(){
+    const parts = els.mElapsed.textContent.split(':');
+    return (+parts[0])*60 + (+parts[1]);
+  }
+
+  els.stop.addEventListener('click', ()=>{
+    synth.cancel();
+    stopTimer();
+    clearHighlight();
+    els.play.disabled = false;
+    els.pause.disabled = true;
+    els.stop.disabled = true;
+    els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
+  });
+
+  els.edit.addEventListener('click', ()=>{
+    synth.cancel();
+    stopTimer();
+    setReadingMode(false);
+    els.play.disabled = false;
+    els.pause.disabled = true;
+    els.stop.disabled = true;
+  });
+
+  // Chrome bug: long utterances stop after ~15s. Keep alive.
+  setInterval(()=>{
+    if(synth.speaking && !synth.paused){
+      synth.pause(); synth.resume();
+    }
+  }, 12000);
+
+  // ---- Seed with the GED speech so it works out of the box ----
+  els.src.value =
+"Good morning, dear graduates, families, colleagues, and friends.\n\n" +
+"I feel deeply honored to stand before you today, representing the faculty. " +
+"But more than honored, I feel moved \u2014 because what we celebrate today is not just a diploma. " +
+"We celebrate courage. We celebrate perseverance. We celebrate dreams that refused to fade.\n\n" +
+"Over these semesters you strengthened your knowledge \u2014 but you learned something even more important " +
+"than any formula or definition: you learned that you could do it.";
+  syncLabels();
+  refreshMeta();
+})();
+</script>
+</body>
+</html>
