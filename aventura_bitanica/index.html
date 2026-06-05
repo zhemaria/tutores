@@ -1,646 +1,796 @@
-<!DOCTYPE html>
-  <!--
+<!doctype html>
+<!--
   Aventura Británica - Aprender ingles para hispanos
   Licencia: CC BY-NC-SA 4.0
   Autor: José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago
 -->
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aventura Británica - Aprende Inglés</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
     <style>
-        /* Estilos personalizados para animaciones y la tarjeta giratoria */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        
-        /* Flip Card CSS */
-        .perspective-1000 { perspective: 1000px; }
-        .transform-style-3d { transform-style: preserve-3d; }
-        .backface-hidden { backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
-        
-        .flip-card-inner {
-            transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
-        }
-        .flip-card.flipped .flip-card-inner {
-            transform: rotateY(180deg);
-        }
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
 
-        /* Botones interactivos */
-        .word-btn { transition: all 0.2s ease; }
-        .word-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .word-btn:active { transform: translateY(0); }
-        
-        /* Ocultar barra de desplazamiento en tabs */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      /* Flip Card CSS */
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+      .transform-style-3d {
+        transform-style: preserve-3d;
+      }
+      .backface-hidden {
+        backface-visibility: hidden;
+      }
+      .rotate-y-180 {
+        transform: rotateY(180deg);
+      }
+
+      .flip-card-inner {
+        transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+      }
+      .flip-card.flipped .flip-card-inner {
+        transform: rotateY(180deg);
+      }
+
+      /* Botones interactivos */
+      .word-btn {
+        transition: all 0.2s ease;
+      }
+      .word-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      .word-btn:active {
+        transform: translateY(0);
+      }
+
+      /* Ocultar barra de desplazamiento en tabs para móviles */
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      footer {
+        text-align: center;
+        text-decoration: cadetblue;
+      }
     </style>
-</head>
-<body class="bg-slate-50 min-h-screen text-slate-800">
-
+  </head>
+  <body class="bg-slate-50 min-h-screen text-slate-800">
     <!-- Header -->
     <header class="bg-blue-900 text-white shadow-md">
-        <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between">
-            <div class="flex items-center gap-3 mb-4 sm:mb-0">
-                <i class="fa-solid fa-earth-europe text-3xl text-red-500"></i>
-                <h1 class="text-2xl font-bold tracking-wide">Aventura Británica</h1>
-            </div>
-            <p class="text-blue-200 text-sm italic">Nivel Intermedio-Avanzado (UK)</p>
+      <div class="max-w-5xl mx-auto px-4 py-6 flex flex-col sm:flex-row items-center justify-between">
+        <div class="flex items-center gap-3 mb-4 sm:mb-0">
+          <i class="fa-solid fa-earth-europe text-3xl text-red-500"></i>
+          <h1 class="text-2xl font-bold tracking-wide">Aventura Británica</h1>
         </div>
-        
-        <!-- Navigation Tabs -->
-        <div class="max-w-5xl mx-auto px-4 flex overflow-x-auto gap-2 pb-2 no-scrollbar">
-            <button onclick="switchTab('vocab')" id="tab-vocab" class="tab-btn active px-4 py-2 bg-white text-blue-900 rounded-t-lg font-semibold whitespace-nowrap">
-                <i class="fa-solid fa-book-open mr-2"></i>Vocabulario & Pronunciación
-            </button>
-            <button onclick="switchTab('structure')" id="tab-structure" class="tab-btn px-4 py-2 text-blue-200 hover:text-white hover:bg-blue-800 rounded-t-lg font-semibold transition-colors whitespace-nowrap">
-                <i class="fa-solid fa-layer-group mr-2"></i>Estructura
-            </button>
-            <button onclick="switchTab('verbs')" id="tab-verbs" class="tab-btn px-4 py-2 text-blue-200 hover:text-white hover:bg-blue-800 rounded-t-lg font-semibold transition-colors whitespace-nowrap">
-                <i class="fa-solid fa-bolt mr-2"></i>Verbos
-            </button>
-            <button onclick="switchTab('grammar')" id="tab-grammar" class="tab-btn px-4 py-2 text-blue-200 hover:text-white hover:bg-purple-800 rounded-t-lg font-semibold transition-colors whitespace-nowrap border-b-2 border-purple-500">
-                <i class="fa-solid fa-graduation-cap mr-2"></i>Gramática Avanzada
-            </button>
-        </div>
+        <p class="text-blue-200 text-sm italic">Nivel Intermedio-Avanzado (UK)</p>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="max-w-5xl mx-auto px-4 flex overflow-x-auto gap-2 pb-2 no-scrollbar">
+        <button onclick="switchTab('vocab')" id="tab-vocab" class="tab-btn active px-4 py-2 bg-white text-blue-900 rounded-t-lg font-semibold whitespace-nowrap">
+          <i class="fa-solid fa-book-open mr-2"></i>
+          Vocabulario & Pronunciación
+        </button>
+        <button
+          onclick="switchTab('structure')"
+          id="tab-structure"
+          class="tab-btn px-4 py-2 text-blue-200 hover:text-white hover:bg-blue-800 rounded-t-lg font-semibold transition-colors whitespace-nowrap">
+          <i class="fa-solid fa-layer-group mr-2"></i>
+          Estructura
+        </button>
+        <button onclick="switchTab('verbs')" id="tab-verbs" class="tab-btn px-4 py-2 text-blue-200 hover:text-white hover:bg-blue-800 rounded-t-lg font-semibold transition-colors whitespace-nowrap">
+          <i class="fa-solid fa-bolt mr-2"></i>
+          Verbos
+        </button>
+        <button
+          onclick="switchTab('grammar')"
+          id="tab-grammar"
+          class="tab-btn px-4 py-2 text-blue-200 hover:text-white hover:bg-purple-800 rounded-t-lg font-semibold transition-colors whitespace-nowrap border-b-2 border-transparent">
+          <i class="fa-solid fa-graduation-cap mr-2"></i>
+          Gramática Avanzada
+        </button>
+      </div>
     </header>
 
     <!-- Main Content -->
     <main class="max-w-5xl mx-auto px-4 py-8">
+      <!-- ================= MÓDULO 1: VOCABULARIO ================= -->
+      <section id="vocab" class="tab-content block">
+        <div class="mb-6 text-center">
+          <h2 class="text-2xl font-bold text-slate-700 mb-2">Vocabulario Británico Extendido</h2>
+          <p class="text-slate-600">Palabras esenciales del día a día en UK. Toca el audio para escuchar el acento nativo.</p>
+        </div>
 
-        <!-- ================= MÓDULO 1: VOCABULARIO ================= -->
-        <section id="vocab" class="tab-content block">
-            <div class="mb-6 text-center">
-                <h2 class="text-2xl font-bold text-slate-700 mb-2">Vocabulario Británico Extendido</h2>
-                <p class="text-slate-600">Palabras esenciales del día a día en UK. Toca el audio para escuchar el acento nativo.</p>
+        <!-- Buscador Interactivo -->
+        <div class="w-full max-w-md mx-auto mb-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
+          <label for="word-search" class="block text-sm font-bold text-blue-900 mb-2">
+            <i class="fa-solid fa-magnifying-glass mr-2"></i>
+            Diccionario Abierto (Inglés):
+          </label>
+          <div class="relative flex items-center">
+            <input
+              type="text"
+              id="word-search"
+              onkeydown="if (event.key === 'Enter') searchWord();"
+              placeholder="Ej. Butterfly, window..."
+              class="w-full pl-4 pr-12 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all font-medium text-slate-700" />
+            <button onclick="searchWord()" class="absolute right-2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-transform hover:scale-105" title="Buscar y Escuchar">
+              <i class="fa-solid fa-volume-high"></i>
+            </button>
+          </div>
+          <p id="search-msg" class="text-xs mt-2 hidden"></p>
+        </div>
+
+        <div class="flex flex-col items-center">
+          <!-- Flashcard -->
+          <div class="flip-card w-full max-w-md h-80 perspective-1000 cursor-pointer" onclick="toggleFlip(this)">
+            <div class="flip-card-inner relative w-full h-full transform-style-3d shadow-xl rounded-2xl">
+              <!-- Front (English) -->
+              <div class="absolute w-full h-full backface-hidden bg-white border-2 border-blue-100 rounded-2xl flex flex-col items-center justify-center p-6 text-center">
+                <span class="absolute top-4 right-4 text-3xl">🇬🇧</span>
+                <span id="vocab-type-en" class="text-sm font-bold text-blue-500 uppercase tracking-wider mb-2">Noun</span>
+                <h3 id="vocab-en" class="text-5xl font-extrabold text-slate-800 mb-2">Lorry</h3>
+                <p id="vocab-phonetic" class="text-xl text-slate-500 mb-6 font-mono">/ˈlɒri/</p>
+
+                <button
+                  onclick="playAudio(event, document.getElementById('vocab-en').innerText)"
+                  class="bg-red-600 hover:bg-red-700 text-white rounded-full p-4 transition-transform hover:scale-110 shadow-lg">
+                  <i class="fa-solid fa-volume-high text-xl"></i>
+                </button>
+                <p class="text-xs text-slate-400 mt-6">
+                  <i class="fa-solid fa-hand-pointer mr-1"></i>
+                  Toca para voltear
+                </p>
+              </div>
+
+              <!-- Back (Spanish) -->
+              <div class="absolute w-full h-full backface-hidden bg-slate-800 text-white border-2 border-slate-700 rounded-2xl flex flex-col items-center justify-center p-6 text-center rotate-y-180">
+                <span class="absolute top-4 right-4 text-3xl">🇪🇸</span>
+                <span id="vocab-type-es" class="text-sm font-bold text-red-400 uppercase tracking-wider mb-2">Sustantivo</span>
+                <h3 id="vocab-es" class="text-4xl font-bold mb-4">Camión</h3>
+                <p id="vocab-note" class="text-slate-300 italic text-sm bg-slate-700 p-3 rounded-lg border border-slate-600">En inglés americano se dice "Truck".</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Controls -->
+          <div class="flex gap-4 mt-8">
+            <button onclick="prevVocab()" class="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-semibold transition-colors">
+              <i class="fa-solid fa-arrow-left mr-2"></i>
+              Anterior
+            </button>
+            <span id="vocab-counter" class="py-2 text-slate-500 font-medium">1 / X</span>
+            <button onclick="nextVocab()" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors">
+              Siguiente
+              <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MÓDULO 2: ESTRUCTURA ================= -->
+      <section id="structure" class="tab-content hidden">
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold text-slate-700 mb-2">Estructuras Complejas</h2>
+          <p class="text-slate-600">Ordena las palabras. Presta atención a las preposiciones al final de frase y cláusulas relativas.</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200">
+          <div class="mb-6 border-b pb-4">
+            <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded uppercase tracking-wide">Reto Estructural</span>
+            <h3 id="struct-es-phrase" class="text-2xl font-bold text-slate-800 mt-2">Él siempre bebe té.</h3>
+            <p id="struct-grammar-rule" class="text-sm text-slate-500 mt-2 italic"></p>
+          </div>
+
+          <div class="mb-6">
+            <p class="text-sm font-semibold text-slate-400 mb-2 uppercase">Tu traducción:</p>
+            <div id="sentence-box" class="min-h-[60px] bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-3 flex flex-wrap gap-2 items-center"></div>
+          </div>
+
+          <div class="mb-6">
+            <p class="text-sm font-semibold text-slate-400 mb-2 uppercase">Palabras disponibles:</p>
+            <div id="word-bank" class="flex flex-wrap gap-2 min-h-[50px]"></div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
+            <div id="struct-feedback" class="font-bold text-lg h-8"></div>
+            <div class="flex gap-2">
+              <button onclick="checkStructure()" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold shadow-sm transition-colors">Comprobar</button>
+              <button onclick="nextStructure()" id="btn-next-struct" class="hidden px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold shadow-sm transition-colors">
+                Siguiente
+                <i class="fa-solid fa-arrow-right ml-1"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MÓDULO 3: VERBOS ================= -->
+      <section id="verbs" class="tab-content hidden">
+        <div class="mb-6 text-center">
+          <h2 class="text-2xl font-bold text-slate-700 mb-2">Desafío de Verbos (Tiempos Mixtos)</h2>
+          <p class="text-slate-600">Completa la oración con la forma correcta. ¡Cuidado con el participio pasado (Past Participle)!</p>
+        </div>
+
+        <div class="max-w-2xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden border border-slate-200">
+          <div class="bg-blue-50 p-6 border-b border-blue-100 text-center">
+            <p class="text-sm font-bold text-blue-500 uppercase tracking-widest mb-2" id="verb-type">Tipo</p>
+            <p class="text-xl text-slate-700 font-medium">Verbo base en español:</p>
+            <h3 id="verb-es-base" class="text-4xl font-black text-slate-800">Verbo</h3>
+            <p class="mt-2 text-slate-500">
+              Infinitive:
+              <strong class="text-blue-700" id="verb-en-base">to verb</strong>
+            </p>
+          </div>
+
+          <div class="p-6">
+            <p class="text-lg text-slate-600 mb-6 text-center" id="verb-sentence">Oración de ejemplo.</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="verb-options"></div>
+
+            <div id="verb-feedback" class="mt-6 text-center font-bold text-lg h-8 hidden rounded py-2"></div>
+          </div>
+          <div class="bg-slate-50 p-4 border-t border-slate-200 flex justify-center hidden" id="verb-next-container">
+            <button onclick="nextVerb()" class="px-8 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold shadow-sm transition-colors">
+              Siguiente Verbo
+              <i class="fa-solid fa-arrow-right ml-2"></i>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MÓDULO 4: GRAMÁTICA AVANZADA ================= -->
+      <section id="grammar" class="tab-content hidden">
+        <div class="mb-6">
+          <h2 class="text-2xl font-bold text-slate-700 mb-2 text-center">Masterclass de Gramática</h2>
+          <p class="text-slate-600 text-center">Lee la teoría a la izquierda y resuelve el ejercicio a la derecha.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <!-- Theory Panel -->
+          <div class="md:col-span-1 bg-purple-50 p-5 rounded-2xl border border-purple-200 shadow-sm h-fit">
+            <h3 class="text-lg font-bold text-purple-900 mb-4 border-b border-purple-200 pb-2">
+              <i class="fa-solid fa-book-journal-whills mr-2"></i>
+              Teoría Activa
+            </h3>
+            <div id="grammar-theory">
+              <!-- Dynamic theory content -->
+            </div>
+          </div>
+
+          <!-- Practice Panel -->
+          <div class="md:col-span-2 bg-white p-6 rounded-2xl shadow-md border border-slate-200">
+            <div class="flex justify-between items-center mb-4">
+              <span id="grammar-badge" class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Tema</span>
+              <span id="grammar-counter" class="text-slate-400 font-medium text-sm">1/4</span>
             </div>
 
-            <!-- Buscador Interactivo -->
-            <div class="w-full max-w-md mx-auto mb-8 bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-                <label for="word-search" class="block text-sm font-bold text-blue-900 mb-2"><i class="fa-solid fa-magnifying-glass mr-2"></i>Diccionario Abierto (Escribe cualquier palabra):</label>
-                <div class="relative flex items-center">
-                    <input type="text" id="word-search" onkeydown="if(event.key === 'Enter') searchWord()" placeholder="Ejemplo: Butterfly, window..." class="w-full pl-4 pr-12 py-3 rounded-xl border-2 border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition-all font-medium text-slate-700">
-                    <button onclick="searchWord()" class="absolute right-2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-lg transition-transform hover:scale-105" title="Buscar y Escuchar">
-                        <i class="fa-solid fa-volume-high"></i>
-                    </button>
-                </div>
-                <p id="search-msg" class="text-xs mt-2 hidden"></p>
+            <h3 class="text-xl font-bold text-slate-800 mb-2">Traduce la siguiente frase:</h3>
+            <p id="grammar-es-prompt" class="text-lg text-slate-600 italic mb-6 border-l-4 border-purple-400 pl-4 py-1 bg-slate-50"></p>
+
+            <div class="space-y-3" id="grammar-mcq-options">
+              <!-- Dynamic options -->
             </div>
 
-            <div class="flex flex-col items-center">
-                <!-- Flashcard -->
-                <div class="flip-card w-full max-w-md h-80 perspective-1000 cursor-pointer" onclick="toggleFlip(this)">
-                    <div class="flip-card-inner relative w-full h-full transform-style-3d shadow-xl rounded-2xl">
-                        
-                        <!-- Front (English) -->
-                        <div class="absolute w-full h-full backface-hidden bg-white border-2 border-blue-100 rounded-2xl flex flex-col items-center justify-center p-6 text-center">
-                            <span class="absolute top-4 right-4 text-3xl">🇬🇧</span>
-                            <span id="vocab-type-en" class="text-sm font-bold text-blue-500 uppercase tracking-wider mb-2">Noun</span>
-                            <h3 id="vocab-en" class="text-5xl font-extrabold text-slate-800 mb-2">Lorry</h3>
-                            <p id="vocab-phonetic" class="text-xl text-slate-500 mb-6 font-mono">/ˈlɒri/</p>
-                            
-                            <button onclick="playAudio(event, currentVocab.en)" class="bg-red-600 hover:bg-red-700 text-white rounded-full p-4 transition-transform hover:scale-110 shadow-lg">
-                                <i class="fa-solid fa-volume-high text-xl"></i>
-                            </button>
-                            <p class="text-xs text-slate-400 mt-6"><i class="fa-solid fa-hand-pointer mr-1"></i> Toca para voltear</p>
-                        </div>
-
-                        <!-- Back (Spanish) -->
-                        <div class="absolute w-full h-full backface-hidden bg-slate-800 text-white border-2 border-slate-700 rounded-2xl flex flex-col items-center justify-center p-6 text-center rotate-y-180">
-                            <span class="absolute top-4 right-4 text-3xl">🇪🇸</span>
-                            <span id="vocab-type-es" class="text-sm font-bold text-red-400 uppercase tracking-wider mb-2">Sustantivo</span>
-                            <h3 id="vocab-es" class="text-4xl font-bold mb-4">Camión</h3>
-                            <p id="vocab-note" class="text-slate-300 italic text-sm bg-slate-700 p-3 rounded-lg border border-slate-600">
-                                En inglés americano se dice "Truck".
-                            </p>
-                        </div>
-
-                    </div>
-                </div>
-
-                <!-- Controls -->
-                <div class="flex gap-4 mt-8">
-                    <button onclick="prevVocab()" class="px-6 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg font-semibold transition-colors">
-                        <i class="fa-solid fa-arrow-left mr-2"></i>Anterior
-                    </button>
-                    <span id="vocab-counter" class="py-2 text-slate-500 font-medium">1 / X</span>
-                    <button onclick="nextVocab()" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors">
-                        Siguiente<i class="fa-solid fa-arrow-right ml-2"></i>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ================= MÓDULO 2: ESTRUCTURA ================= -->
-        <section id="structure" class="tab-content hidden">
-            <div class="mb-6">
-                <h2 class="text-2xl font-bold text-slate-700 mb-2">Estructuras Complejas</h2>
-                <p class="text-slate-600">Ordena las palabras. Presta atención a las preposiciones al final de frase y cláusulas relativas.</p>
+            <div id="grammar-feedback" class="hidden mt-6 p-4 rounded-lg font-medium">
+              <!-- Feedback -->
             </div>
 
-            <div class="bg-white p-6 rounded-2xl shadow-md border border-slate-200">
-                
-                <div class="mb-6 border-b pb-4">
-                    <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded uppercase tracking-wide">Reto Estructural</span>
-                    <h3 id="struct-es-phrase" class="text-2xl font-bold text-slate-800 mt-2">Él siempre bebe té.</h3>
-                    <p id="struct-grammar-rule" class="text-sm text-slate-500 mt-2 italic"></p>
-                </div>
-
-                <div class="mb-6">
-                    <p class="text-sm font-semibold text-slate-400 mb-2 uppercase">Tu traducción:</p>
-                    <div id="sentence-box" class="min-h-[60px] bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl p-3 flex flex-wrap gap-2 items-center">
-                    </div>
-                </div>
-
-                <div class="mb-6">
-                    <p class="text-sm font-semibold text-slate-400 mb-2 uppercase">Palabras disponibles:</p>
-                    <div id="word-bank" class="flex flex-wrap gap-2 min-h-[50px]">
-                    </div>
-                </div>
-
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
-                    <div id="struct-feedback" class="font-bold text-lg h-8"></div>
-                    <div class="flex gap-2">
-                        <button onclick="checkStructure()" class="px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold shadow-sm transition-colors">
-                            Comprobar
-                        </button>
-                        <button onclick="nextStructure()" id="btn-next-struct" class="hidden px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold shadow-sm transition-colors">
-                            Siguiente <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </button>
-                    </div>
-                </div>
+            <div class="mt-6 flex justify-end">
+              <button onclick="nextGrammar()" id="grammar-next-btn" class="hidden px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-bold shadow-sm transition-colors">
+                Siguiente
+                <i class="fa-solid fa-arrow-right ml-1"></i>
+              </button>
             </div>
-        </section>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer>
+      <p>Creado por Jo´se M. Fernández con Gemini Pro</p>
+    </footer>
+    <script>
+      // ================= STATE MANAGEMENT & NAVIGATION =================
+      function switchTab(tabId) {
+        // Hide all tabs
+        document.querySelectorAll('.tab-content').forEach(tab => {
+          tab.classList.add('hidden');
+          tab.classList.remove('block');
+        });
+        // Reset button styles
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+          let baseClasses = 'tab-btn px-4 py-2 text-blue-200 hover:text-white rounded-t-lg font-semibold transition-colors whitespace-nowrap';
+          if (btn.id === 'tab-grammar') {
+            btn.className = baseClasses + ' hover:bg-purple-800 border-b-2 border-transparent';
+          } else {
+            btn.className = baseClasses + ' hover:bg-blue-800';
+          }
+        });
 
-        <!-- ================= MÓDULO 3: VERBOS ================= -->
-        <section id="verbs" class="tab-content hidden">
-            <div class="mb-6 text-center">
-                <h2 class="text-2xl font-bold text-slate-700 mb-2">Desafío de Verbos (Tiempos Mixtos)</h2>
-            document.getElementById(`tab-${tabId}`);
-            if(tabId === 'grammar') {
-                 activeBtn.className = 'tab-btn active px-4 py-2 bg-white text-purple-900 rounded-t-lg font-semibold whitespace-nowrap border-t-2 border-x-2 border-purple-500';
-            } else {
-                activeBtn.className = 'tab-btn active px-4 py-2 bg-white text-blue-900 rounded-t-lg font-semibold whitespace-nowrap';
-            }
+        // Show selected tab
+        document.getElementById(tabId).classList.remove('hidden');
+        document.getElementById(tabId).classList.add('block');
+
+        // Highlight selected button
+        const activeBtn = document.getElementById(`tab-${tabId}`);
+        if (tabId === 'grammar') {
+          activeBtn.className = 'tab-btn active px-4 py-2 bg-white text-purple-900 rounded-t-lg font-semibold whitespace-nowrap border-t-2 border-x-2 border-purple-500';
+        } else {
+          activeBtn.className = 'tab-btn active px-4 py-2 bg-white text-blue-900 rounded-t-lg font-semibold whitespace-nowrap';
+        }
+      }
+
+      // ================= MÓDULO 1: VOCABULARIO =================
+      const vocabData = [
+        {en: 'Lorry', phonetic: '/ˈlɒri/', typeEn: 'Noun', es: 'Camión', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Truck'."},
+        {en: 'Biscuit', phonetic: '/ˈbɪskɪt/', typeEn: 'Noun', es: 'Galleta', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Cookie'."},
+        {en: 'Lift', phonetic: '/lɪft/', typeEn: 'Noun', es: 'Ascensor', typeEs: 'Sustantivo', note: "En EE.UU. prefieren 'Elevator'."},
+        {en: 'Pavement', phonetic: '/ˈpeɪvmənt/', typeEn: 'Noun', es: 'Acera', typeEs: 'Sustantivo', note: "¡Falso amigo! No es pavimento de carretera. En EE.UU. es 'Sidewalk'."},
+        {en: 'Chemist', phonetic: '/ˈkemɪst/', typeEn: 'Noun', es: 'Farmacia', typeEs: 'Sustantivo', note: "También se dice 'Pharmacy'. En EE.UU. es muy común 'Drugstore'."},
+        {en: 'Queue', phonetic: '/kjuː/', typeEn: 'Noun / Verb', es: 'Fila / Hacer fila', typeEs: 'Sustantivo / Verbo', note: "En EE.UU. se dice 'Line'."},
+        {en: 'Flat', phonetic: '/flæt/', typeEn: 'Noun', es: 'Apartamento', typeEs: 'Sustantivo', note: "En EE.UU. se usa 'Apartment'."},
+        {
+          en: 'Rubbish',
+          phonetic: '/ˈrʌbɪʃ/',
+          typeEn: 'Noun / Adj',
+          es: 'Basura / Malo',
+          typeEs: 'Sustantivo / Adjetivo',
+          note: "EE.UU: 'Trash' / 'Garbage'. En UK se usa para decir que algo es de mala calidad ('That film was rubbish')."
+        },
+        {en: 'Mate', phonetic: '/meɪt/', typeEn: 'Noun', es: 'Compañero / Amigo', typeEs: 'Sustantivo', note: "Muy usado en UK y Australia para referirse a un amigo ('Cheers, mate!')."},
+        {en: 'Actually', phonetic: '/ˈæktʃuəli/', typeEn: 'Adverb', es: 'En realidad / De hecho', typeEs: 'Adverbio', note: "¡Falso amigo! No significa 'actualmente' (currently)."},
+        {en: 'Chips', phonetic: '/tʃɪps/', typeEn: 'Noun', es: 'Papas fritas (gruesas)', typeEs: 'Sustantivo', note: "En EE.UU. las llaman 'Fries'. En UK, 'chips' son las calientes de corte grueso."},
+        {en: 'Crisps', phonetic: '/krɪsps/', typeEn: 'Noun', es: 'Papas fritas (de bolsa)', typeEs: 'Sustantivo', note: "En EE.UU. estas son 'Chips'."},
+        {en: 'Petrol', phonetic: '/ˈpetrəl/', typeEn: 'Noun', es: 'Gasolina', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Gas' o 'Gasoline'."},
+        {en: 'Holiday', phonetic: '/ˈhɒlədeɪ/', typeEn: 'Noun', es: 'Vacaciones', typeEs: 'Sustantivo', note: "En EE.UU. se prefiere 'Vacation'."},
+        {en: 'Jumper', phonetic: '/ˈdʒʌmpə/', typeEn: 'Noun', es: 'Suéter', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Sweater'. En UK 'sweater' también se usa, pero menos."},
+        {en: 'Trainers', phonetic: '/ˈtreɪnəz/', typeEn: 'Noun', es: 'Zapatillas deportivas', typeEs: 'Sustantivo', note: "En EE.UU. se conocen como 'Sneakers'."},
+        {en: 'Trousers', phonetic: '/ˈtraʊzəz/', typeEn: 'Noun', es: 'Pantalones', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Pants' (en UK, 'pants' se refiere a la ropa interior)."},
+        {en: 'Boot', phonetic: '/buːt/', typeEn: 'Noun', es: 'Maletero (coche)', typeEs: 'Sustantivo', note: "En EE.UU. le llaman 'Trunk'."},
+        {en: 'Bonnet', phonetic: '/ˈbɒnɪt/', typeEn: 'Noun', es: 'Capó (coche)', typeEs: 'Sustantivo', note: "En EE.UU. le llaman 'Hood'."},
+        {en: 'Windscreen', phonetic: '/ˈwɪndskriːn/', typeEn: 'Noun', es: 'Parabrisas', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Windshield'."},
+        {en: 'Indicator', phonetic: '/ˈɪndɪkeɪtə/', typeEn: 'Noun', es: 'Intermitente (coche)', typeEs: 'Sustantivo', note: "En EE.UU. usan 'Blinker' o 'Turn signal'."},
+        {en: 'Motorway', phonetic: '/ˈməʊtəweɪ/', typeEn: 'Noun', es: 'Autopista', typeEs: 'Sustantivo', note: "En EE.UU. es 'Highway' o 'Freeway'."},
+        {en: 'Roundabout', phonetic: '/ˈraʊndəbaʊt/', typeEn: 'Noun', es: 'Rotonda', typeEs: 'Sustantivo', note: "Común en UK. En EE.UU. le dicen 'Traffic circle'."},
+        {en: 'Zebra crossing', phonetic: '/ˌzebrə ˈkrɒsɪŋ/', typeEn: 'Noun', es: 'Paso de cebra', typeEs: 'Sustantivo', note: "En EE.UU. es 'Crosswalk'."},
+        {en: 'Underground / Tube', phonetic: '/ˈʌndəɡraʊnd/', typeEn: 'Noun', es: 'Metro', typeEs: 'Sustantivo', note: "En Londres se le llama cariñosamente 'The Tube'. EE.UU: 'Subway'."},
+        {en: 'Railway station', phonetic: '/ˈreɪlweɪ ˈsteɪʃn/', typeEn: 'Noun', es: 'Estación de tren', typeEs: 'Sustantivo', note: "En EE.UU. 'Train station' es más común."},
+        {en: 'Return ticket', phonetic: '/rɪˈtɜːn ˈtɪkɪt/', typeEn: 'Noun', es: 'Billete de ida y vuelta', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Round-trip ticket'."},
+        {en: 'Single ticket', phonetic: '/ˈsɪŋɡl ˈtɪkɪt/', typeEn: 'Noun', es: 'Billete sencillo (solo ida)', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'One-way ticket'."},
+        {en: 'Timetable', phonetic: '/ˈtaɪmteɪbl/', typeEn: 'Noun', es: 'Horario', typeEs: 'Sustantivo', note: "En EE.UU. se prefiere 'Schedule'."},
+        {en: 'Autumn', phonetic: '/ˈɔːtəm/', typeEn: 'Noun', es: 'Otoño', typeEs: 'Sustantivo', note: "En EE.UU. se usa muchísimo 'Fall'."},
+        {en: 'Fortnight', phonetic: '/ˈfɔːtnaɪt/', typeEn: 'Noun', es: 'Quincena', typeEs: 'Sustantivo', note: "Término muy británico. En EE.UU. dicen 'Two weeks'."},
+        {en: 'Post', phonetic: '/pəʊst/', typeEn: 'Noun / Verb', es: 'Correo / Enviar por correo', typeEs: 'Sustantivo / Verbo', note: "En EE.UU. se dice 'Mail'."},
+        {en: 'Postcode', phonetic: '/ˈpəʊstkəʊd/', typeEn: 'Noun', es: 'Código postal', typeEs: 'Sustantivo', note: "En EE.UU. es el famoso 'Zip code'."},
+        {en: 'Bill', phonetic: '/bɪl/', typeEn: 'Noun', es: 'Cuenta (restaurante)', typeEs: 'Sustantivo', note: "En EE.UU. suelen pedir 'The check'."},
+        {en: 'Tap', phonetic: '/tæp/', typeEn: 'Noun', es: 'Grifo', typeEs: 'Sustantivo', note: "En EE.UU. le llaman 'Faucet'."},
+        {en: 'Bath', phonetic: '/bɑːθ/', typeEn: 'Noun', es: 'Bañera', typeEs: 'Sustantivo', note: "En EE.UU. es 'Bathtub'."},
+        {en: 'Wardrobe', phonetic: '/ˈwɔːdrəʊb/', typeEn: 'Noun', es: 'Armario (para ropa)', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Closet'."},
+        {en: 'Garden', phonetic: '/ˈɡɑːdn/', typeEn: 'Noun', es: 'Jardín (patio)', typeEs: 'Sustantivo', note: "El patio trasero en UK. En EE.UU. es 'Yard'."},
+        {en: 'Ground floor', phonetic: '/ɡraʊnd flɔː/', typeEn: 'Noun', es: 'Planta baja', typeEs: 'Sustantivo', note: "En EE.UU. la planta baja es el 'First floor'."},
+        {en: 'Torch', phonetic: '/tɔːtʃ/', typeEn: 'Noun', es: 'Linterna', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Flashlight'."},
+        {en: 'Rubber', phonetic: '/ˈrʌbə/', typeEn: 'Noun', es: 'Goma de borrar', typeEs: 'Sustantivo', note: "En EE.UU. es 'Eraser' (Rubber allí significa otra cosa)."},
+        {en: 'Ruler', phonetic: '/ˈruːlə/', typeEn: 'Noun', es: 'Regla', typeEs: 'Sustantivo', note: 'Regla para medir en el colegio.'},
+        {en: 'Term', phonetic: '/tɜːm/', typeEn: 'Noun', es: 'Trimestre escolar', typeEs: 'Sustantivo', note: "En EE.UU. usan 'Semester' o 'Quarter'."},
+        {en: 'Marks', phonetic: '/mɑːks/', typeEn: 'Noun', es: 'Notas (exámenes)', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Grades'."},
+        {en: 'State school', phonetic: '/steɪt skuːl/', typeEn: 'Noun', es: 'Escuela pública (gratis)', typeEs: 'Sustantivo', note: "En EE.UU. es 'Public school'."},
+        {
+          en: 'Public school',
+          phonetic: '/ˈpʌblɪk skuːl/',
+          typeEn: 'Noun',
+          es: 'Escuela privada (exclusiva)',
+          typeEs: 'Sustantivo',
+          note: "¡Contradictorio! En UK, las escuelas de élite de pago se llaman 'public'."
+        },
+        {en: 'Cinema', phonetic: '/ˈsɪnəmə/', typeEn: 'Noun', es: 'Cine', typeEs: 'Sustantivo', note: "En EE.UU. prefieren 'Movie theater'."},
+        {en: 'Film', phonetic: '/fɪlm/', typeEn: 'Noun', es: 'Película', typeEs: 'Sustantivo', note: "En EE.UU. es 'Movie'."},
+        {en: 'Football', phonetic: '/ˈfʊtbɔːl/', typeEn: 'Noun', es: 'Fútbol', typeEs: 'Sustantivo', note: "En EE.UU. es 'Soccer' (Football allí es el americano)."},
+        {en: 'Match', phonetic: '/mætʃ/', typeEn: 'Noun', es: 'Partido (deporte)', typeEs: 'Sustantivo', note: "En EE.UU. se dice 'Game'."}
+      ];
+
+      let currentVocabIndex = 0;
+      let currentVocab = vocabData[0];
+
+      function updateVocabUI() {
+        currentVocab = vocabData[currentVocabIndex];
+        document.getElementById('vocab-en').innerText = currentVocab.en;
+        document.getElementById('vocab-phonetic').innerText = currentVocab.phonetic;
+        document.getElementById('vocab-type-en').innerText = currentVocab.typeEn;
+
+        document.getElementById('vocab-es').innerText = currentVocab.es;
+        document.getElementById('vocab-type-es').innerText = currentVocab.typeEs;
+        document.getElementById('vocab-note').innerText = currentVocab.note;
+        document.getElementById('vocab-counter').innerText = `${currentVocabIndex + 1} / ${vocabData.length}`;
+
+        document.querySelector('.flip-card').classList.remove('flipped');
+      }
+
+      async function searchWord() {
+        const input = document.getElementById('word-search').value.trim().toLowerCase();
+        const msgEl = document.getElementById('search-msg');
+        if (!input) return;
+
+        msgEl.classList.remove('hidden');
+
+        // 1. Buscar en la base local de 50 palabras
+        const index = vocabData.findIndex(v => v.en.toLowerCase() === input || v.en.toLowerCase().includes(input));
+        if (index !== -1) {
+          currentVocabIndex = index;
+          updateVocabUI();
+          playAudio(new Event(''), vocabData[currentVocabIndex].en);
+          msgEl.innerText = '¡Encontrada en el temario principal!';
+          msgEl.className = 'text-xs text-green-600 mt-2 block font-bold text-center';
+          return;
         }
 
-        // ================= MÓDULO 1: VOCABULARIO =================
-        const vocabData = [
-            { en: "Lorry", phonetic: "/ˈlɒri/", typeEn: "Noun", es: "Camión", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Truck'." },
-            { en: "Biscuit", phonetic: "/ˈbɪskɪt/", typeEn: "Noun", es: "Galleta", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Cookie'." },
-            { en: "Lift", phonetic: "/lɪft/", typeEn: "Noun", es: "Ascensor", typeEs: "Sustantivo", note: "En EE.UU. prefieren 'Elevator'." },
-            { en: "Pavement", phonetic: "/ˈpeɪvmənt/", typeEn: "Noun", es: "Acera", typeEs: "Sustantivo", note: "¡Falso amigo! No es pavimento de carretera. En EE.UU. es 'Sidewalk'." },
-            { en: "Chemist", phonetic: "/ˈkemɪst/", typeEn: "Noun", es: "Farmacia", typeEs: "Sustantivo", note: "También se dice 'Pharmacy'. En EE.UU. es muy común 'Drugstore'." },
-            { en: "Queue", phonetic: "/kjuː/", typeEn: "Noun / Verb", es: "Fila / Hacer fila", typeEs: "Sustantivo / Verbo", note: "En EE.UU. se dice 'Line'." },
-            { en: "Flat", phonetic: "/flæt/", typeEn: "Noun", es: "Apartamento", typeEs: "Sustantivo", note: "En EE.UU. se usa 'Apartment'." },
-            { en: "Rubbish", phonetic: "/ˈrʌbɪʃ/", typeEn: "Noun / Adj", es: "Basura / Malo", typeEs: "Sustantivo / Adjetivo", note: "EE.UU: 'Trash' / 'Garbage'. En UK se usa para decir que algo es de mala calidad ('That film was rubbish')." },
-            { en: "Mate", phonetic: "/meɪt/", typeEn: "Noun", es: "Compañero / Amigo", typeEs: "Sustantivo", note: "Muy usado en UK y Australia para referirse a un amigo ('Cheers, mate!')." },
-            { en: "Actually", phonetic: "/ˈæktʃuəli/", typeEn: "Adverb", es: "En realidad / De hecho", typeEs: "Adverbio", note: "¡Falso amigo! No significa 'actualmente' (currently)." },
-            { en: "Chips", phonetic: "/tʃɪps/", typeEn: "Noun", es: "Papas fritas (gruesas)", typeEs: "Sustantivo", note: "En EE.UU. las llaman 'Fries'. En UK, 'chips' son las calientes de corte grueso." },
-            { en: "Crisps", phonetic: "/krɪsps/", typeEn: "Noun", es: "Papas fritas (de bolsa)", typeEs: "Sustantivo", note: "En EE.UU. estas son 'Chips'." },
-            { en: "Petrol", phonetic: "/ˈpetrəl/", typeEn: "Noun", es: "Gasolina", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Gas' o 'Gasoline'." },
-            { en: "Holiday", phonetic: "/ˈhɒlədeɪ/", typeEn: "Noun", es: "Vacaciones", typeEs: "Sustantivo", note: "En EE.UU. se prefiere 'Vacation'." },
-            { en: "Jumper", phonetic: "/ˈdʒʌmpə/", typeEn: "Noun", es: "Suéter", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Sweater'. En UK 'sweater' también se usa, pero menos." },
-            { en: "Trainers", phonetic: "/ˈtreɪnəz/", typeEn: "Noun", es: "Zapatillas deportivas", typeEs: "Sustantivo", note: "En EE.UU. se conocen como 'Sneakers'." },
-            { en: "Trousers", phonetic: "/ˈtraʊzəz/", typeEn: "Noun", es: "Pantalones", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Pants' (en UK, 'pants' se refiere a la ropa interior)." },
-            { en: "Boot", phonetic: "/buːt/", typeEn: "Noun", es: "Maletero (coche)", typeEs: "Sustantivo", note: "En EE.UU. le llaman 'Trunk'." },
-            { en: "Bonnet", phonetic: "/ˈbɒnɪt/", typeEn: "Noun", es: "Capó (coche)", typeEs: "Sustantivo", note: "En EE.UU. le llaman 'Hood'." },
-            { en: "Windscreen", phonetic: "/ˈwɪndskriːn/", typeEn: "Noun", es: "Parabrisas", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Windshield'." },
-            { en: "Indicator", phonetic: "/ˈɪndɪkeɪtə/", typeEn: "Noun", es: "Intermitente (coche)", typeEs: "Sustantivo", note: "En EE.UU. usan 'Blinker' o 'Turn signal'." },
-            { en: "Motorway", phonetic: "/ˈməʊtəweɪ/", typeEn: "Noun", es: "Autopista", typeEs: "Sustantivo", note: "En EE.UU. es 'Highway' o 'Freeway'." },
-            { en: "Roundabout", phonetic: "/ˈraʊndəbaʊt/", typeEn: "Noun", es: "Rotonda", typeEs: "Sustantivo", note: "Común en UK. En EE.UU. le dicen 'Traffic circle'." },
-            { en: "Zebra crossing", phonetic: "/ˌzebrə ˈkrɒsɪŋ/", typeEn: "Noun", es: "Paso de cebra", typeEs: "Sustantivo", note: "En EE.UU. es 'Crosswalk'." },
-            { en: "Underground / Tube", phonetic: "/ˈʌndəɡraʊnd/", typeEn: "Noun", es: "Metro", typeEs: "Sustantivo", note: "En Londres se le llama cariñosamente 'The Tube'. EE.UU: 'Subway'." },
-            { en: "Railway station", phonetic: "/ˈreɪlweɪ ˈsteɪʃn/", typeEn: "Noun", es: "Estación de tren", typeEs: "Sustantivo", note: "En EE.UU. 'Train station' es más común." },
-            { en: "Return ticket", phonetic: "/rɪˈtɜːn ˈtɪkɪt/", typeEn: "Noun", es: "Billete de ida y vuelta", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Round-trip ticket'." },
-            { en: "Single ticket", phonetic: "/ˈsɪŋɡl ˈtɪkɪt/", typeEn: "Noun", es: "Billete sencillo (solo ida)", typeEs: "Sustantivo", note: "En EE.UU. se dice 'One-way ticket'." },
-            { en: "Timetable", phonetic: "/ˈtaɪmteɪbl/", typeEn: "Noun", es: "Horario", typeEs: "Sustantivo", note: "En EE.UU. se prefiere 'Schedule'." },
-            { en: "Autumn", phonetic: "/ˈɔːtəm/", typeEn: "Noun", es: "Otoño", typeEs: "Sustantivo", note: "En EE.UU. se usa muchísimo 'Fall'." },
-            { en: "Fortnight", phonetic: "/ˈfɔːtnaɪt/", typeEn: "Noun", es: "Quincena", typeEs: "Sustantivo", note: "Término muy británico. En EE.UU. dicen 'Two weeks'." },
-            { en: "Post", phonetic: "/pəʊst/", typeEn: "Noun / Verb", es: "Correo / Enviar por correo", typeEs: "Sustantivo / Verbo", note: "En EE.UU. se dice 'Mail'." },
-            { en: "Postcode", phonetic: "/ˈpəʊstkəʊd/", typeEn: "Noun", es: "Código postal", typeEs: "Sustantivo", note: "En EE.UU. es el famoso 'Zip code'." },
-            { en: "Bill", phonetic: "/bɪl/", typeEn: "Noun", es: "Cuenta (restaurante)", typeEs: "Sustantivo", note: "En EE.UU. suelen pedir 'The check'." },
-            { en: "Tap", phonetic: "/tæp/", typeEn: "Noun", es: "Grifo", typeEs: "Sustantivo", note: "En EE.UU. le llaman 'Faucet'." },
-            { en: "Bath", phonetic: "/bɑːθ/", typeEn: "Noun", es: "Bañera", typeEs: "Sustantivo", note: "En EE.UU. es 'Bathtub'." },
-            { en: "Wardrobe", phonetic: "/ˈwɔːdrəʊb/", typeEn: "Noun", es: "Armario (para ropa)", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Closet'." },
-            { en: "Garden", phonetic: "/ˈɡɑːdn/", typeEn: "Noun", es: "Jardín (patio)", typeEs: "Sustantivo", note: "El patio trasero en UK. En EE.UU. es 'Yard'." },
-            { en: "Ground floor", phonetic: "/ɡraʊnd flɔː/", typeEn: "Noun", es: "Planta baja", typeEs: "Sustantivo", note: "En EE.UU. la planta baja es el 'First floor'." },
-            { en: "Torch", phonetic: "/tɔːtʃ/", typeEn: "Noun", es: "Linterna", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Flashlight'." },
-            { en: "Rubber", phonetic: "/ˈrʌbə/", typeEn: "Noun", es: "Goma de borrar", typeEs: "Sustantivo", note: "En EE.UU. es 'Eraser' (Rubber allí significa otra cosa)." },
-            { en: "Ruler", phonetic: "/ˈruːlə/", typeEn: "Noun", es: "Regla", typeEs: "Sustantivo", note: "Regla para medir en el colegio." },
-            { en: "Term", phonetic: "/tɜːm/", typeEn: "Noun", es: "Trimestre escolar", typeEs: "Sustantivo", note: "En EE.UU. usan 'Semester' o 'Quarter'." },
-            { en: "Marks", phonetic: "/mɑːks/", typeEn: "Noun", es: "Notas (exámenes)", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Grades'." },
-            { en: "State school", phonetic: "/steɪt skuːl/", typeEn: "Noun", es: "Escuela pública (gratis)", typeEs: "Sustantivo", note: "En EE.UU. es 'Public school'." },
-            { en: "Public school", phonetic: "/ˈpʌblɪk skuːl/", typeEn: "Noun", es: "Escuela privada (exclusiva)", typeEs: "Sustantivo", note: "¡Contradictorio! En UK, las escuelas de élite de pago se llaman 'public'." },
-            { en: "Cinema", phonetic: "/ˈsɪnəmə/", typeEn: "Noun", es: "Cine", typeEs: "Sustantivo", note: "En EE.UU. prefieren 'Movie theater'." },
-            { en: "Film", phonetic: "/fɪlm/", typeEn: "Noun", es: "Película", typeEs: "Sustantivo", note: "En EE.UU. es 'Movie'." },
-            { en: "Football", phonetic: "/ˈfʊtbɔːl/", typeEn: "Noun", es: "Fútbol", typeEs: "Sustantivo", note: "En EE.UU. es 'Soccer' (Football allí es el americano)." },
-            { en: "Match", phonetic: "/mætʃ/", typeEn: "Noun", es: "Partido (deporte)", typeEs: "Sustantivo", note: "En EE.UU. se dice 'Game'." }
-        ];
+        // 2. Usar API externa para traducir si no está
+        msgEl.innerText = 'Traduciendo y generando audio...';
+        msgEl.className = 'text-xs text-blue-500 mt-2 block font-medium text-center animate-pulse';
 
-        let currentVocabIndex = 0;
-        let currentVocab = vocabData[0];
+        try {
+          const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=en|es`);
+          const data = await response.json();
 
-        function updateVocabUI() {
-            currentVocab = vocabData[currentVocabIndex];
-            document.getElementById('vocab-en').innerText = currentVocab.en;
-            document.getElementById('vocab-phonetic').innerText = currentVocab.phonetic;
-            document.getElementById('vocab-type-en').innerText = currentVocab.typeEn;
-            
-            document.getElementById('vocab-es').innerText = currentVocab.es;
-            document.getElementById('vocab-type-es').innerText = currentVocab.typeEs;
-            document.getElementById('vocab-note').innerText = currentVocab.note;
-            document.getElementById('vocab-counter').innerText = `${currentVocabIndex + 1} / ${vocabData.length}`;
-            
+          if (data && data.responseData && data.responseData.translatedText) {
+            const translation = data.responseData.translatedText;
+            const capitalizedInput = input.charAt(0).toUpperCase() + input.slice(1);
+
+            document.getElementById('vocab-en').innerText = capitalizedInput;
+            document.getElementById('vocab-phonetic').innerText = '/.../';
+            document.getElementById('vocab-type-en').innerText = 'Online Search';
+
+            document.getElementById('vocab-es').innerText = translation;
+            document.getElementById('vocab-type-es').innerText = 'Traducción';
+            document.getElementById('vocab-note').innerText = 'Palabra fuera de temario. Obtenida de diccionario en línea.';
+            document.getElementById('vocab-counter').innerText = 'Búsqueda Extra';
+
             document.querySelector('.flip-card').classList.remove('flipped');
+
+            playAudio(new Event(''), input);
+
+            msgEl.innerText = `Traducida y pronunciada (UK).`;
+            msgEl.className = 'text-xs text-purple-600 mt-2 block font-bold text-center';
+          } else {
+            throw new Error('No translation');
+          }
+        } catch (error) {
+          msgEl.innerText = 'Pronunciando palabra (sin traducción disponible).';
+          msgEl.className = 'text-xs text-orange-500 mt-2 block font-medium text-center';
+          playAudio(new Event(''), input);
+        }
+      }
+
+      function nextVocab() {
+        currentVocabIndex = (currentVocabIndex + 1) % vocabData.length;
+        updateVocabUI();
+      }
+
+      function prevVocab() {
+        currentVocabIndex = (currentVocabIndex - 1 + vocabData.length) % vocabData.length;
+        updateVocabUI();
+      }
+
+      function toggleFlip(element) {
+        element.classList.toggle('flipped');
+      }
+
+      function playAudio(event, text) {
+        if (event) event.stopPropagation();
+        if ('speechSynthesis' in window) {
+          // Cancel previous speech to avoid overlapping
+          speechSynthesis.cancel();
+
+          const utterance = new SpeechSynthesisUtterance(text);
+          const voices = speechSynthesis.getVoices();
+          // Prefer UK English
+          const ukVoice = voices.find(voice => voice.lang === 'en-GB' || voice.lang === 'en_GB');
+          if (ukVoice) {
+            utterance.voice = ukVoice;
+          } else {
+            utterance.lang = 'en-GB';
+          }
+          utterance.rate = 0.85;
+          speechSynthesis.speak(utterance);
+        } else {
+          alert('Tu navegador no soporta la síntesis de voz.');
+        }
+      }
+      speechSynthesis.onvoiceschanged = () => {
+        speechSynthesis.getVoices();
+      };
+
+      // ================= MÓDULO 2: ESTRUCTURA =================
+      const structureData = [
+        {
+          esPhrase: 'El hombre con el que estaba hablando es mi jefe.',
+          rule: 'Preposiciones al final: En el lenguaje común la preposición (to) suele ir al final de la cláusula relativa.',
+          words: ['The', 'man', 'I', 'was', 'talking', 'to', 'is', 'my', 'boss.'],
+          correct: ['The', 'man', 'I', 'was', 'talking', 'to', 'is', 'my', 'boss.']
+        },
+        {
+          esPhrase: '¿De dónde eres?',
+          rule: 'Preguntas con preposiciones: Las palabras interrogativas van al principio, la preposición (from) al final.',
+          words: ['Where', 'you', 'from?', 'are'],
+          correct: ['Where', 'are', 'you', 'from?']
+        },
+        {
+          esPhrase: 'El coche rojo, que compré ayer, es muy rápido.',
+          rule: "Cláusulas relativas (Non-defining): Usamos comas y 'which' para dar información extra sobre cosas.",
+          words: ['The', 'red', 'car,', 'which', 'I', 'bought', 'yesterday,', 'is', 'very', 'fast.'],
+          correct: ['The', 'red', 'car,', 'which', 'I', 'bought', 'yesterday,', 'is', 'very', 'fast.']
+        },
+        {
+          esPhrase: 'Me pregunto a qué hora sale el tren.',
+          rule: 'Preguntas indirectas: El orden vuelve a ser Afirmativo (Sujeto + Verbo), no se usa auxiliar do/does/did.',
+          words: ['I', 'wonder', 'what', 'time', 'the', 'train', 'leaves.'],
+          correct: ['I', 'wonder', 'what', 'time', 'the', 'train', 'leaves.']
+        }
+      ];
+
+      let currentStructIndex = 0;
+      let selectedWords = [];
+      let availableWords = [];
+
+      function initStructure() {
+        const currentStruct = structureData[currentStructIndex];
+        document.getElementById('struct-es-phrase').innerText = currentStruct.esPhrase;
+        document.getElementById('struct-grammar-rule').innerHTML = `<i class="fa-solid fa-lightbulb text-yellow-500 mr-1"></i> ${currentStruct.rule}`;
+
+        availableWords = [...currentStruct.words].sort(() => Math.random() - 0.5);
+        selectedWords = [];
+
+        document.getElementById('struct-feedback').innerText = '';
+        document.getElementById('struct-feedback').className = 'font-bold text-lg h-8';
+        document.getElementById('btn-next-struct').classList.add('hidden');
+
+        renderStructureBoxes();
+      }
+
+      function renderStructureBoxes() {
+        const bankDiv = document.getElementById('word-bank');
+        const boxDiv = document.getElementById('sentence-box');
+
+        bankDiv.innerHTML = '';
+        boxDiv.innerHTML = '';
+
+        availableWords.forEach((word, index) => {
+          const btn = document.createElement('button');
+          btn.className = 'word-btn px-4 py-2 bg-blue-100 text-blue-800 rounded-lg shadow-sm font-medium border border-blue-200';
+          btn.innerText = word;
+          btn.onclick = () => moveWordToSentence(index);
+          bankDiv.appendChild(btn);
+        });
+
+        selectedWords.forEach((word, index) => {
+          const btn = document.createElement('button');
+          btn.className = 'word-btn px-4 py-2 bg-white text-slate-800 rounded-lg shadow font-medium border border-slate-300';
+          btn.innerText = word;
+          btn.onclick = () => moveWordToBank(index);
+          boxDiv.appendChild(btn);
+        });
+      }
+
+      function moveWordToSentence(index) {
+        const word = availableWords.splice(index, 1)[0];
+        selectedWords.push(word);
+        renderStructureBoxes();
+      }
+
+      function moveWordToBank(index) {
+        const word = selectedWords.splice(index, 1)[0];
+        availableWords.push(word);
+        renderStructureBoxes();
+      }
+
+      function checkStructure() {
+        const currentStruct = structureData[currentStructIndex];
+        if (selectedWords.length !== currentStruct.correct.length) {
+          showStructFeedback('Usa todas las palabras.', 'text-orange-500');
+          return;
         }
 
-        async function searchWord() {
-            const input = document.getElementById('word-search').value.trim().toLowerCase();
-            const msgEl = document.getElementById('search-msg');
-            if(!input) return;
+        const isCorrect = selectedWords.every((word, idx) => word === currentStruct.correct[idx]);
 
-            msgEl.classList.remove('hidden');
-
-            // 1. Buscar en la base de 50 palabras
-            const index = vocabData.findIndex(v => v.en.toLowerCase() === input);
-            if (index !== -1) {
-                currentVocabIndex = index;
-                updateVocabUI();
-                playAudio(new Event(''), vocabData[currentVocabIndex].en);
-                msgEl.innerText = "¡Encontrada en el temario principal!";
-                msgEl.className = "text-xs text-green-600 mt-2 block font-bold text-center";
-                return;
-            }
-
-            // 2. Si no está, usar API externa para traducir y TTS para pronunciar
-            msgEl.innerText = "Traduciendo y generando audio...";
-            msgEl.className = "text-xs text-blue-500 mt-2 block font-medium text-center animate-pulse";
-
-            try {
-                // Usamos MyMemory API (Gratuita y sin clave necesaria para bajo volumen)
-                const response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(input)}&langpair=en|es`);
-                const data = await response.json();
-                
-                if(data && data.responseData && data.responseData.translatedText) {
-                    const translation = data.responseData.translatedText;
-                    const capitalizedInput = input.charAt(0).toUpperCase() + input.slice(1);
-                    
-                    // Sobreescribimos la UI temporalmente sin guardar en el array local
-                    document.getElementById('vocab-en').innerText = capitalizedInput;
-                    document.getElementById('vocab-phonetic').innerText = "/.../";
-                    document.getElementById('vocab-type-en').innerText = "Online Search";
-                    
-                    document.getElementById('vocab-es').innerText = translation;
-                    document.getElementById('vocab-type-es').innerText = "Traducción";
-                    document.getElementById('vocab-note').innerText = "Palabra fuera de temario. Obtenida de diccionario en línea.";
-                    document.getElementById('vocab-counter').innerText = "Búsqueda Extra";
-                    
-                    document.querySelector('.flip-card').classList.remove('flipped');
-                    
-                    playAudio(new Event(''), input);
-                    
-                    msgEl.innerText = `Traducida y pronunciada (UK).`;
-                    msgEl.className = "text-xs text-purple-600 mt-2 block font-bold text-center";
-                } else {
-                    throw new Error("No translation");
-                }
-            } catch (error) {
-                msgEl.innerText = "No se pudo traducir, pero escucha su pronunciación:";
-                msgEl.className = "text-xs text-orange-500 mt-2 block font-medium text-center";
-                // Aún así reproducimos el audio
-                playAudio(new Event(''), input);
-            }
+        if (isCorrect) {
+          showStructFeedback('¡Perfecto! Excelente estructura.', 'text-green-600');
+          document.getElementById('btn-next-struct').classList.remove('hidden');
+        } else {
+          showStructFeedback('Ese no es el orden correcto. Intenta de nuevo.', 'text-red-500');
         }
+      }
 
-        function nextVocab() {
-            currentVocabIndex = (currentVocabIndex + 1) % vocabData.length;
-            updateVocabUI();
+      function showStructFeedback(msg, colorClass) {
+        const fb = document.getElementById('struct-feedback');
+        fb.innerText = msg;
+        fb.className = `font-bold text-lg h-8 ${colorClass}`;
+      }
+
+      function nextStructure() {
+        currentStructIndex = (currentStructIndex + 1) % structureData.length;
+        initStructure();
+      }
+
+      // ================= MÓDULO 3: VERBOS =================
+      const verbsData = [
+        {
+          esBase: 'Escribir',
+          enBase: 'write',
+          type: 'Present Perfect (Participio)',
+          sentence: 'She has already ________ three emails today.',
+          correct: 'written',
+          options: ['wrote', 'writed', 'written', 'writing']
+        },
+        {
+          esBase: 'Beber',
+          enBase: 'drink',
+          type: 'Past Simple (Irregular)',
+          sentence: 'I ________ too much tea yesterday.',
+          correct: 'drank',
+          options: ['drunk', 'drinked', 'drank', 'drinks']
+        },
+        {
+          esBase: 'Olvidar',
+          enBase: 'forget',
+          type: 'Past Simple (Irregular)',
+          sentence: 'Sorry, I ________ my umbrella at the pub.',
+          correct: 'forgot',
+          options: ['forgetted', 'forgot', 'forgotten', 'forget']
+        },
+        {
+          esBase: 'Ver',
+          enBase: 'see',
+          type: 'Present Perfect (Participio)',
+          sentence: 'Have you ever ________ the London Eye?',
+          correct: 'seen',
+          options: ['saw', 'seen', 'seed', 'see']
         }
+      ];
 
-        function prevVocab() {
-            currentVocabIndex = (currentVocabIndex - 1 + vocabData.length) % vocabData.length;
-            updateVocabUI();
-        }
+      let currentVerbIndex = 0;
 
-        function toggleFlip(element) {
-            element.classList.toggle('flipped');
-        }
+      function initVerbs() {
+        const currentVerb = verbsData[currentVerbIndex];
 
-        function playAudio(event, text) {
-            event.stopPropagation();
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                const voices = speechSynthesis.getVoices();
-                const ukVoice = voices.find(voice => voice.lang === 'en-GB' || voice.lang === 'en_GB');
-                if (ukVoice) {
-                    utterance.voice = ukVoice;
-                } else {
-                    utterance.lang = 'en-GB';
-                }
-                utterance.rate = 0.85;
-                speechSynthesis.speak(utterance);
-            } else {
-                alert("Tu navegador no soporta la síntesis de voz.");
-            }
-        }
-        speechSynthesis.onvoiceschanged = () => { speechSynthesis.getVoices(); };
+        document.getElementById('verb-type').innerText = currentVerb.type;
+        document.getElementById('verb-es-base').innerText = currentVerb.esBase;
+        document.getElementById('verb-en-base').innerText = `to ${currentVerb.enBase}`;
 
+        const sentenceHTML = currentVerb.sentence.replace(
+          '________',
+          '<span id="verb-blank" class="inline-block w-24 border-b-2 border-slate-800 border-dashed mx-1 text-center font-bold text-blue-700"></span>'
+        );
+        document.getElementById('verb-sentence').innerHTML = sentenceHTML;
 
-        // ================= MÓDULO 2: ESTRUCTURA =================
-        const structureData = [
-            {
-                esPhrase: "El hombre con el que estaba hablando es mi jefe.",
-                rule: "Preposiciones al final: En inglés formal se dice 'with whom I was talking', pero en el lenguaje común la preposición (to) suele ir al final de la cláusula relativa.",
-                words: ["The", "man", "I", "was", "talking", "to", "is", "my", "boss."],
-                correct: ["The", "man", "I", "was", "talking", "to", "is", "my", "boss."]
-            },
-            {
-                esPhrase: "¿De dónde eres?",
-                rule: "Preguntas con preposiciones: En inglés, las palabras interrogativas (Where, Who) van al principio, pero la preposición (from) se va al final de la pregunta.",
-                words: ["Where", "you", "from?", "are"],
-                correct: ["Where", "are", "you", "from?"]
-            },
-            {
-                esPhrase: "El coche rojo, que compré ayer, es muy rápido.",
-                rule: "Cláusulas relativas explicativas (Non-defining relative clauses): Usamos comas y 'which' (no 'that') para dar información extra sobre cosas.",
-                words: ["The", "red", "car,", "which", "I", "bought", "yesterday,", "is", "very", "fast."],
-                correct: ["The", "red", "car,", "which", "I", "bought", "yesterday,", "is", "very", "fast."]
-            },
-            {
-                esPhrase: "Me pregunto a qué hora sale el tren.",
-                rule: "Preguntas indirectas (Indirect Questions): El orden de las palabras vuelve a ser Afirmativo (Sujeto + Verbo), no se usa auxiliar do/does/did.",
-                words: ["I", "wonder", "what", "time", "the", "train", "leaves."],
-                correct: ["I", "wonder", "what", "time", "the", "train", "leaves."]
-            }
-        ];
+        const optionsDiv = document.getElementById('verb-options');
+        optionsDiv.innerHTML = '';
 
-        let currentStructIndex = 0;
-        let currentStruct = structureData[0];
-        let selectedWords = [];
-        let availableWords = [];
+        const shuffledOptions = [...currentVerb.options].sort(() => Math.random() - 0.5);
 
-        function initStructure() {
-            currentStruct = structureData[currentStructIndex];
-            document.getElementById('struct-es-phrase').innerText = currentStruct.esPhrase;
-            document.getElementById('struct-grammar-rule').innerHTML = `<i class="fa-solid fa-lightbulb text-yellow-500 mr-1"></i> ${currentStruct.rule}`;
-            
-            availableWords = [...currentStruct.words].sort(() => Math.random() - 0.5);
-            selectedWords = [];
-            
-            document.getElementById('struct-feedback').innerText = "";
-            document.getElementById('struct-feedback').className = "font-bold text-lg h-8";
-            document.getElementById('btn-next-struct').classList.add('hidden');
+        shuffledOptions.forEach(opt => {
+          const btn = document.createElement('button');
+          btn.className = 'py-3 px-6 bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 rounded-xl font-semibold text-slate-700 transition-all shadow-sm';
+          btn.innerText = opt;
+          btn.onclick = () => checkVerb(opt, btn, currentVerb);
+          optionsDiv.appendChild(btn);
+        });
 
-            renderStructureBoxes();
-        }
+        document.getElementById('verb-feedback').classList.add('hidden');
+        document.getElementById('verb-next-container').classList.add('hidden');
+      }
 
-        function renderStructureBoxes() {
-            const bankDiv = document.getElementById('word-bank');
-            const boxDiv = document.getElementById('sentence-box');
-            
-            bankDiv.innerHTML = "";
-            boxDiv.innerHTML = "";
+      function checkVerb(selectedOpt, btnElement, currentVerb) {
+        const isCorrect = selectedOpt === currentVerb.correct;
+        const fb = document.getElementById('verb-feedback');
+        const blank = document.getElementById('verb-blank');
+        const allBtns = document.getElementById('verb-options').querySelectorAll('button');
 
-            availableWords.forEach((word, index) => {
-                const btn = document.createElement('button');
-                btn.className = "word-btn px-4 py-2 bg-blue-100 text-blue-800 rounded-lg shadow-sm font-medium border border-blue-200";
-                btn.innerText = word;
-                btn.onclick = () => moveWordToSentence(index);
-                bankDiv.appendChild(btn);
-            });
+        allBtns.forEach(b => (b.disabled = true));
+        blank.innerText = selectedOpt;
+        fb.classList.remove('hidden');
 
-            selectedWords.forEach((word, index) => {
-                const btn = document.createElement('button');
-                btn.className = "word-btn px-4 py-2 bg-white text-slate-800 rounded-lg shadow font-medium border border-slate-300";
-                btn.innerText = word;
-                btn.onclick = () => moveWordToBank(index);
-                boxDiv.appendChild(btn);
-            });
-        }
+        if (isCorrect) {
+          btnElement.classList.replace('border-slate-200', 'border-green-500');
+          btnElement.classList.add('bg-green-50', 'text-green-700');
 
-        function moveWordToSentence(index) {
-            const word = availableWords.splice(index, 1)[0];
-            selectedWords.push(word);
-            renderStructureBoxes();
-        }
+          fb.innerText = '¡Correcto! Bien hecho.';
+          fb.className = 'mt-6 text-center font-bold text-lg h-8 bg-green-100 text-green-800 rounded py-2';
+          document.getElementById('verb-next-container').classList.remove('hidden');
 
-        function moveWordToBank(index) {
-            const word = selectedWords.splice(index, 1)[0];
-            availableWords.push(word);
-            renderStructureBoxes();
-        }
+          setTimeout(() => playAudio(null, currentVerb.sentence.replace('________', selectedOpt)), 500);
+        } else {
+          btnElement.classList.replace('border-slate-200', 'border-red-500');
+          btnElement.classList.add('bg-red-50', 'text-red-700');
+          blank.classList.replace('text-blue-700', 'text-red-500');
 
-        function checkStructure() {
-            if (selectedWords.length !== currentStruct.correct.length) {
-                showStructFeedback("Usa todas las palabras.", "text-orange-500");
-                return;
-            }
+          fb.innerText = 'Incorrecto. Intenta de nuevo.';
+          fb.className = 'mt-6 text-center font-bold text-lg h-8 bg-red-100 text-red-800 rounded py-2';
 
-            const isCorrect = selectedWords.every((word, idx) => word === currentStruct.correct[idx]);
-            
-            if (isCorrect) {
-                showStructFeedback("¡Perfecto! Excelente estructura.", "text-green-600");
-                document.getElementById('btn-next-struct').classList.remove('hidden');
-            } else {
-                showStructFeedback("Ese no es el orden correcto. Intenta de nuevo.", "text-red-500");
-            }
-        }
-
-        function showStructFeedback(msg, colorClass) {
-            const fb = document.getElementById('struct-feedback');
-            fb.innerText = msg;
-            fb.className = `font-bold text-lg h-8 ${colorClass}`;
-        }
-
-        function nextStructure() {
-            currentStructIndex = (currentStructIndex + 1) % structureData.length;
-            initStructure();
-        }
-
-
-        // ================= MÓDULO 3: VERBOS =================
-        const verbsData = [
-            {
-                esBase: "Escribir",
-                enBase: "write",
-                type: "Present Perfect (Participio)",
-                sentence: "She has already ________ three emails today.",
-                correct: "written",
-                options: ["wrote", "writed", "written", "writing"]
-            },
-            {
-                esBase: "Beber",
-                enBase: "drink",
-                type: "Past Simple (Irregular)",
-                sentence: "I ________ too much tea yesterday.",
-                correct: "drank",
-                options: ["drunk", "drinked", "drank", "drinks"]
-            },
-            {
-                esBase: "Olvidar",
-                enBase: "forget",
-                type: "Past Simple (Irregular)",
-                sentence: "Sorry, I ________ my umbrella at the pub.",
-                correct: "forgot",
-                options: ["forgetted", "forgot", "forgotten", "forget"]
-            },
-            {
-                esBase: "Ver",
-                enBase: "see",
-                type: "Present Perfect (Participio)",
-                sentence: "Have you ever ________ the London Eye?",
-                correct: "seen",
-                options: ["saw", "seen", "seed", "see"]
-            }
-        ];
-
-        let currentVerbIndex = 0;
-        let currentVerb = verbsData[0];
-
-        function initVerbs() {
-            currentVerb = verbsData[currentVerbIndex];
-            
-            document.getElementById('verb-type').innerText = currentVerb.type;
-            document.getElementById('verb-es-base').innerText = currentVerb.esBase;
-            document.getElementById('verb-en-base').innerText = `to ${currentVerb.enBase}`;
-            
-            const sentenceHTML = currentVerb.sentence.replace('________', '<span id="verb-blank" class="inline-block w-24 border-b-2 border-slate-800 border-dashed mx-1 text-center font-bold text-blue-700"></span>');
-            document.getElementById('verb-sentence').innerHTML = sentenceHTML;
-
-            const optionsDiv = document.getElementById('verb-options');
-            optionsDiv.innerHTML = "";
-            
-            const shuffledOptions = [...currentVerb.options].sort(() => Math.random() - 0.5);
-
-            shuffledOptions.forEach(opt => {
-                const btn = document.createElement('button');
-                btn.className = "py-3 px-6 bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 rounded-xl font-semibold text-slate-700 transition-all shadow-sm";
-                btn.innerText = opt;
-                btn.onclick = () => checkVerb(opt, btn);
-                optionsDiv.appendChild(btn);
-            });
-
-            const fb = document.getElementById('verb-feedback');
+          setTimeout(() => {
+            allBtns.forEach(b => (b.disabled = false));
+            btnElement.className = 'py-3 px-6 bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 rounded-xl font-semibold text-slate-700 transition-all shadow-sm';
+            blank.innerText = '';
+            blank.classList.replace('text-red-500', 'text-blue-700');
             fb.classList.add('hidden');
-            document.getElementById('verb-next-container').classList.add('hidden');
+          }, 2000);
         }
+      }
 
-        function checkVerb(selectedOpt, btnElement) {
-            const isCorrect = selectedOpt === currentVerb.correct;
-            const fb = document.getElementById('verb-feedback');
-            const blank = document.getElementById('verb-blank');
-            const allBtns = document.getElementById('verb-options').querySelectorAll('button');
+      function nextVerb() {
+        currentVerbIndex = (currentVerbIndex + 1) % verbsData.length;
+        initVerbs();
+      }
 
-            allBtns.forEach(b => b.disabled = true);
-            blank.innerText = selectedOpt;
-            fb.classList.remove('hidden');
-
-            if (isCorrect) {
-                btnElement.classList.replace('border-slate-200', 'border-green-500');
-                btnElement.classList.replace('hover:border-blue-500', 'border-green-500');
-                btnElement.classList.add('bg-green-50', 'text-green-700');
-                
-                fb.innerText = "¡Correcto! Bien hecho.";
-                fb.className = "mt-6 text-center font-bold text-lg h-8 bg-green-100 text-green-800 rounded py-2";
-                
-                document.getElementById('verb-next-container').classList.remove('hidden');
-                
-                setTimeout(() => {
-                    const fullSentence = currentVerb.sentence.replace('________', selectedOpt);
-                    playAudio(new Event(''), fullSentence);
-                }, 500);
-
-            } else {
-                btnElement.classList.replace('border-slate-200', 'border-red-500');
-                btnElement.classList.replace('hover:border-blue-500', 'border-red-500');
-                btnElement.classList.add('bg-red-50', 'text-red-700');
-                
-                blank.classList.replace('text-blue-700', 'text-red-500');
-                
-                fb.innerText = "Incorrecto. Intenta de nuevo.";
-                fb.className = "mt-6 text-center font-bold text-lg h-8 bg-red-100 text-red-800 rounded py-2";
-
-                setTimeout(() => {
-                    allBtns.forEach(b => b.disabled = false);
-                    btnElement.className = "py-3 px-6 bg-white border-2 border-slate-200 hover:border-blue-500 hover:bg-blue-50 rounded-xl font-semibold text-slate-700 transition-all shadow-sm";
-                    blank.innerText = "";
-                    blank.classList.replace('text-red-500', 'text-blue-700');
-                    fb.classList.add('hidden');
-                }, 2000);
-            }
+      // ================= MÓDULO 4: GRAMÁTICA AVANZADA =================
+      const grammarData = [
+        {
+          badge: 'Second Conditional',
+          esPrompt: 'Si yo tuviera un millón de libras, compraría un castillo.',
+          theoryTitle: 'Segundo Condicional',
+          theoryDesc: 'Se usa para situaciones hipotéticas o irreales en el presente o futuro.',
+          theoryStruct: 'If + Past Simple, ... would + infinitive',
+          options: [
+            {text: 'If I have a million pounds, I will buy a castle.', correct: false},
+            {text: 'If I had a million pounds, I would buy a castle.', correct: true},
+            {text: 'If I had a million pounds, I will buy a castle.', correct: false}
+          ],
+          explanation: "El segundo condicional requiere pasado simple en la condición (If I had) y 'would' en el resultado."
+        },
+        {
+          badge: 'Passive Voice',
+          esPrompt: 'El libro fue escrito por J.K. Rowling.',
+          theoryTitle: 'Voz Pasiva (Pasado Simple)',
+          theoryDesc: 'El enfoque está en la acción o en el objeto que la recibe, no en quién la hizo.',
+          theoryStruct: 'Objeto + was/were + Participio Pasado (+ by sujeto)',
+          options: [
+            {text: 'The book wrote by J.K. Rowling.', correct: false},
+            {text: 'The book was wrote by J.K. Rowling.', correct: false},
+            {text: 'The book was written by J.K. Rowling.', correct: true}
+          ],
+          explanation: "Se necesita el verbo 'to be' en pasado (was) y el participio del verbo principal (written)."
+        },
+        {
+          badge: 'Reported Speech',
+          esPrompt: "Él dijo: 'Estoy cansado' -> Él dijo que estaba cansado.",
+          theoryTitle: 'Estilo Indirecto (Reported Speech)',
+          theoryDesc: "Al reportar lo que alguien dijo, el tiempo verbal suele ir 'un paso atrás' en el pasado.",
+          theoryStruct: 'Present Simple -> Past Simple',
+          options: [
+            {text: 'He said that he is tired.', correct: false},
+            {text: 'He said that he was tired.', correct: true},
+            {text: 'He said what he was tired.', correct: false}
+          ],
+          explanation: "Al reportar 'I am tired', el verbo pasa de presente (am/is) a pasado (was)."
+        },
+        {
+          badge: 'Third Conditional',
+          esPrompt: 'Si hubiera estudiado, habría aprobado el examen.',
+          theoryTitle: 'Tercer Condicional',
+          theoryDesc: 'Se usa para arrepentimientos o situaciones imposibles en el pasado que ya no se pueden cambiar.',
+          theoryStruct: 'If + Past Perfect, ... would have + Past Participle',
+          options: [
+            {text: 'If I had studied, I would have passed the exam.', correct: true},
+            {text: 'If I studied, I would have passed the exam.', correct: false},
+            {text: 'If I had studied, I would pass the exam.', correct: false}
+          ],
+          explanation: 'Requiere Past Perfect (had studied) y Conditional Perfect (would have passed).'
         }
+      ];
 
-        function nextVerb() {
-            currentVerbIndex = (currentVerbIndex + 1) % verbsData.length;
-            initVerbs();
-        }
+      let currentGrammarIndex = 0;
 
-        // ================= MÓDULO 4: GRAMÁTICA AVANZADA =================
-        const grammarData = [
-            {
-                badge: "Second Conditional",
-                esPrompt: "Si yo tuviera un millón de libras, compraría un castillo.",
-                theoryTitle: "Segundo Condicional",
-                theoryDesc: "Se usa para situaciones hipotéticas o irreales en el presente o futuro.",
-                theoryStruct: "If + Past Simple, ... would + infinitive",
-                options: [
-                    { text: "If I have a million pounds, I will buy a castle.", correct: false },
-                    { text: "If I had a million pounds, I would buy a castle.", correct: true },
-                    { text: "If I had a million pounds, I will buy a castle.", correct: false }
-                ],
-                explanation: "El segundo condicional requiere pasado simple en la condición (If I had) y 'would' en el resultado."
-            },
-            {
-                badge: "Passive Voice",
-                esPrompt: "El libro fue escrito por J.K. Rowling.",
-                theoryTitle: "Voz Pasiva (Pasado Simple)",
-                theoryDesc: "El enfoque está en la acción o en el objeto que la recibe, no en quién la hizo.",
-                theoryStruct: "Objeto + was/were + Participio Pasado (+ by sujeto)",
-                options: [
-                    { text: "The book wrote by J.K. Rowling.", correct: false },
-                    { text: "The book was wrote by J.K. Rowling.", correct: false },
-                    { text: "The book was written by J.K. Rowling.", correct: true }
-                ],
-                explanation: "Se necesita el verbo 'to be' en pasado (was) y el participio del verbo principal (written)."
-            },
-            {
-                badge: "Reported Speech",
-                esPrompt: "Él dijo: 'Estoy cansado' -> Él dijo que estaba cansado.",
-                theoryTitle: "Estilo Indirecto (Reported Speech)",
-                theoryDesc: "Al reportar lo que alguien dijo, el tiempo verbal suele ir 'un paso atrás' en el pasado.",
-                theoryStruct: "Present Simple -> Past Simple",
-                options: [
-                    { text: "He said that he is tired.", correct: false },
-                    { text: "He said that he was tired.", correct: true },
-                    { text: "He said what he was tired.", correct: false }
-                ],
-                explanation: "Al reportar 'I am tired', el verbo pasa de presente (am/is) a pasado (was)."
-            },
-            {
-                badge: "Third Conditional",
-                esPrompt: "Si hubiera estudiado, habría aprobado el examen.",
-                theoryTitle: "Tercer Condicional",
-                theoryDesc: "Se usa para arrepentimientos o situaciones imposibles en el pasado que ya no se pueden cambiar.",
-                theoryStruct: "If + Past Perfect, ... would have + Past Participle",
-                options: [
-                    { text: "If I had studied, I would have passed the exam.", correct: true },
-                    { text: "If I studied, I would have passed the exam.", correct: false },
-                    { text: "If I had studied, I would pass the exam.", correct: false }
-                ],
-                explanation: "Requiere Past Perfect (had studied) y Conditional Perfect (would have passed)."
-            }
-        ];
+      function initGrammar() {
+        const data = grammarData[currentGrammarIndex];
 
-        let currentGrammarIndex = 0;
-
-        function initGrammar() {
-            const data = grammarData[currentGrammarIndex];
-            
-            // Update Theory Sidebar
-            document.getElementById('grammar-theory').innerHTML = `
+        document.getElementById('grammar-theory').innerHTML = `
                 <h4 class="font-bold text-purple-800 mb-1">${data.theoryTitle}</h4>
                 <p class="text-sm text-slate-700 mb-3">${data.theoryDesc}</p>
                 <div class="bg-white p-3 rounded border border-purple-100 text-sm">
@@ -649,76 +799,70 @@
                 </div>
             `;
 
-            // Update Practice Area
-            document.getElementById('grammar-badge').innerText = data.badge;
-            document.getElementById('grammar-counter').innerText = `${currentGrammarIndex + 1}/${grammarData.length}`;
-            document.getElementById('grammar-es-prompt').innerText = data.esPrompt;
+        document.getElementById('grammar-badge').innerText = data.badge;
+        document.getElementById('grammar-counter').innerText = `${currentGrammarIndex + 1}/${grammarData.length}`;
+        document.getElementById('grammar-es-prompt').innerText = data.esPrompt;
 
-            const optionsDiv = document.getElementById('grammar-mcq-options');
-            optionsDiv.innerHTML = "";
+        const optionsDiv = document.getElementById('grammar-mcq-options');
+        optionsDiv.innerHTML = '';
 
-            // Render options
-            data.options.forEach((opt, index) => {
-                const button = document.createElement('button');
-                button.className = "w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 transition-colors font-medium text-slate-700";
-                button.innerText = opt.text;
-                button.onclick = () => checkGrammar(opt.correct, button, data.explanation);
-                optionsDiv.appendChild(button);
-            });
+        data.options.forEach(opt => {
+          const button = document.createElement('button');
+          button.className = 'w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 transition-colors font-medium text-slate-700';
+          button.innerText = opt.text;
+          button.onclick = () => checkGrammar(opt.correct, button, data.explanation);
+          optionsDiv.appendChild(button);
+        });
 
-            // Reset UI
-            document.getElementById('grammar-feedback').classList.add('hidden');
-            document.getElementById('grammar-next-btn').classList.add('hidden');
-        }
+        document.getElementById('grammar-feedback').classList.add('hidden');
+        document.getElementById('grammar-next-btn').classList.add('hidden');
+      }
 
-        function checkGrammar(isCorrect, btnElement, explanation) {
-            const fb = document.getElementById('grammar-feedback');
-            const allBtns = document.getElementById('grammar-mcq-options').querySelectorAll('button');
+      function checkGrammar(isCorrect, btnElement, explanation) {
+        const fb = document.getElementById('grammar-feedback');
+        const allBtns = document.getElementById('grammar-mcq-options').querySelectorAll('button');
 
-            // Disable all buttons
+        allBtns.forEach(b => {
+          b.disabled = true;
+          b.classList.remove('hover:border-purple-400', 'hover:bg-purple-50');
+        });
+
+        fb.classList.remove('hidden');
+
+        if (isCorrect) {
+          btnElement.classList.add('border-green-500', 'bg-green-50', 'text-green-800');
+          fb.className = 'mt-6 p-4 rounded-lg font-medium bg-green-100 text-green-800 border border-green-200';
+          fb.innerHTML = `<strong>¡Excelente!</strong> ${explanation}`;
+          document.getElementById('grammar-next-btn').classList.remove('hidden');
+          playAudio(null, btnElement.innerText);
+        } else {
+          btnElement.classList.add('border-red-500', 'bg-red-50', 'text-red-800');
+          fb.className = 'mt-6 p-4 rounded-lg font-medium bg-red-100 text-red-800 border border-red-200';
+          fb.innerHTML = `<strong>Vuelve a intentarlo.</strong> Lee la teoría en el panel izquierdo.`;
+
+          setTimeout(() => {
             allBtns.forEach(b => {
-                b.disabled = true;
-                b.classList.remove('hover:border-purple-400', 'hover:bg-purple-50');
+              b.disabled = false;
+              if (b !== btnElement) b.classList.add('hover:border-purple-400', 'hover:bg-purple-50');
             });
-
-            fb.classList.remove('hidden');
-
-            if (isCorrect) {
-                btnElement.classList.add('border-green-500', 'bg-green-50', 'text-green-800');
-                fb.className = "mt-6 p-4 rounded-lg font-medium bg-green-100 text-green-800 border border-green-200";
-                fb.innerHTML = `<strong>¡Excelente!</strong> ${explanation}`;
-                document.getElementById('grammar-next-btn').classList.remove('hidden');
-                playAudio(new Event(''), btnElement.innerText);
-            } else {
-                btnElement.classList.add('border-red-500', 'bg-red-50', 'text-red-800');
-                fb.className = "mt-6 p-4 rounded-lg font-medium bg-red-100 text-red-800 border border-red-200";
-                fb.innerHTML = `<strong>Vuelve a intentarlo.</strong> Lee la teoría en el panel izquierdo.`;
-                
-                // Allow retry
-                setTimeout(() => {
-                    allBtns.forEach(b => {
-                        b.disabled = false;
-                        if(b !== btnElement) b.classList.add('hover:border-purple-400', 'hover:bg-purple-50');
-                    });
-                    btnElement.className = "w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 transition-colors font-medium text-slate-700";
-                    fb.classList.add('hidden');
-                }, 2500);
-            }
+            btnElement.className = 'w-full text-left p-4 rounded-xl border-2 border-slate-200 hover:border-purple-400 hover:bg-purple-50 transition-colors font-medium text-slate-700';
+            fb.classList.add('hidden');
+          }, 2500);
         }
+      }
 
-        function nextGrammar() {
-            currentGrammarIndex = (currentGrammarIndex + 1) % grammarData.length;
-            initGrammar();
-        }
+      function nextGrammar() {
+        currentGrammarIndex = (currentGrammarIndex + 1) % grammarData.length;
+        initGrammar();
+      }
 
-        // ================= INICIALIZACIÓN =================
-        window.onload = () => {
-            updateVocabUI();
-            initStructure();
-            initVerbs();
-            initGrammar();
-        };
-
+      // ================= INICIALIZACIÓN =================
+      window.onload = () => {
+        updateVocabUI();
+        initStructure();
+        initVerbs();
+        initGrammar();
+      };
     </script>
-</body>
+  </body>
 </html>
