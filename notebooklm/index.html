@@ -1,1 +1,802 @@
+<!DOCTYPE html>
+<!--
+  Manual de NotebookLM para la educación de adultos — con énfasis en prompts JSON
+  Autor: José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago
+  Año: 2026 | Para uso personal del autor.
+  Licencia: CC BY-NC-SA 4.0 (Atribución-NoComercial-CompartirIgual).
+  Resumen: Guía de referencia ampliada sobre el uso de NotebookLM y la estructuración de prompts en formato JSON.
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago">
+<meta name="license" content="CC BY-NC-SA 4.0">
+<link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Manual de NotebookLM · Prompts JSON para educación de adultos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16243f;          /* navy tinta principal */
+    --ink-soft:#2b3a55;
+    --paper:#eaeef4;        /* fondo frío tipo papel técnico */
+    --surface:#ffffff;
+    --line:#d3dbe6;
+    --muted:#475569;        /* texto secundario (pasa 4.5:1 sobre blanco) */
+    --blue:#1d4ed8;         /* interacción / enlaces */
+    --blue-dark:#1e3a8a;
+    --amber:#d97706;        /* acento resaltador */
+    --amber-bg:#fef3c7;
+    --amber-ink:#5c3900;    /* ámbar oscuro para texto sobre claro */
+    --code-bg:#0f1b30;      /* bloques de código / JSON */
+    --code-line:#23314d;
+    --ok:#15803d;
+    --radius:14px;
+    --maxw:1160px;
+    --shadow:0 1px 2px rgba(22,36,63,.06), 0 8px 24px rgba(22,36,63,.07);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;font-size:16px;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--amber-bg);color:var(--ink)}
 
+  /* ---------- Encabezado ---------- */
+  header.hero{
+    background:
+      radial-gradient(1200px 380px at 88% -120px, rgba(29,78,216,.18), transparent 60%),
+      linear-gradient(180deg,#16243f 0%, #1b2c4d 100%);
+    color:#eef2f8;padding:46px 22px 40px;position:relative;overflow:hidden;
+    border-bottom:3px solid var(--amber);
+  }
+  .hero::after{
+    content:"{ }";position:absolute;right:30px;top:8px;font-family:"JetBrains Mono",monospace;
+    font-size:160px;font-weight:700;color:rgba(255,255,255,.05);line-height:1;letter-spacing:-8px;
+    pointer-events:none;user-select:none;
+  }
+  .hero-inner{max-width:var(--maxw);margin:0 auto;position:relative;z-index:1}
+  .eyebrow{
+    font-family:"JetBrains Mono",monospace;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;
+    color:#ffd27d;margin:0 0 12px;
+  }
+  .hero h1{
+    font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:clamp(1.9rem,4.4vw,3.05rem);
+    line-height:1.06;margin:0 0 14px;letter-spacing:-.01em;
+  }
+  .hero h1 em{font-style:normal;color:#ffd27d}
+  .hero p.lede{font-size:1.08rem;max-width:62ch;margin:0;color:#cdd7e6}
+  .hero .meta{
+    margin-top:22px;display:flex;flex-wrap:wrap;gap:10px;font-family:"JetBrains Mono",monospace;font-size:.78rem;
+  }
+  .hero .meta span{
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    padding:6px 12px;border-radius:999px;color:#dbe5f3;
+  }
+
+  /* ---------- Barra de herramientas ---------- */
+  .toolbar{
+    position:sticky;top:0;z-index:50;background:rgba(234,238,244,.92);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .toolbar-inner{
+    max-width:var(--maxw);margin:0 auto;padding:11px 22px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;
+  }
+  .search{flex:1;min-width:220px;position:relative}
+  .search input{
+    width:100%;padding:10px 14px 10px 40px;border:1px solid var(--line);border-radius:10px;
+    background:var(--surface);font:inherit;font-size:.95rem;color:var(--ink);
+  }
+  .search input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .toolbar button{
+    font:inherit;font-weight:600;font-size:.88rem;cursor:pointer;border:1px solid var(--line);
+    background:var(--surface);color:var(--ink-soft);padding:9px 14px;border-radius:10px;transition:.15s;
+  }
+  .toolbar button:hover{border-color:var(--blue);color:var(--blue)}
+  .toolbar button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+
+  /* ---------- Layout principal ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:30px 22px 70px;display:grid;grid-template-columns:230px 1fr;gap:40px}
+  nav.toc{position:sticky;top:74px;align-self:start;height:max-content}
+  nav.toc h2{
+    font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 12px;padding-left:4px;
+  }
+  nav.toc a{
+    display:block;padding:7px 12px;border-radius:8px;color:var(--ink-soft);text-decoration:none;
+    font-size:.9rem;font-weight:500;border-left:2px solid transparent;transition:.12s;
+  }
+  nav.toc a:hover{background:var(--surface);color:var(--blue)}
+  nav.toc a.active{background:var(--surface);color:var(--blue);border-left-color:var(--amber);font-weight:600}
+
+  main{min-width:0}
+
+  /* ---------- Acordeón ---------- */
+  .panel{
+    background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+    margin-bottom:16px;box-shadow:var(--shadow);overflow:hidden;
+  }
+  .panel > .head{
+    width:100%;display:flex;align-items:center;gap:16px;cursor:pointer;
+    padding:20px 22px;border:0;background:transparent;text-align:left;font:inherit;color:var(--ink);
+  }
+  .panel > .head:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+  .panel .num{
+    flex:none;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;
+    background:var(--ink);color:#fff;font-family:"JetBrains Mono",monospace;font-weight:700;font-size:.95rem;
+  }
+  .panel.is-json .num{background:var(--amber);color:var(--amber-ink)}
+  .panel .head h3{
+    margin:0;flex:1;font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1.18rem;line-height:1.25;letter-spacing:-.01em;
+  }
+  .panel .head .sub{display:block;font-family:"Inter",sans-serif;font-weight:400;font-size:.86rem;color:var(--muted);margin-top:3px}
+  .chev{flex:none;color:var(--muted);transition:transform .25s ease}
+  .panel.open .chev{transform:rotate(180deg)}
+  .panel .body{display:none;padding:0 22px 26px;border-top:1px solid var(--line)}
+  .panel.open .body{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .body > :first-child{margin-top:18px}
+
+  /* ---------- Tipografía de contenido ---------- */
+  main p{margin:0 0 14px}
+  main h4{
+    font-family:"Space Grotesk",sans-serif;font-size:1.02rem;font-weight:600;color:var(--ink);
+    margin:24px 0 10px;
+  }
+  main ul,main ol{margin:0 0 16px;padding-left:4px}
+  main li{margin:0 0 10px;list-style:none;padding-left:26px;position:relative}
+  main ul li::before{
+    content:"";position:absolute;left:6px;top:.62em;width:7px;height:7px;border-radius:2px;
+    background:var(--amber);transform:rotate(45deg);
+  }
+  main ol{counter-reset:c}
+  main ol li{counter-increment:c}
+  main ol li::before{
+    content:counter(c);position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:6px;
+    background:var(--ink);color:#fff;font-family:"JetBrains Mono",monospace;font-size:.72rem;font-weight:700;
+    display:grid;place-items:center;
+  }
+  strong{color:var(--ink);font-weight:600}
+  code.inline{
+    font-family:"JetBrains Mono",monospace;font-size:.85em;background:#eef2f8;color:var(--blue-dark);
+    padding:2px 6px;border-radius:5px;border:1px solid #dce4ef;
+  }
+  .ph{ /* placeholder/corchete */
+    font-family:"JetBrains Mono",monospace;font-size:.85em;background:var(--amber-bg);color:var(--amber-ink);
+    padding:2px 6px;border-radius:5px;font-weight:600;
+  }
+
+  /* ---------- Cajas destacadas ---------- */
+  .tip,.warn{border-radius:12px;padding:15px 18px 15px 16px;margin:18px 0;border:1px solid;display:flex;gap:12px}
+  .tip{background:#eef5ff;border-color:#cfe0fb}
+  .warn{background:#fff7ed;border-color:#fed7aa}
+  .tip .ic,.warn .ic{flex:none;font-family:"Space Grotesk";font-weight:700;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:.9rem}
+  .tip .ic{background:var(--blue)}
+  .warn .ic{background:var(--amber)}
+  .tip p,.warn p{margin:0}
+  .tip strong{color:var(--blue-dark)}
+  .warn strong{color:var(--amber-ink)}
+
+  /* ---------- Bloques de código / JSON ---------- */
+  .code-card{margin:18px 0;border-radius:12px;overflow:hidden;border:1px solid var(--code-line)}
+  .code-top{
+    background:#0b1426;color:#9fb3d1;display:flex;align-items:center;gap:10px;
+    padding:9px 14px;font-family:"JetBrains Mono",monospace;font-size:.76rem;border-bottom:1px solid var(--code-line);
+  }
+  .code-top .dot{width:10px;height:10px;border-radius:50%}
+  .code-top .tag{margin-left:auto;letter-spacing:.06em;text-transform:uppercase;color:#6f86a8}
+  pre{
+    margin:0;background:var(--code-bg);color:#e2e8f0;padding:16px 18px;overflow-x:auto;
+    font-family:"JetBrains Mono",monospace;font-size:.84rem;line-height:1.6;
+  }
+  pre code{font-family:inherit}
+  .j-key{color:#fbbf24}
+  .j-str{color:#86efac}
+  .j-bool{color:#7dd3fc}
+  .j-null{color:#fca5a5}
+  .j-num{color:#c4b5fd}
+
+  .copy{
+    margin-left:8px;font:inherit;font-family:"JetBrains Mono",monospace;font-size:.72rem;font-weight:700;
+    cursor:pointer;border:1px solid #34466b;background:#1a294a;color:#bcd0ee;
+    padding:5px 11px;border-radius:7px;transition:.15s;
+  }
+  .copy:hover{background:#22335a;color:#fff;border-color:var(--blue)}
+  .copy.done{background:#14532d;border-color:#15803d;color:#bbf7d0}
+
+  /* ---------- Tarjetas de prompt ---------- */
+  .prompt-card{
+    border:1px solid var(--line);border-radius:12px;margin:16px 0;overflow:hidden;background:#fbfcfe;
+  }
+  .prompt-card .pc-head{padding:15px 18px 12px;border-bottom:1px dashed var(--line)}
+  .prompt-card .pc-sit{
+    font-family:"Space Grotesk";font-weight:600;font-size:1.02rem;color:var(--ink);margin:0 0 4px;
+    display:flex;gap:9px;align-items:baseline;
+  }
+  .prompt-card .pc-sit .idx{font-family:"JetBrains Mono";font-size:.78rem;color:var(--amber);font-weight:700}
+  .prompt-card .pc-obj{margin:0;font-size:.88rem;color:var(--muted)}
+  .prompt-card .pc-obj b{color:var(--ink-soft);font-weight:600}
+  .prompt-body{position:relative}
+  .prompt-body pre{background:var(--code-bg);white-space:pre-wrap;word-break:break-word;color:#e9eef7;font-size:.85rem}
+  .prompt-actions{display:flex;justify-content:flex-end;padding:8px;background:#0b1426}
+  .prompt-actions .copy{margin:0}
+
+  /* ---------- Tabla ---------- */
+  .tbl{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .tbl caption{caption-side:top;text-align:left;font-size:.82rem;color:var(--muted);margin-bottom:8px;font-style:italic}
+  .tbl th,.tbl td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl th{background:#eef2f8;font-weight:600;color:var(--ink);font-size:.84rem}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl td code{font-family:"JetBrains Mono";font-size:.82em;color:var(--blue-dark)}
+
+  .no-results{display:none;text-align:center;color:var(--muted);padding:30px;font-style:italic}
+
+  /* ---------- Pie ---------- */
+  footer{background:var(--ink);color:#aebdd6;padding:34px 22px;font-size:.85rem}
+  footer .fin{max-width:var(--maxw);margin:0 auto}
+  footer a{color:#ffd27d;text-decoration:none}
+  footer a:hover{text-decoration:underline}
+  footer .big{font-family:"Space Grotesk";color:#fff;font-size:1.05rem;font-weight:600;margin:0 0 8px}
+
+  /* ---------- Responsivo ---------- */
+  @media (max-width:900px){
+    .wrap{grid-template-columns:1fr;gap:18px;padding-top:20px}
+    nav.toc{position:static;order:-1;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+    nav.toc a{display:inline-block;border-left:0;border:1px solid transparent}
+    nav.toc a.active{border-color:var(--line)}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{scroll-behavior:auto !important;animation:none !important;transition:none !important}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Manual de referencia · v1.0 · 2026</p>
+    <h1>NotebookLM para educación de adultos:<br>del documento al <em>prompt JSON</em></h1>
+    <p class="lede">Una guía práctica para convertir tus propias fuentes en clases, resúmenes en audio y evaluaciones de precisión — y para estructurar tus instrucciones como una biblioteca reutilizable en formato JSON.</p>
+    <div class="meta">
+      <span>5 pasos de flujo</span>
+      <span>8 prompts JSON listos</span>
+      <span>6 prompts de aula</span>
+      <span>Plantilla maestra</span>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="search">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Buscar un prompt, una situación, una regla…" aria-label="Buscar en el manual">
+    </div>
+    <button id="expand">Expandir todo</button>
+    <button id="collapse">Contraer todo</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Índice">
+    <h2>Índice</h2>
+    <a href="#intro">Qué es NotebookLM</a>
+    <a href="#flujo">Flujo de trabajo</a>
+    <a href="#p1">1 · Organizar fuentes</a>
+    <a href="#p2">2 · Configurar el cuaderno</a>
+    <a href="#p3">3 · Material de clase</a>
+    <a href="#p4">4 · Cuestionarios</a>
+    <a href="#p5">5 · Precauciones</a>
+    <a href="#prompts">Cómo escribir prompts</a>
+    <a href="#json">El poder del JSON</a>
+    <a href="#biblioteca">Biblioteca JSON</a>
+    <a href="#aula">Prompts de aula</a>
+    <a href="#reglas">Reglas de oro</a>
+    <a href="#glosario">Glosario</a>
+  </nav>
+
+  <main>
+
+    <!-- INTRO -->
+    <section class="panel open" id="intro">
+      <button class="head" aria-expanded="true"><span class="num">i</span>
+        <h3>Qué es NotebookLM y por qué cambia las reglas<span class="sub">El asistente que solo lee lo que tú le das</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>NotebookLM es un asistente de inteligencia artificial que trabaja <strong>exclusivamente con los documentos que tú le proporcionas</strong>. A diferencia de un chatbot general, no sale a inventar con datos de todo internet: se ancla a tus fuentes, cita de dónde saca cada afirmación y reduce drásticamente el ruido. Eso lo vuelve una herramienta ideal para el docente, que necesita fidelidad al temario, no creatividad descontrolada.</p>
+        <p>Este manual está organizado en dos grandes bloques. Primero, un <strong>flujo de trabajo de cinco pasos</strong> (organizar fuentes → configurar → preparar clases → evaluar → verificar). Después, el corazón de la guía: <strong>cómo escribir prompts efectivos y por qué conviene guardarlos en formato JSON</strong> como una biblioteca que reutilizas curso tras curso.</p>
+        <div class="tip"><span class="ic">i</span><p><strong>Cómo usar este manual.</strong> Cada sección es un acordeón: pulsa el título para abrir o cerrar. El buscador de arriba filtra los prompts por palabra clave. Cada prompt trae un botón <code class="inline">Copiar</code> para llevarlo directo a NotebookLM. Los <span class="ph">[corchetes]</span> marcan los huecos que debes rellenar con tu materia, tema o audiencia.</p></div>
+      </div>
+    </section>
+
+    <!-- FLUJO -->
+    <section class="panel" id="flujo">
+      <button class="head" aria-expanded="false"><span class="num">→</span>
+        <h3>Flujo de trabajo recomendado<span class="sub">El orden importa: cinco pasos de la fuente a la evaluación</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>NotebookLM rinde mejor cuando lo abordas como un proceso, no como una caja de respuestas. Este es el recorrido completo que desarrolla el resto del manual:</p>
+        <ol>
+          <li><strong>Organiza tus fuentes</strong> antes de pedir nada: fragmenta, nombra con claridad y crea un glosario. La calidad de la salida depende de la calidad y el orden de la entrada.</li>
+          <li><strong>Configura el comportamiento</strong> del cuaderno con un prompt de sistema que fije el rol, exija citas y prohíba inventar.</li>
+          <li><strong>Genera material de clase</strong> en varios formatos: guías, mapas mentales, tablas, podcasts y bosquejos de presentaciones.</li>
+          <li><strong>Construye evaluaciones</strong>: cuestionarios con "trampas", simulacros por casos y tarjetas didácticas exportables.</li>
+          <li><strong>Verifica siempre</strong>: revisa las citas, contrasta los datos y quédate con la última palabra como docente.</li>
+        </ol>
+        <div class="tip"><span class="ic">★</span><p><strong>Principio rector.</strong> Tú diriges, la IA ejecuta. Úsala para borradores, esquemas y repaso a gran escala; reserva el juicio pedagógico y la verificación final para ti.</p></div>
+      </div>
+    </section>
+
+    <!-- PASO 1 -->
+    <section class="panel" id="p1">
+      <button class="head" aria-expanded="false"><span class="num">1</span>
+        <h3>Organización estratégica de tus fuentes<span class="sub">La estructura de los documentos es el 80 % del resultado</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Para que la IA no entregue respuestas superficiales ni confunda información, la forma en que preparas y subes los documentos es clave.</p>
+        <ul>
+          <li><strong>Aplica el "chunking" (fragmentación).</strong> En lugar de subir un PDF masivo de 400 páginas, divídelo en archivos más pequeños y temáticos (por ejemplo, por capítulos o por tema). Esto mejora drásticamente la precisión con que NotebookLM recupera la información.</li>
+          <li><strong>Crea un documento de glosario.</strong> Redacta en Google Docs una página con las definiciones y acrónimos clave del curso y súbela como <strong>Fuente #1</strong>. Así la IA estabiliza la terminología antes de leer documentos más densos.</li>
+          <li><strong>Renombra los archivos con claridad.</strong> Usa prefijos taxonómicos o nombres descriptivos —<code class="inline">2026_Tema1_Historia.pdf</code> en vez de <code class="inline">informe_final.pdf</code>— para darle contexto al modelo desde el propio nombre.</li>
+          <li><strong>Aprovecha Google Drive y AutoSync.</strong> Si tienes documentos que cambian con frecuencia (temarios, guías, ejercicios), conéctalos directo desde Drive. Con AutoSync, el cuaderno se mantiene actualizado cada vez que editas el original, y evitas trabajar con versiones obsoletas.</li>
+          <li><strong>Un cuaderno por asignatura.</strong> Hay un límite de 50 fuentes por cuaderno: organiza un cuaderno por materia completa en lugar de uno por cada tema pequeño.</li>
+        </ul>
+        <div class="warn"><span class="ic">!</span><p><strong>Regla práctica.</strong> Un documento bien fragmentado y bien nombrado vale más que diez prompts ingeniosos sobre un PDF caótico. La precisión empieza en la fuente.</p></div>
+      </div>
+    </section>
+
+    <!-- PASO 2 -->
+    <section class="panel" id="p2">
+      <button class="head" aria-expanded="false"><span class="num">2</span>
+        <h3>Configuración del cuaderno (el "system prompt")<span class="sub">Educa a la IA sobre cómo quieres que se comporte</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Antes de pedir tareas concretas, fija las reglas del juego. Puedes hacerlo anclando una nota o usando la configuración del cuaderno para establecer instrucciones de comportamiento que se apliquen a toda la sesión.</p>
+        <ul>
+          <li><strong>Define su rol.</strong> Por ejemplo: <em>"Soy profesor de adultos de <span class="ph">[Materia]</span>. Actúa como un tutor experto. Explica los conceptos con ejemplos sencillos y evita la jerga innecesaria. Al responder, cita siempre el número de página y el documento fuente."</em></li>
+          <li><strong>Evita las alucinaciones.</strong> Añade la regla de oro: <em>"Si la información no está en las fuentes, di que las fuentes no contienen la respuesta."</em> Esto reduce enormemente las respuestas inventadas.</li>
+        </ul>
+        <p>En la <a href="#biblioteca" style="color:var(--blue);font-weight:600;text-decoration:none">biblioteca JSON</a> tienes este system prompt listo para copiar (situación <em>"Configuración del cuaderno"</em>).</p>
+      </div>
+    </section>
+
+    <!-- PASO 3 -->
+    <section class="panel" id="p3">
+      <button class="head" aria-expanded="false"><span class="num">3</span>
+        <h3>Preparación de material para clases<span class="sub">Convierte textos densos en formatos que entran por los ojos (y los oídos)</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <ul>
+          <li><strong>Guías y mapas mentales.</strong> Usa la "Guía de la Fuente" que se genera al subir un archivo para tener de inmediato un resumen ejecutivo y preguntas clave. Genera también un esquema o mapa mental para organizar tu clase en viñetas lógicas.</li>
+          <li><strong>Tablas de datos e infografías.</strong> Si el tema tiene muchas fechas, comparaciones o clasificaciones, pide: <em>"Crea una tabla para resumir y organizar la información de este tema según la fuente seleccionada."</em> También puedes generar estructuras visuales o infografías para que los conceptos "entren por los ojos".</li>
+          <li><strong>Podcasts (resúmenes en audio).</strong> Los adultos suelen tener poco tiempo: genera un <em>Audio Overview</em> con dos voces que debaten el temario. Perfecto para escuchar mientras conducen o hacen otras tareas. Puedes personalizar la instrucción para que se enfoque en ejemplos prácticos para tu audiencia.</li>
+          <li><strong>Presentaciones.</strong> NotebookLM crea un bosquejo paso a paso, diapositiva por diapositiva, sugiriendo contenido, títulos y conclusiones clave.</li>
+        </ul>
+        <div class="tip"><span class="ic">i</span><p><strong>Atajo.</strong> El podcast personalizado es de lo más infravalorado: pide que se centre en un tema concreto y que hablen "a profesionales adultos con poco tiempo, con ejemplos del día a día". El prompt está en la <a href="#biblioteca" style="color:var(--blue-dark);font-weight:600">biblioteca JSON</a>.</p></div>
+      </div>
+    </section>
+
+    <!-- PASO 4 -->
+    <section class="panel" id="p4">
+      <button class="head" aria-expanded="false"><span class="num">4</span>
+        <h3>Creación de cuestionarios y evaluaciones<span class="sub">De repasar a aplicar: trampas, casos y tarjetas</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <ul>
+          <li><strong>Cuestionarios personalizados.</strong> Selecciona la fuente del temario y usa la función de "Cuestionario" (Study Guide). Para mejores resultados: <em>"Crea un cuestionario de 10 preguntas de opción múltiple, ordenadas de menor a mayor dificultad, e incluye 'trampas' o errores comunes que los estudiantes suelen cometer."</em></li>
+          <li><strong>Casos prácticos y simulacros.</strong> En adultos, aplicar vale más que memorizar. Pide una simulación de examen basada en casos reales (clínicos, de negocio o del oficio) para que el alumno use el conocimiento, no solo lo recuerde.</li>
+          <li><strong>Tarjetas didácticas (flashcards).</strong> Pide 20 tarjetas pregunta/respuesta para evaluar la comprensión real. Se pueden exportar a Excel e importar a programas de repetición espaciada como Anki, para repasar desde el teléfono en cualquier rato libre.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PASO 5 -->
+    <section class="panel" id="p5">
+      <button class="head" aria-expanded="false"><span class="num">5</span>
+        <h3>Precauciones y limitaciones<span class="sub">Lo creíble es justo lo peligroso</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <ul>
+          <li><strong>Revisa siempre la información.</strong> NotebookLM no hace un "copiar y pegar": reinterpreta tus textos con probabilidades para generar contenido nuevo. Eso significa que puede suavizar contradicciones o "alucinar" datos para que el texto suene fluido.</li>
+          <li><strong>Haz fact-checking con las citas.</strong> Cada respuesta incluye burbujas numeradas. Haz clic en ellas para ir al párrafo exacto del documento original y comprobar que no se malinterpretó nada.</li>
+          <li><strong>El peligro de lo creíble.</strong> Como usa <em>tus</em> fuentes, sus alucinaciones suenan muy convincentes. Úsala para borradores y esquemas, pero la revisión final es tuya.</li>
+        </ul>
+        <div class="warn"><span class="ic">!</span><p><strong>Nunca delegues la verificación.</strong> Una cita rota o un dato suavizado, dentro de un texto que "suena bien", es el error más difícil de detectar. Abre cada burbuja.</p></div>
+      </div>
+    </section>
+
+    <!-- PROMPTS -->
+    <section class="panel" id="prompts">
+      <button class="head" aria-expanded="false"><span class="num">¶</span>
+        <h3>Cómo escribir prompts efectivos<span class="sub">Deja de usarlo como buscador y empieza a darle instrucciones de comportamiento</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Un prompt vago da una respuesta vaga. La diferencia entre "resume esto" y un buen prompt es que el segundo le dice a la IA <strong>quién es, para quién trabaja, qué reglas sigue y en qué formato responde</strong>. Cinco estrategias:</p>
+        <ol>
+          <li><strong>Define un rol y una audiencia específicos.</strong> No pidas solo "resume". Asígnale una identidad ("actúa como tutor profesional de estudio", "eres investigador médico preparando un estudio") y di claramente para quién es el material.</li>
+          <li><strong>Establece reglas anti-alucinación y exige citas.</strong> <em>"Al responder, cita siempre el número de página y el documento fuente."</em> Y la regla de oro: <em>"Si la información no está en las fuentes, dilo explícitamente."</em></li>
+          <li><strong>Aplica marcos y metodologías de aprendizaje.</strong> Pide técnicas concretas. El <strong>Método Feynman</strong>, por ejemplo, obliga a la IA a explicar con metáforas y ejemplos sencillos, evitando la jerga.</li>
+          <li><strong>Diseña interacciones paso a paso.</strong> En vez de un examen resuelto de golpe, pide tutoría: <em>"Hazme preguntas, no me des las respuestas; espera a que yo responda y luego califícame."</em></li>
+          <li><strong>Exige formatos específicos y "trampas".</strong> Solicita un formato exacto (tabla comparativa, viñetas, APA) y, en los cuestionarios, pide "trampas" o errores comunes para que las preguntas sean un reto real.</li>
+        </ol>
+        <div class="tip"><span class="ic">i</span><p><strong>El Método Feynman, en una línea.</strong> "Explícamelo como si fuera la primera vez que lo escucho, con un ejemplo de la vida real, y al final dime qué confusiones suele tener la gente." Esa fórmula sola ya mejora casi cualquier explicación.</p></div>
+      </div>
+    </section>
+
+    <!-- JSON -->
+    <section class="panel is-json" id="json">
+      <button class="head" aria-expanded="false"><span class="num">{}</span>
+        <h3>El poder del JSON: tu biblioteca de prompts<span class="sub">Por qué estructurar tus instrucciones como objetos reutilizables</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Un prompt suelto se escribe y se pierde. Un prompt en <strong>JSON</strong> se guarda, se reutiliza y se mejora. El JSON (<em>JavaScript Object Notation</em>) es simplemente una forma ordenada de escribir datos como pares <strong>clave: valor</strong>. Aplicado a tus prompts, convierte cada instrucción en una "ficha" con tres partes fijas: <em>cuándo usarla</em>, <em>qué logra</em> y <em>el texto literal</em>.</p>
+
+        <h4>¿Por qué conviene usar JSON?</h4>
+        <ul>
+          <li><strong>Separa lo que importa.</strong> La <code class="inline">situacion</code>, el <code class="inline">objetivo</code> y el <code class="inline">prompt_sugerido</code> quedan etiquetados. Encuentras el prompt correcto de un vistazo, sin releer párrafos.</li>
+          <li><strong>Es una biblioteca reutilizable.</strong> Copias la ficha, rellenas los <span class="ph">[corchetes]</span> y la pegas en NotebookLM. El mismo prompt te sirve para Matemáticas, Artes del Lenguaje o Ciencias: solo cambia las variables.</li>
+          <li><strong>Da consistencia.</strong> Usas siempre la misma estructura, así no improvisas ni olvidas la regla anti-alucinación.</li>
+          <li><strong>Es parametrizable.</strong> Los <span class="ph">[corchetes]</span> son variables. Una sola ficha cubre infinitas materias.</li>
+          <li><strong>Escala.</strong> ¿Necesitas más control? Añade campos como <code class="inline">formato_salida</code>, <code class="inline">nivel</code> o <code class="inline">restricciones</code>. La estructura crece contigo.</li>
+        </ul>
+
+        <h4>Anatomía de un objeto-prompt</h4>
+        <table class="tbl">
+          <caption>Claves de cada ficha y para qué sirven.</caption>
+          <thead><tr><th scope="col">Clave</th><th scope="col">Qué contiene</th></tr></thead>
+          <tbody>
+            <tr><td><code>situacion</code></td><td>Cuándo usar este prompt (la etiqueta por la que lo buscas).</td></tr>
+            <tr><td><code>objetivo</code></td><td>Qué resultado pedagógico persigue.</td></tr>
+            <tr><td><code>prompt_sugerido</code></td><td>El texto literal que copias y pegas, con sus <span class="ph">[corchetes]</span> a rellenar.</td></tr>
+          </tbody>
+        </table>
+
+        <h4>Cómo usarlo en la práctica</h4>
+        <p>Tienes dos formas de aprovecharlo:</p>
+        <ol>
+          <li><strong>Ficha a ficha.</strong> Buscas la situación que necesitas en la <a href="#biblioteca" style="color:var(--blue);font-weight:600;text-decoration:none">biblioteca</a>, copias el <code class="inline">prompt_sugerido</code>, rellenas los corchetes y lo pegas en el chat.</li>
+          <li><strong>Biblioteca completa.</strong> Pegas todo el array JSON en NotebookLM y le dices: <em>"Usa el prompt cuya situación sea '<span class="ph">[X]</span>' aplicándolo a la fuente seleccionada."</em> La IA lee el objeto y aplica la instrucción exacta.</li>
+        </ol>
+
+        <h4>Convención de corchetes</h4>
+        <p>Los <span class="ph">[corchetes]</span> son huecos que <strong>siempre</strong> debes reemplazar antes de enviar. Los más comunes:</p>
+        <ul>
+          <li><span class="ph">[Materia]</span> — la asignatura (Matemáticas ASE, Artes del Lenguaje…).</li>
+          <li><span class="ph">[Insertar Tema]</span> — el concepto puntual (fracciones, estructura del párrafo…).</li>
+          <li><span class="ph">[Sector Profesional]</span> / <span class="ph">[Contexto del estudiante]</span> — el perfil de tu audiencia, para personalizar ejemplos.</li>
+        </ul>
+
+        <h4>Plantilla maestra (clónala para tus propias fichas)</h4>
+        <p>Copia este objeto y añade tantas fichas como necesites. He incluido campos extra (<code class="inline">nivel</code>, <code class="inline">formato_salida</code>, <code class="inline">restricciones</code>) para que veas cómo extender la estructura cuando quieras más control.</p>
+        <div class="code-card">
+          <div class="code-top"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>plantilla_maestra.json<span class="tag">json</span><button class="copy" data-copy>Copiar</button></div>
+          <pre><code class="json-code">{
+  "id": "ficha_001",
+  "situacion": "[Cuándo usar este prompt]",
+  "objetivo": "[Qué resultado pedagógico persigue]",
+  "materia": "[Materia]",
+  "nivel": "[Principiante | Intermedio | Avanzado]",
+  "formato_salida": "[Tabla | Viñetas | Prosa | APA | Opción múltiple]",
+  "restricciones": [
+    "Cita siempre la página y el documento fuente.",
+    "Si la información no está en las fuentes, dilo explícitamente.",
+    "Usa el método Feynman: lenguaje sencillo y ejemplos reales."
+  ],
+  "prompt_sugerido": "Actúa como [rol]. Trabaja sobre [Insertar Tema] usando solo la fuente seleccionada. [Instrucción concreta]. Devuelve la respuesta en formato [formato_salida]."
+}</code></pre>
+        </div>
+        <div class="tip"><span class="ic">i</span><p><strong>Truco de escalado.</strong> Guarda tu biblioteca como un documento más dentro del cuaderno. Así NotebookLM puede "leer" tus propios prompts y aplicarlos cuando se lo pidas por su <code class="inline">situacion</code>.</p></div>
+      </div>
+    </section>
+
+    <!-- BIBLIOTECA -->
+    <section class="panel" id="biblioteca">
+      <button class="head" aria-expanded="false"><span class="num">≡</span>
+        <h3>Biblioteca de prompts JSON<span class="sub">Ocho fichas listas para copiar · usa el buscador de arriba para filtrar</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Estos son los ocho prompts estructurados, con los comandos literales recomendados para configurar el cuaderno, generar evaluaciones, extraer tablas y personalizar audios. Copia cada uno por separado, o lleva el array completo de una vez.</p>
+
+        <div class="code-card">
+          <div class="code-top"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>biblioteca_completa.json<span class="tag">array · 8 fichas</span><button class="copy" data-copy>Copiar todo</button></div>
+          <pre><code class="json-code">{
+  "prompts_para_notebooklm": [
+    {
+      "situacion": "Configuración del Cuaderno (System Prompt)",
+      "objetivo": "Establecer el rol de la IA, evitar alucinaciones y forzar la citación exacta de las fuentes.",
+      "prompt_sugerido": "Soy un profesor de educación de adultos. Quiero que actúes como un tutor profesional de estudio en esta materia. Explícame de forma sencilla utilizando el método Feynman. No inventes información, responde siempre con citas exactas de mis documentos, y si te pido algo que no viene en las fuentes, dímelo explícitamente."
+    },
+    {
+      "situacion": "Explicación de Conceptos Difíciles para la Clase",
+      "objetivo": "Transformar texto denso en explicaciones accesibles usando pedagogía activa.",
+      "prompt_sugerido": "Explícame el concepto de [Insertar Tema] basándote en la fuente seleccionada, como si fuera la primera vez que lo escucho aplicando el método Feynman. Dame ejemplos prácticos de la vida real, ilústralo bien y cita la fuente exacta. Al final, dime qué trampas o confusiones comunes suelen tener los estudiantes al aprender esto."
+    },
+    {
+      "situacion": "Interrogatorio Interactivo (Simulador de Tutoría)",
+      "objetivo": "Comprobar el nivel de comprensión del alumno obligándolo a escribir la respuesta antes de darle la solución.",
+      "prompt_sugerido": "Hazme 10 preguntas sobre esta fuente como si fuera un examen universitario, de nivel fácil a difícil. No me des las respuestas. Espera a que yo las responda una por una en este chat; luego califícame, dime en qué me equivoqué y qué debo agregar para tener la respuesta perfecta."
+    },
+    {
+      "situacion": "Simulacro de Examen con Casos Prácticos",
+      "objetivo": "Evaluar la aplicación práctica del conocimiento mediante escenarios del mundo real.",
+      "prompt_sugerido": "Crea una simulación de examen real de nivel avanzado sobre este tema. Incluye preguntas basadas en casos prácticos, con el mismo formato y dificultad que usaría una institución certificadora. Ordena de menor a mayor dificultad e incluye opciones múltiples con trampas diseñadas para confundir a alguien que solo ha memorizado."
+    },
+    {
+      "situacion": "Análisis Crítico y Búsqueda de Contradicciones",
+      "objetivo": "Fomentar el pensamiento crítico identificando diferencias de opinión en la bibliografía.",
+      "prompt_sugerido": "Basándote en todas las fuentes cargadas, ¿dónde están los desacuerdos entre los expertos sobre [Insertar Tema]? Genera un resumen en formato de tabla comparativa de los puntos clave y las posturas contradictorias."
+    },
+    {
+      "situacion": "Generación de Tarjetas Didácticas (Flashcards)",
+      "objetivo": "Crear material de estudio rápido y de repetición espaciada que los alumnos puedan exportar.",
+      "prompt_sugerido": "Crea 20 tarjetas didácticas sobre la fuente seleccionada para evaluar mi comprensión real. Evita preguntas sin sentido y organízalas por niveles de dificultad detectando trampas."
+    },
+    {
+      "situacion": "Estructuración de Tablas de Datos",
+      "objetivo": "Sintetizar información dispersa, histórica o comparativa en un formato estructurado.",
+      "prompt_sugerido": "Crea una tabla para resumir y organizar la información de este tema basándote en la fuente seleccionada. Utiliza columnas específicas para [Concepto/Síntoma], [Tratamiento/Solución] y [Referencias]."
+    },
+    {
+      "situacion": "Instrucción para Resumen de Audio (Podcast)",
+      "objetivo": "Dirigir a los presentadores de IA para que el podcast se centre en un tema específico con el tono adecuado.",
+      "prompt_sugerido": "Enfóquense en el apartado de [Tema de la clase] y mencionen los artículos y elementos principales. Expliquen el contenido con un enfoque muy práctico, como si le estuvieran hablando directamente a un grupo de estudiantes adultos de [Sector Profesional]. Incluyan ejemplos de su día a día."
+    }
+  ]
+}</code></pre>
+        </div>
+
+        <h4>Fichas individuales</h4>
+        <div id="cards"><!-- generado por JS --></div>
+        <p class="no-results" id="noResults">No hay prompts que coincidan con tu búsqueda.</p>
+      </div>
+    </section>
+
+    <!-- PROMPTS DE AULA -->
+    <section class="panel" id="aula">
+      <button class="head" aria-expanded="false"><span class="num">✎</span>
+        <h3>Prompts de aula (versión en prosa)<span class="sub">Seis instrucciones ampliadas para situaciones concretas</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Variantes redactadas en prosa, con más contexto que las fichas JSON. Útiles cuando quieres pegar la instrucción tal cual en el chat.</p>
+        <div id="prose"><!-- generado por JS --></div>
+      </div>
+    </section>
+
+    <!-- REGLAS DE ORO -->
+    <section class="panel" id="reglas">
+      <button class="head" aria-expanded="false"><span class="num">★</span>
+        <h3>Reglas de oro (hoja de referencia rápida)<span class="sub">Lo que no debes olvidar nunca</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <ul>
+          <li><strong>Fragmenta y nombra.</strong> Documentos pequeños, temáticos y con nombres descriptivos.</li>
+          <li><strong>Glosario como Fuente #1.</strong> Estabiliza la terminología antes que nada.</li>
+          <li><strong>Fija el rol y la audiencia</strong> en el system prompt, no en cada mensaje.</li>
+          <li><strong>Exige citas siempre</strong> — página y documento.</li>
+          <li><strong>Activa la regla anti-alucinación:</strong> "si no está en las fuentes, dilo".</li>
+          <li><strong>Pide el método Feynman</strong> para explicaciones accesibles.</li>
+          <li><strong>Incluye trampas</strong> en los cuestionarios para que evalúen de verdad.</li>
+          <li><strong>Privilegia la aplicación</strong> sobre la memorización: casos prácticos.</li>
+          <li><strong>Abre cada burbuja de cita</strong> antes de dar nada por bueno.</li>
+          <li><strong>Tú tienes la última palabra.</strong> La IA hace borradores; tú revisas.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- GLOSARIO -->
+    <section class="panel" id="glosario">
+      <button class="head" aria-expanded="false"><span class="num">A·Z</span>
+        <h3>Glosario<span class="sub">Términos clave del manual</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <table class="tbl">
+          <caption>Vocabulario esencial para usar NotebookLM con criterio.</caption>
+          <thead><tr><th scope="col">Término</th><th scope="col">Definición</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Alucinación</strong></td><td>Dato inventado por la IA que suena plausible pero no está respaldado por las fuentes.</td></tr>
+            <tr><td><strong>AutoSync</strong></td><td>Función que sincroniza automáticamente un documento de Google Drive con el cuaderno cuando lo editas.</td></tr>
+            <tr><td><strong>Audio Overview</strong></td><td>Resumen en formato de podcast con dos voces que conversan sobre tus fuentes.</td></tr>
+            <tr><td><strong>Chunking</strong></td><td>Fragmentar un documento grande en archivos pequeños y temáticos para mejorar la precisión.</td></tr>
+            <tr><td><strong>Fuente</strong></td><td>Cada documento que subes al cuaderno; NotebookLM solo razona sobre estas (máx. 50 por cuaderno).</td></tr>
+            <tr><td><strong>JSON</strong></td><td>Formato de datos en pares clave:valor, ideal para guardar prompts como fichas reutilizables.</td></tr>
+            <tr><td><strong>Método Feynman</strong></td><td>Técnica que exige explicar un concepto en lenguaje sencillo, con metáforas y ejemplos, como a un principiante.</td></tr>
+            <tr><td><strong>System prompt</strong></td><td>Instrucción de comportamiento que fija el rol y las reglas para toda la sesión del cuaderno.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="fin">
+    <p class="big">Manual de NotebookLM · Prompts JSON para educación de adultos</p>
+    <p>Documento de referencia para uso personal. Contenido base generado con NotebookLM y ampliado para servir como manual.</p>
+    <p style="margin-top:14px">© 2026 <strong style="color:#dbe5f3">José M. Fernández</strong>, ABE/ASE Math Master Teacher · Harry S. Truman College — City Colleges of Chicago.<br>
+    Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> (Atribución–NoComercial–CompartirIgual).</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---- Datos de los prompts ---- */
+  var jsonPrompts = [
+    {s:"Configuración del Cuaderno (System Prompt)", o:"Establecer el rol de la IA, evitar alucinaciones y forzar la citación exacta de las fuentes.", p:"Soy un profesor de educación de adultos. Quiero que actúes como un tutor profesional de estudio en esta materia. Explícame de forma sencilla utilizando el método Feynman. No inventes información, responde siempre con citas exactas de mis documentos, y si te pido algo que no viene en las fuentes, dímelo explícitamente."},
+    {s:"Explicación de Conceptos Difíciles para la Clase", o:"Transformar texto denso en explicaciones accesibles usando pedagogía activa.", p:"Explícame el concepto de [Insertar Tema] basándote en la fuente seleccionada, como si fuera la primera vez que lo escucho aplicando el método Feynman. Dame ejemplos prácticos de la vida real, ilústralo bien y cita la fuente exacta. Al final, dime qué trampas o confusiones comunes suelen tener los estudiantes al aprender esto."},
+    {s:"Interrogatorio Interactivo (Simulador de Tutoría)", o:"Comprobar el nivel de comprensión del alumno obligándolo a escribir la respuesta antes de darle la solución.", p:"Hazme 10 preguntas sobre esta fuente como si fuera un examen universitario, de nivel fácil a difícil. No me des las respuestas. Espera a que yo las responda una por una en este chat; luego califícame, dime en qué me equivoqué y qué debo agregar para tener la respuesta perfecta."},
+    {s:"Simulacro de Examen con Casos Prácticos", o:"Evaluar la aplicación práctica del conocimiento mediante escenarios del mundo real.", p:"Crea una simulación de examen real de nivel avanzado sobre este tema. Incluye preguntas basadas en casos prácticos, con el mismo formato y dificultad que usaría una institución certificadora. Ordena de menor a mayor dificultad e incluye opciones múltiples con trampas diseñadas para confundir a alguien que solo ha memorizado."},
+    {s:"Análisis Crítico y Búsqueda de Contradicciones", o:"Fomentar el pensamiento crítico identificando diferencias de opinión en la bibliografía.", p:"Basándote en todas las fuentes cargadas, ¿dónde están los desacuerdos entre los expertos sobre [Insertar Tema]? Genera un resumen en formato de tabla comparativa de los puntos clave y las posturas contradictorias."},
+    {s:"Generación de Tarjetas Didácticas (Flashcards)", o:"Crear material de estudio rápido y de repetición espaciada que los alumnos puedan exportar.", p:"Crea 20 tarjetas didácticas sobre la fuente seleccionada para evaluar mi comprensión real. Evita preguntas sin sentido y organízalas por niveles de dificultad detectando trampas."},
+    {s:"Estructuración de Tablas de Datos", o:"Sintetizar información dispersa, histórica o comparativa en un formato estructurado.", p:"Crea una tabla para resumir y organizar la información de este tema basándote en la fuente seleccionada. Utiliza columnas específicas para [Concepto/Síntoma], [Tratamiento/Solución] y [Referencias]."},
+    {s:"Instrucción para Resumen de Audio (Podcast)", o:"Dirigir a los presentadores de IA para que el podcast se centre en un tema específico con el tono adecuado.", p:"Enfóquense en el apartado de [Tema de la clase] y mencionen los artículos y elementos principales. Expliquen el contenido con un enfoque muy práctico, como si le estuvieran hablando directamente a un grupo de estudiantes adultos de [Sector Profesional]. Incluyan ejemplos de su día a día."}
+  ];
+
+  var prosePrompts = [
+    {s:"Situación 1 · Comportamiento general del cuaderno", p:"Soy un profesor de adultos preparando material para mi clase. Quiero que actúes como un tutor profesional de estudio de esta materia. Ayúdame a explicar conceptos usando el método Feynman, con explicaciones básicas y ejemplos de la vida real. No inventes información, responde siempre con citas exactas a los documentos, y si te pido algo que no viene en las fuentes, dímelo explícitamente para saber qué estás sacando de mis textos."},
+    {s:"Situación 2 · Explicar conceptos difíciles", p:"Explícame el concepto de [Insertar Tema] basándote en la fuente seleccionada, como si fuera la primera vez que lo escucho. Aplica el método Feynman, dame ejemplos prácticos, ilústralo bien y cita la fuente exacta. Al final, dime qué 'trampas' o confusiones comunes suelen tener las personas al estudiar este concepto."},
+    {s:"Situación 3 · Simulacros de examen por casos", p:"Crea una simulación de examen real de nivel avanzado sobre este tema. Incluye preguntas basadas en casos prácticos (o casos clínicos/de negocio), con el mismo formato y dificultad que usaría un profesor o una institución certificadora. Ordena de menor a mayor dificultad e incluye opciones múltiples diseñadas para confundir a alguien que solo ha memorizado."},
+    {s:"Situación 4 · Tutoría interactiva (interrogatorio)", p:"Hazme 10 preguntas sobre esta fuente para comprobar mi comprensión y ver qué separaría a un experto de un novato. Incluye preguntas de nivel fácil a difícil. No quiero las respuestas. Espera a que yo te responda una por una en este chat; luego califícame, dime en qué me equivoqué y qué debo agregar para tener una respuesta perfecta."},
+    {s:"Situación 5 · Análisis crítico y contradicciones", p:"Basándote en todas las fuentes cargadas, ¿dónde están los desacuerdos entre los expertos sobre [Insertar Tema]? Genera un resumen en formato de tabla comparativa de los puntos clave y las posturas contradictorias presentes en los distintos documentos."},
+    {s:"Situación 6 · Personalizar el podcast (Audio Overview)", p:"Enfóquense en el apartado de [Tema Específico] y mencionen las reglas y elementos principales. Expliquen el contenido con un enfoque muy práctico y directo, como si le estuvieran hablando a un grupo de adultos profesionales sin mucho tiempo libre. Incluyan ejemplos de la vida diaria relacionados con [Contexto del estudiante]."}
+  ];
+
+  function esc(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+  /* Resalta los [corchetes] en el texto del prompt mostrado */
+  function markBrackets(t){
+    return esc(t).replace(/\[([^\]]+)\]/g, '<span class="j-key">[$1]</span>');
+  }
+
+  /* ---- Construir tarjetas de la biblioteca JSON ---- */
+  var cards = document.getElementById("cards");
+  jsonPrompts.forEach(function(item, i){
+    var idx = String(i+1).padStart(2,"0");
+    var card = document.createElement("div");
+    card.className = "prompt-card";
+    card.setAttribute("data-text", (item.s + " " + item.o + " " + item.p).toLowerCase());
+    card.innerHTML =
+      '<div class="pc-head">'+
+        '<p class="pc-sit"><span class="idx">'+idx+'</span>'+esc(item.s)+'</p>'+
+        '<p class="pc-obj"><b>Objetivo:</b> '+esc(item.o)+'</p>'+
+      '</div>'+
+      '<div class="prompt-body">'+
+        '<pre><code>'+markBrackets(item.p)+'</code></pre>'+
+        '<div class="prompt-actions"><button class="copy" data-copy>Copiar prompt</button></div>'+
+      '</div>';
+    cards.appendChild(card);
+  });
+
+  /* ---- Construir prompts en prosa ---- */
+  var prose = document.getElementById("prose");
+  prosePrompts.forEach(function(item){
+    var card = document.createElement("div");
+    card.className = "prompt-card";
+    card.innerHTML =
+      '<div class="pc-head"><p class="pc-sit">'+esc(item.s)+'</p></div>'+
+      '<div class="prompt-body">'+
+        '<pre><code>'+markBrackets(item.p)+'</code></pre>'+
+        '<div class="prompt-actions"><button class="copy" data-copy>Copiar prompt</button></div>'+
+      '</div>';
+    prose.appendChild(card);
+  });
+
+  /* ---- Resaltado de sintaxis para los bloques .json-code ---- */
+  function highlightJSON(raw){
+    var s = esc(raw);
+    return s.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false)\b|\bnull\b|-?\d+(?:\.\d+)?)/g, function(m){
+      var cls = "j-num";
+      if(/^"/.test(m)){ cls = /:$/.test(m) ? "j-key" : "j-str"; }
+      else if(/true|false/.test(m)){ cls = "j-bool"; }
+      else if(/null/.test(m)){ cls = "j-null"; }
+      return '<span class="'+cls+'">'+m+'</span>';
+    });
+  }
+  document.querySelectorAll("code.json-code").forEach(function(el){
+    el.setAttribute("data-raw", el.textContent);
+    el.innerHTML = highlightJSON(el.textContent);
+  });
+
+  /* ---- Botones de copiar ---- */
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest("[data-copy]");
+    if(!btn) return;
+    var card = btn.closest(".code-card, .prompt-body");
+    var codeEl = card.querySelector("code");
+    var text = codeEl.getAttribute("data-raw") || codeEl.textContent;
+    var done = function(){
+      var old = btn.textContent;
+      btn.textContent = "¡Copiado!";
+      btn.classList.add("done");
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove("done"); }, 1600);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, function(){ fallback(text); done(); });
+    } else { fallback(text); done(); }
+  });
+  function fallback(text){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); }catch(err){}
+    document.body.removeChild(ta);
+  }
+
+  /* ---- Acordeón ---- */
+  document.querySelectorAll(".panel > .head").forEach(function(h){
+    h.addEventListener("click", function(){
+      var panel = h.parentElement;
+      var open = panel.classList.toggle("open");
+      h.setAttribute("aria-expanded", open ? "true":"false");
+    });
+  });
+  document.getElementById("expand").addEventListener("click", function(){
+    document.querySelectorAll(".panel").forEach(function(p){ p.classList.add("open"); p.querySelector(".head").setAttribute("aria-expanded","true"); });
+  });
+  document.getElementById("collapse").addEventListener("click", function(){
+    document.querySelectorAll(".panel").forEach(function(p){ p.classList.remove("open"); p.querySelector(".head").setAttribute("aria-expanded","false"); });
+  });
+
+  /* ---- Buscador (filtra tarjetas de prompt) ---- */
+  var q = document.getElementById("q");
+  var noRes = document.getElementById("noResults");
+  q.addEventListener("input", function(){
+    var term = q.value.trim().toLowerCase();
+    var libPanel = document.getElementById("biblioteca");
+    if(term){ libPanel.classList.add("open"); libPanel.querySelector(".head").setAttribute("aria-expanded","true"); }
+    var visible = 0;
+    cards.querySelectorAll(".prompt-card").forEach(function(c){
+      var match = !term || c.getAttribute("data-text").indexOf(term) > -1;
+      c.style.display = match ? "" : "none";
+      if(match) visible++;
+    });
+    noRes.style.display = (term && visible===0) ? "block" : "none";
+  });
+
+  /* ---- Índice activo (scroll-spy) ---- */
+  var links = Array.prototype.slice.call(document.querySelectorAll("nav.toc a"));
+  var map = {};
+  links.forEach(function(a){ map[a.getAttribute("href").slice(1)] = a; });
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          links.forEach(function(l){ l.classList.remove("active"); });
+          var a = map[en.target.id];
+          if(a) a.classList.add("active");
+        }
+      });
+    }, {rootMargin:"-30% 0px -60% 0px"});
+    document.querySelectorAll("main .panel").forEach(function(p){ obs.observe(p); });
+  }
+  /* Abrir el panel destino al pulsar un enlace del índice */
+  links.forEach(function(a){
+    a.addEventListener("click", function(){
+      var t = document.getElementById(a.getAttribute("href").slice(1));
+      if(t){ t.classList.add("open"); t.querySelector(".head").setAttribute("aria-expanded","true"); }
+    });
+  });
+})();
+</script>
+</body>
+</html>
