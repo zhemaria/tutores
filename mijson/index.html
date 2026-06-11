@@ -1,1 +1,819 @@
+<!DOCTYPE html>
+<!--
+  Guía maestra de JSON — Estructura, encadenamiento y buenas prácticas
+  Autor: José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago
+  Año: 2026 | Para uso personal del autor.
+  Licencia: CC BY-NC-SA 4.0 (Atribución-NoComercial-CompartirIgual).
+  Resumen: Manual de referencia ampliado sobre JSON: tipos de datos, sintaxis, lectura/escritura,
+           datos anidados, buenas prácticas, JSON Schema, seguridad y un validador interactivo.
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago">
+<meta name="license" content="CC BY-NC-SA 4.0">
+<link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<title>Guía maestra de JSON · Estructura, encadenamiento y buenas prácticas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16243f;
+    --ink-soft:#2b3a55;
+    --paper:#eaeef4;
+    --surface:#ffffff;
+    --line:#d3dbe6;
+    --muted:#475569;
+    --blue:#1d4ed8;
+    --blue-dark:#1e3a8a;
+    --amber:#d97706;
+    --amber-bg:#fef3c7;
+    --amber-ink:#5c3900;
+    --green:#15803d;
+    --red:#b91c1c;
+    --code-bg:#0f1b30;
+    --code-line:#23314d;
+    --radius:14px;
+    --maxw:1160px;
+    --shadow:0 1px 2px rgba(22,36,63,.06), 0 8px 24px rgba(22,36,63,.07);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--amber-bg);color:var(--ink)}
 
+  /* ---------- Hero ---------- */
+  header.hero{
+    background:
+      radial-gradient(900px 320px at 92% -80px, rgba(217,119,6,.16), transparent 60%),
+      linear-gradient(180deg,#16243f 0%, #1b2c4d 100%);
+    color:#eef2f8;padding:46px 22px 40px;border-bottom:3px solid var(--amber);
+  }
+  .hero-inner{max-width:var(--maxw);margin:0 auto;display:grid;grid-template-columns:1.3fr .9fr;gap:34px;align-items:center}
+  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:#ffd27d;margin:0 0 12px}
+  .hero h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:clamp(1.9rem,4.2vw,3rem);line-height:1.06;margin:0 0 14px;letter-spacing:-.01em}
+  .hero h1 em{font-style:normal;color:#ffd27d}
+  .hero p.lede{font-size:1.06rem;max-width:54ch;margin:0;color:#cdd7e6}
+  .hero .meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:9px;font-family:"JetBrains Mono",monospace;font-size:.76rem}
+  .hero .meta span{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);padding:6px 12px;border-radius:999px;color:#dbe5f3}
+  .hero-code{
+    background:#0b1426;border:1px solid #2a3a5c;border-radius:14px;overflow:hidden;box-shadow:0 16px 40px rgba(0,0,0,.35);
+  }
+  .hero-code .bar{display:flex;gap:6px;padding:10px 14px;border-bottom:1px solid #1e2c47;background:#0e1830}
+  .hero-code .bar i{width:11px;height:11px;border-radius:50%;display:inline-block}
+  .hero-code pre{margin:0;padding:16px 18px;font-size:.82rem;background:transparent}
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{position:sticky;top:0;z-index:50;background:rgba(234,238,244,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .toolbar-inner{max-width:var(--maxw);margin:0 auto;padding:11px 22px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .search{flex:1;min-width:220px;position:relative}
+  .search input{width:100%;padding:10px 14px 10px 40px;border:1px solid var(--line);border-radius:10px;background:var(--surface);font:inherit;font-size:.95rem;color:var(--ink)}
+  .search input:focus{outline:2px solid var(--blue);outline-offset:1px;border-color:var(--blue)}
+  .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
+  .toolbar button{font:inherit;font-weight:600;font-size:.88rem;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);padding:9px 14px;border-radius:10px;transition:.15s}
+  .toolbar button:hover{border-color:var(--blue);color:var(--blue)}
+  .toolbar button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+
+  /* ---------- Layout ---------- */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:30px 22px 70px;display:grid;grid-template-columns:230px 1fr;gap:40px}
+  nav.toc{position:sticky;top:74px;align-self:start;height:max-content}
+  nav.toc h2{font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 0 12px;padding-left:4px}
+  nav.toc a{display:block;padding:7px 12px;border-radius:8px;color:var(--ink-soft);text-decoration:none;font-size:.9rem;font-weight:500;border-left:2px solid transparent;transition:.12s}
+  nav.toc a:hover{background:var(--surface);color:var(--blue)}
+  nav.toc a.active{background:var(--surface);color:var(--blue);border-left-color:var(--amber);font-weight:600}
+  main{min-width:0}
+
+  /* ---------- Acordeón ---------- */
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:16px;box-shadow:var(--shadow);overflow:hidden}
+  .panel > .head{width:100%;display:flex;align-items:center;gap:16px;cursor:pointer;padding:20px 22px;border:0;background:transparent;text-align:left;font:inherit;color:var(--ink)}
+  .panel > .head:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+  .panel .num{flex:none;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--ink);color:#fff;font-family:"JetBrains Mono",monospace;font-weight:700;font-size:.92rem}
+  .panel.is-live .num{background:var(--amber);color:var(--amber-ink)}
+  .panel .head h3{margin:0;flex:1;font-family:"Space Grotesk",sans-serif;font-weight:600;font-size:1.18rem;line-height:1.25;letter-spacing:-.01em}
+  .panel .head .sub{display:block;font-family:"Inter",sans-serif;font-weight:400;font-size:.86rem;color:var(--muted);margin-top:3px}
+  .chev{flex:none;color:var(--muted);transition:transform .25s ease}
+  .panel.open .chev{transform:rotate(180deg)}
+  .panel .body{display:none;padding:0 22px 26px;border-top:1px solid var(--line)}
+  .panel.open .body{display:block;animation:fade .25s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .body > :first-child{margin-top:18px}
+
+  /* ---------- Texto ---------- */
+  main p{margin:0 0 14px}
+  main h4{font-family:"Space Grotesk",sans-serif;font-size:1.02rem;font-weight:600;color:var(--ink);margin:24px 0 10px}
+  main ul,main ol{margin:0 0 16px;padding-left:4px}
+  main li{margin:0 0 10px;list-style:none;padding-left:26px;position:relative}
+  main ul li::before{content:"";position:absolute;left:6px;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--amber);transform:rotate(45deg)}
+  main ol{counter-reset:c}
+  main ol li{counter-increment:c}
+  main ol li::before{content:counter(c);position:absolute;left:0;top:1px;width:20px;height:20px;border-radius:6px;background:var(--ink);color:#fff;font-family:"JetBrains Mono",monospace;font-size:.72rem;font-weight:700;display:grid;place-items:center}
+  strong{color:var(--ink);font-weight:600}
+  code.inline{font-family:"JetBrains Mono",monospace;font-size:.85em;background:#eef2f8;color:var(--blue-dark);padding:2px 6px;border-radius:5px;border:1px solid #dce4ef}
+
+  /* ---------- Cajas ---------- */
+  .tip,.warn{border-radius:12px;padding:15px 18px 15px 16px;margin:18px 0;border:1px solid;display:flex;gap:12px}
+  .tip{background:#eef5ff;border-color:#cfe0fb}
+  .warn{background:#fff7ed;border-color:#fed7aa}
+  .tip .ic,.warn .ic{flex:none;font-family:"Space Grotesk";font-weight:700;width:24px;height:24px;border-radius:7px;display:grid;place-items:center;color:#fff;font-size:.9rem}
+  .tip .ic{background:var(--blue)}.warn .ic{background:var(--amber)}
+  .tip p,.warn p{margin:0}.tip strong{color:var(--blue-dark)}.warn strong{color:var(--amber-ink)}
+
+  /* ---------- Código ---------- */
+  .code-card{margin:18px 0;border-radius:12px;overflow:hidden;border:1px solid var(--code-line)}
+  .code-top{background:#0b1426;color:#9fb3d1;display:flex;align-items:center;gap:10px;padding:9px 14px;font-family:"JetBrains Mono",monospace;font-size:.76rem;border-bottom:1px solid var(--code-line)}
+  .code-top .dot{width:10px;height:10px;border-radius:50%}
+  .code-top .tag{margin-left:auto;letter-spacing:.06em;text-transform:uppercase;color:#6f86a8}
+  pre{margin:0;background:var(--code-bg);color:#e2e8f0;padding:16px 18px;overflow-x:auto;font-family:"JetBrains Mono",monospace;font-size:.84rem;line-height:1.6}
+  pre code{font-family:inherit}
+  .j-key{color:#fbbf24}.j-str{color:#86efac}.j-bool{color:#7dd3fc}.j-null{color:#fca5a5}.j-num{color:#c4b5fd}.j-punc{color:#94a3b8}
+  .c-str{color:#86efac}.c-com{color:#64748b;font-style:italic}.c-kw{color:#7dd3fc}
+  .copy{margin-left:8px;font:inherit;font-family:"JetBrains Mono",monospace;font-size:.72rem;font-weight:700;cursor:pointer;border:1px solid #34466b;background:#1a294a;color:#bcd0ee;padding:5px 11px;border-radius:7px;transition:.15s}
+  .copy:hover{background:#22335a;color:#fff;border-color:var(--blue)}
+  .copy.done{background:#14532d;border-color:#15803d;color:#bbf7d0}
+
+  /* ---------- Comparación válido/inválido ---------- */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:18px 0}
+  .compare .code-top.bad{color:#fca5a5}
+  .compare .code-top.good{color:#86efac}
+  @media (max-width:680px){.compare{grid-template-columns:1fr}}
+
+  /* ---------- Tipos de datos (tarjetas) ---------- */
+  .types{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:12px;margin:18px 0}
+  .type-card{border:1px solid var(--line);border-radius:11px;padding:13px 14px;background:#fbfcfe}
+  .type-card .tn{font-family:"Space Grotesk";font-weight:600;font-size:.98rem;margin:0 0 3px;color:var(--ink)}
+  .type-card .td{font-size:.8rem;color:var(--muted);margin:0 0 9px;line-height:1.45}
+  .type-card code{display:block;font-family:"JetBrains Mono";font-size:.78rem;background:var(--code-bg);color:#86efac;padding:7px 9px;border-radius:7px;overflow-x:auto}
+
+  /* ---------- Tabla ---------- */
+  .tbl{width:100%;border-collapse:collapse;margin:16px 0;font-size:.9rem;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .tbl caption{caption-side:top;text-align:left;font-size:.82rem;color:var(--muted);margin-bottom:8px;font-style:italic}
+  .tbl th,.tbl td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  .tbl th{background:#eef2f8;font-weight:600;color:var(--ink);font-size:.84rem}
+  .tbl tr:last-child td{border-bottom:0}
+  .tbl td code,.tbl th code{font-family:"JetBrains Mono";font-size:.82em;color:var(--blue-dark);background:#eef2f8;padding:1px 5px;border-radius:4px}
+  .glo-row[hidden]{display:none}
+
+  /* ---------- Validador ---------- */
+  .validator{margin:6px 0 4px}
+  .val-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media (max-width:760px){.val-grid{grid-template-columns:1fr}}
+  .val-col label{display:block;font-family:"JetBrains Mono";font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 7px}
+  #jsonInput{width:100%;min-height:230px;resize:vertical;font-family:"JetBrains Mono",monospace;font-size:.84rem;line-height:1.55;padding:14px;border-radius:11px;border:1px solid var(--code-line);background:var(--code-bg);color:#e2e8f0;tab-size:2}
+  #jsonInput:focus{outline:2px solid var(--blue);outline-offset:1px}
+  .val-out{min-height:230px;max-height:430px;overflow:auto;border-radius:11px;border:1px solid var(--code-line);background:var(--code-bg)}
+  .val-out pre{padding:14px;min-height:230px}
+  .val-actions{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0 12px}
+  .val-actions button{font:inherit;font-weight:600;font-size:.86rem;cursor:pointer;border-radius:9px;padding:9px 15px;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft);transition:.15s}
+  .val-actions button:hover{border-color:var(--blue);color:var(--blue)}
+  .val-actions button.primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .val-actions button.primary:hover{background:#22345c;color:#fff}
+  .val-actions button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+  .val-status{font-family:"JetBrains Mono";font-size:.8rem;padding:10px 14px;border-radius:9px;margin-top:4px;display:none}
+  .val-status.ok{display:block;background:#dcfce7;color:#14532d;border:1px solid #86efac}
+  .val-status.err{display:block;background:#fee2e2;color:#7f1d1d;border:1px solid #fca5a5}
+  .val-status b{font-weight:700}
+
+  .no-results{display:none;text-align:center;color:var(--muted);padding:24px;font-style:italic}
+
+  /* ---------- Pie ---------- */
+  footer{background:var(--ink);color:#aebdd6;padding:34px 22px;font-size:.85rem}
+  footer .fin{max-width:var(--maxw);margin:0 auto}
+  footer a{color:#ffd27d;text-decoration:none}footer a:hover{text-decoration:underline}
+  footer .big{font-family:"Space Grotesk";color:#fff;font-size:1.05rem;font-weight:600;margin:0 0 8px}
+
+  @media (max-width:900px){
+    .hero-inner{grid-template-columns:1fr}
+    .hero-code{display:none}
+    .wrap{grid-template-columns:1fr;gap:18px;padding-top:20px}
+    nav.toc{position:static;order:-1;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+    nav.toc a{display:inline-block;border-left:0;border:1px solid transparent}
+    nav.toc a.active{border-color:var(--line)}
+  }
+  @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto !important;animation:none !important;transition:none !important}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <p class="eyebrow">Manual de referencia · v1.0 · 2026</p>
+      <h1>Guía maestra de <em>JSON</em>:<br>estructura, encadenamiento y buenas prácticas</h1>
+      <p class="lede">Todo lo que necesitas para dominar JSON: sus tipos de datos, sus reglas de sintaxis, cómo leerlo y escribirlo, cómo navegar datos anidados sin romper nada, y cómo diseñarlo para que sea predecible, seguro y fácil de mantener. Con un validador interactivo incluido.</p>
+      <div class="meta"><span>6 tipos de datos</span><span>JS + Python</span><span>JSON Schema</span><span>Validador en vivo</span></div>
+    </div>
+    <div class="hero-code" aria-hidden="true">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i></div>
+      <pre><code class="json-code">{
+  "formato": "JSON",
+  "version": 2026,
+  "ligero": true,
+  "tipos": ["string", "number", "boolean", "null", "object", "array"],
+  "fecha": "2026-06-10T08:15:00Z",
+  "comentarios": null
+}</code></pre>
+    </div>
+  </div>
+</header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="search">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="q" type="search" placeholder="Buscar un término del glosario…" aria-label="Buscar en el glosario">
+    </div>
+    <button id="expand">Expandir todo</button>
+    <button id="collapse">Contraer todo</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <nav class="toc" aria-label="Índice">
+    <h2>Índice</h2>
+    <a href="#intro">Qué es JSON</a>
+    <a href="#tipos">Tipos de datos</a>
+    <a href="#sintaxis">Reglas de sintaxis</a>
+    <a href="#io">Leer y escribir</a>
+    <a href="#anidados">Datos anidados</a>
+    <a href="#practicas">Buenas prácticas</a>
+    <a href="#schema">JSON Schema</a>
+    <a href="#seguridad">Seguridad y rendimiento</a>
+    <a href="#caso">Caso práctico</a>
+    <a href="#validador">Validador interactivo</a>
+    <a href="#glosario">Glosario</a>
+    <a href="#cheat">Referencia rápida</a>
+  </nav>
+
+  <main>
+
+    <!-- INTRO -->
+    <section class="panel open" id="intro">
+      <button class="head" aria-expanded="true"><span class="num">i</span>
+        <h3>Qué es JSON y por qué conviene dominarlo<span class="sub">El idioma con el que hablan los datos modernos</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p><strong>JSON</strong> (<em>JavaScript Object Notation</em>) es un formato de intercambio de datos ligero, fácil de leer y escribir para las personas y sencillo de procesar para las máquinas. Se basa en algo muy simple: <strong>pares clave–valor</strong>. Una clave (un texto) y el dato que le corresponde.</p>
+        <p>Aunque nació en el mundo de JavaScript, hoy es <strong>independiente del lenguaje</strong>: lo usan Python, Java, PHP y prácticamente cualquier tecnología. Está en todas partes —respuestas de APIs, archivos de configuración, e incluso en la forma de estructurar instrucciones para una IA— porque combina dos virtudes difíciles de tener juntas: es legible para un humano y predecible para una máquina.</p>
+        <div class="tip"><span class="ic">i</span><p><strong>Cómo usar este manual.</strong> Cada sección es un acordeón: pulsa el título para abrirla. El buscador de arriba filtra el glosario. Todos los bloques de código traen botón <code class="inline">Copiar</code>. Y en la sección <a href="#validador" style="color:var(--blue-dark);font-weight:600">Validador interactivo</a> puedes pegar tu propio JSON para validarlo, formatearlo o minificarlo al instante.</p></div>
+      </div>
+    </section>
+
+    <!-- TIPOS -->
+    <section class="panel" id="tipos">
+      <button class="head" aria-expanded="false"><span class="num">1</span>
+        <h3>Anatomía y tipos de datos<span class="sub">Seis tipos, ni uno más</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Un valor en JSON solo puede ser uno de estos seis tipos. Toda estructura, por compleja que parezca, se construye combinándolos.</p>
+        <div class="types">
+          <div class="type-card"><p class="tn">Cadena (string)</p><p class="td">Texto entre comillas dobles. Siempre dobles, nunca simples.</p><code>"Hola mundo"</code></div>
+          <div class="type-card"><p class="tn">Número (number)</p><p class="td">Enteros o decimales, sin comillas.</p><code>42&nbsp;&nbsp;·&nbsp;&nbsp;3.14</code></div>
+          <div class="type-card"><p class="tn">Booleano (boolean)</p><p class="td">Verdadero o falso reales, jamás entre comillas.</p><code>true&nbsp;&nbsp;·&nbsp;&nbsp;false</code></div>
+          <div class="type-card"><p class="tn">Nulo (null)</p><p class="td">Ausencia explícita de valor.</p><code>null</code></div>
+          <div class="type-card"><p class="tn">Objeto (object)</p><p class="td">Colección de pares clave–valor entre llaves.</p><code>{"edad": 28}</code></div>
+          <div class="type-card"><p class="tn">Array (matriz)</p><p class="td">Lista ordenada de elementos entre corchetes.</p><code>["rojo","azul"]</code></div>
+        </div>
+        <p>Las claves de un objeto son <strong>siempre cadenas</strong> (texto entre comillas dobles). Los valores pueden ser cualquiera de los seis tipos, incluidos otros objetos o arrays: así es como nacen las estructuras anidadas.</p>
+        <div class="code-card">
+          <div class="code-top"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>tipos.json<span class="tag">json</span><button class="copy" data-copy>Copiar</button></div>
+          <pre><code class="json-code">{
+  "nombre": "Ana",
+  "edad": 28,
+  "activo": true,
+  "segundoNombre": null,
+  "colores": ["rojo", "verde", "azul"],
+  "direccion": { "calle": "Principal", "numero": 12 }
+}</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- SINTAXIS -->
+    <section class="panel" id="sintaxis">
+      <button class="head" aria-expanded="false"><span class="num">2</span>
+        <h3>Reglas de sintaxis que no se rompen<span class="sub">Los errores más comunes y cómo evitarlos</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>JSON es estricto a propósito: esa rigidez es lo que lo hace fiable entre máquinas distintas. Estas son las reglas que más se incumplen.</p>
+        <ul>
+          <li><strong>Comillas dobles, siempre.</strong> Tanto las claves como las cadenas van entre <code class="inline">"</code> dobles. Las comillas simples no son JSON válido.</li>
+          <li><strong>Las claves van entrecomilladas.</strong> <code class="inline">edad: 28</code> no vale; debe ser <code class="inline">"edad": 28</code>.</li>
+          <li><strong>Sin comas finales.</strong> Una coma después del último elemento (<em>trailing comma</em>) invalida el documento.</li>
+          <li><strong>Sin comentarios.</strong> JSON no admite <code class="inline">//</code> ni <code class="inline">/* */</code>. Si necesitas notas, usa un campo extra como <code class="inline">"_nota"</code>.</li>
+          <li><strong>Booleanos y null en minúscula.</strong> Es <code class="inline">true</code>/<code class="inline">false</code>/<code class="inline">null</code>, no <code class="inline">True</code> ni <code class="inline">NULL</code>. Y <code class="inline">undefined</code> no existe en JSON.</li>
+          <li><strong>Las fechas son cadenas.</strong> JSON no tiene tipo fecha: se representan como texto en formato ISO-8601.</li>
+        </ul>
+        <div class="compare">
+          <div class="code-card">
+            <div class="code-top bad"><span class="dot" style="background:#ff5f57"></span>✗ inválido<span class="tag">no parsea</span></div>
+            <pre><code class="json-code">{
+  'nombre': "Ana",
+  edad: 28,
+  "activo": True,
+  "tags": ["a", "b",],
+  "nota": undefined,
+}</code></pre>
+          </div>
+          <div class="code-card">
+            <div class="code-top good"><span class="dot" style="background:#28c840"></span>✓ válido<span class="tag">correcto</span><button class="copy" data-copy>Copiar</button></div>
+            <pre><code class="json-code">{
+  "nombre": "Ana",
+  "edad": 28,
+  "activo": true,
+  "tags": ["a", "b"],
+  "nota": null
+}</code></pre>
+          </div>
+        </div>
+        <p>Los seis errores de la izquierda: clave con comillas simples, clave sin comillas, <code class="inline">True</code> capitalizado, coma final en el array, <code class="inline">undefined</code> (no existe) y coma final en el objeto.</p>
+        <div class="tip"><span class="ic">i</span><p><strong>Compruébalo tú mismo.</strong> Pega cualquiera de estos bloques en el <a href="#validador" style="color:var(--blue-dark);font-weight:600">validador</a> y verás exactamente qué falla y en qué posición.</p></div>
+      </div>
+    </section>
+
+    <!-- IO -->
+    <section class="panel" id="io">
+      <button class="head" aria-expanded="false"><span class="num">3</span>
+        <h3>Leer y escribir JSON<span class="sub">Parsear y serializar en JavaScript y Python</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Dos operaciones resumen casi todo el trabajo con JSON: <strong>parsear</strong> (convertir texto JSON en un objeto manipulable) y <strong>serializar</strong> (el camino inverso, de objeto a texto).</p>
+        <h4>En JavaScript</h4>
+        <div class="code-card">
+          <div class="code-top"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>javascript<span class="tag">js</span><button class="copy" data-copy>Copiar</button></div>
+          <pre><code class="code-snippet">// Texto JSON  ->  objeto JavaScript
+const obj = JSON.parse('{"activo": true, "edad": 28}');
+console.log(obj.edad); // 28
+
+// Objeto JavaScript  ->  texto JSON
+const texto = JSON.stringify(obj);
+
+// Con sangría de 2 espacios para lectura humana (pretty-print)
+const bonito = JSON.stringify(obj, null, 2);
+
+// El 2.º parámetro (replacer) permite filtrar qué claves se incluyen
+const filtrado = JSON.stringify(obj, ["edad"], 2);</code></pre>
+        </div>
+        <h4>En Python</h4>
+        <div class="code-card">
+          <div class="code-top"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>python<span class="tag">py</span><button class="copy" data-copy>Copiar</button></div>
+          <pre><code class="code-snippet"># Con cadenas de texto
+import json
+obj = json.loads('{"activo": true}')   # texto -> dict
+texto = json.dumps(obj, indent=2)       # dict -> texto
+
+# Directamente con archivos
+with open("datos.json", encoding="utf-8") as f:
+    datos = json.load(f)                # archivo -> dict
+
+with open("salida.json", "w", encoding="utf-8") as f:
+    json.dump(datos, f, ensure_ascii=False, indent=2)  # dict -> archivo</code></pre>
+        </div>
+        <table class="tbl">
+          <caption>Equivalencias entre los dos lenguajes.</caption>
+          <thead><tr><th scope="col">Operación</th><th scope="col">JavaScript</th><th scope="col">Python (texto)</th><th scope="col">Python (archivo)</th></tr></thead>
+          <tbody>
+            <tr><td>Parsear (leer)</td><td><code>JSON.parse()</code></td><td><code>json.loads()</code></td><td><code>json.load()</code></td></tr>
+            <tr><td>Serializar (escribir)</td><td><code>JSON.stringify()</code></td><td><code>json.dumps()</code></td><td><code>json.dump()</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ANIDADOS -->
+    <section class="panel" id="anidados">
+      <button class="head" aria-expanded="false"><span class="num">4</span>
+        <h3>Datos anidados y encadenamiento seguro<span class="sub">Navegar estructuras profundas sin romper la aplicación</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Es muy común encontrar objetos dentro de objetos. El problema aparece cuando intentas acceder a una propiedad profunda y un nivel intermedio no existe: el programa intenta leer una propiedad de <code class="inline">undefined</code> y falla.</p>
+        <h4>Encadenamiento opcional (<code class="inline">?.</code>) en JavaScript</h4>
+        <p>El operador <code class="inline">?.</code> detiene la evaluación y devuelve <code class="inline">undefined</code> si el valor anterior es nulo o no existe, en lugar de lanzar un error. Tiene tres formas:</p>
+        <div class="code-card">
+          <div class="code-top"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>encadenamiento-opcional.js<span class="tag">js</span><button class="copy" data-copy>Copiar</button></div>
+          <pre><code class="code-snippet">const user = { nombre: "Ana" }; // sin "address"
+
+// ✗ Esto lanzaría un error: no se puede leer "street" de undefined
+// const calle = user.address.street;
+
+// ✓ Con encadenamiento opcional, devuelve undefined sin romper
+const calle = user?.address?.street;   // undefined
+
+// Tres formas de usarlo:
+obj?.prop;        // propiedad simple
+obj?.[clave];     // propiedad dinámica (con corchetes)
+obj.metodo?.();   // ejecuta el método solo si existe</code></pre>
+        </div>
+        <div class="warn"><span class="ic">!</span><p><strong>No abuses del <code class="inline" style="background:#fde8c8;border-color:#f3cf9a">?.</code></strong> Úsalo solo en propiedades que de verdad sean opcionales. Si lo pones en todas partes, puedes silenciar errores reales de programación y volverlos muy difíciles de depurar.</p></div>
+        <h4>Method chaining (interfaces fluidas)</h4>
+        <p>Una técnica de diseño donde cada método devuelve el propio objeto (<code class="inline">return this;</code>), lo que te permite encadenar llamadas que se leen como una frase. Reduce código repetitivo y mejora la legibilidad.</p>
+        <div class="code-card">
+          <div class="code-top"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>method-chaining.js<span class="tag">js</span><button class="copy" data-copy>Copiar</button></div>
+          <pre><code class="code-snippet">// Cada método retorna "this", así se pueden encadenar
+consulta.filtrar("activo").ordenar("edad").limitar(10);</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRACTICAS -->
+    <section class="panel" id="practicas">
+      <button class="head" aria-expanded="false"><span class="num">5</span>
+        <h3>Mejores prácticas de diseño<span class="sub">Para que tu JSON sea predecible y fácil de mantener</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <ul>
+          <li><strong>Nombres de claves consistentes.</strong> Elige <code class="inline">camelCase</code> (<code class="inline">duracionMs</code>) o <code class="inline">snake_case</code> (<code class="inline">peso_kg</code>) y mantén el mismo estilo en todo el proyecto. Prioriza la claridad sobre las abreviaturas crípticas e incluye las unidades cuando ayude.</li>
+          <li><strong>Dinero: nunca uses <code class="inline">float</code>.</strong> Los decimales flotantes arrastran errores de redondeo. Guarda el dinero como enteros (centavos) o con decimales definidos. Así, $19,99 se guarda como <code class="inline">1999</code>.</li>
+          <li><strong>Fechas en ISO-8601 y UTC.</strong> Usa siempre <code class="inline">"2025-09-09T16:30:00Z"</code>. La <code class="inline">Z</code> indica UTC y evita líos de zonas horarias.</li>
+          <li><strong>Evita la anidación excesiva.</strong> Más de 4 o 5 niveles vuelve el archivo difícil de leer y mantener. Si crece demasiado, divídelo en sub-recursos o referencia las partes por un <code class="inline">id</code>.</li>
+          <li><strong>Distingue <code class="inline">null</code> de "ausente".</strong> Por convención, un campo que no aparece significa "desconocido o no aplica"; <code class="inline">null</code> significa que el campo aplica, pero se sabe que no tiene valor. Define qué significa cada cosa en tu proyecto.</li>
+        </ul>
+        <div class="tip"><span class="ic">i</span><p><strong>Regla de profundidad agrupada.</strong> Agrupa la información por contextos lógicos (por ejemplo, <code class="inline">sourceImage</code>, <code class="inline">presentationDetails</code>) en vez de aplanar todo o anidar sin control. Lo verás en acción en el <a href="#caso" style="color:var(--blue-dark);font-weight:600">caso práctico</a>.</p></div>
+      </div>
+    </section>
+
+    <!-- SCHEMA -->
+    <section class="panel" id="schema">
+      <button class="head" aria-expanded="false"><span class="num">6</span>
+        <h3>Validación con JSON Schema<span class="sub">Un contrato que garantiza que los datos cumplen las reglas</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p><strong>JSON Schema</strong> es un estándar que actúa como un contrato documental: describe qué forma deben tener los datos para que quien los envía y quien los recibe respeten las mismas reglas. Reduce muchísimo los errores de integración en APIs y formularios.</p>
+        <p>Te permite declarar, entre otras cosas: qué claves son obligatorias (<code class="inline">required</code>), de qué tipo es cada una (<code class="inline">type</code>), sus rangos numéricos (<code class="inline">minimum</code>, <code class="inline">maximum</code>) y hasta patrones de texto con expresiones regulares (<code class="inline">pattern</code>).</p>
+        <div class="code-card">
+          <div class="code-top"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>esquema-alumno.json<span class="tag">json schema</span><button class="copy" data-copy>Copiar</button></div>
+          <pre><code class="json-code">{
+  "type": "object",
+  "required": ["nombre", "edad"],
+  "properties": {
+    "nombre": { "type": "string", "minLength": 1 },
+    "edad":   { "type": "integer", "minimum": 0, "maximum": 120 },
+    "correo": { "type": "string", "pattern": "^.+@.+\\..+$" },
+    "activo": { "type": "boolean" }
+  }
+}</code></pre>
+        </div>
+        <p>Un documento que <strong>cumple</strong> ese contrato:</p>
+        <div class="code-card">
+          <div class="code-top good"><span class="dot" style="background:#28c840"></span>alumno.json<span class="tag">válido</span><button class="copy" data-copy>Copiar</button></div>
+          <pre><code class="json-code">{ "nombre": "Ana", "edad": 28, "correo": "ana@correo.com", "activo": true }</code></pre>
+        </div>
+        <p>Para validar automáticamente existen librerías listas: <code class="inline">AJV</code> en JavaScript y <code class="inline">jsonschema</code> en Python.</p>
+      </div>
+    </section>
+
+    <!-- SEGURIDAD -->
+    <section class="panel" id="seguridad">
+      <button class="head" aria-expanded="false"><span class="num">7</span>
+        <h3>Seguridad y rendimiento<span class="sub">Lo que conviene cuidar al transmitir JSON</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <ul>
+          <li><strong>Desinfecta los datos (anti-inyección).</strong> Aunque JSON es texto, conviene sanitizar lo que recibes para evitar inyección de código. Usa validadores formales como <code class="inline">json-sanitizer</code> y <strong>jamás</strong> uses <code class="inline">eval()</code> para analizar JSON en JavaScript: usa siempre <code class="inline">JSON.parse()</code>.</li>
+          <li><strong>Cabecera HTTP correcta.</strong> Si transmites JSON por una API, devuelve <code class="inline">Content-Type: application/json; charset=utf-8</code> para que clientes y servidores lo interpreten bien.</li>
+          <li><strong>Compacto en producción.</strong> El "pretty-print" (con sangrías y saltos de línea) es para leer, no para transmitir. En producción envía el JSON compacto y habilita compresión <code class="inline">GZIP</code> o <code class="inline">Brotli</code> para aligerar la transferencia.</li>
+        </ul>
+        <div class="warn"><span class="ic">!</span><p><strong>La regla de seguridad número uno.</strong> Nunca uses <code class="inline" style="background:#fde8c8;border-color:#f3cf9a">eval()</code> para parsear JSON. Ejecuta el contenido como código y abre la puerta a ataques. <code class="inline" style="background:#fde8c8;border-color:#f3cf9a">JSON.parse()</code> es seguro y existe justo para esto.</p></div>
+      </div>
+    </section>
+
+    <!-- CASO -->
+    <section class="panel" id="caso">
+      <button class="head" aria-expanded="false"><span class="num">★</span>
+        <h3>Caso práctico: de la prosa al JSON<span class="sub">Convertir una instrucción en lenguaje natural en datos estructurados</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Veamos las buenas prácticas en acción. Partimos de una orden escrita en lenguaje natural y la convertimos en un JSON limpio y predecible.</p>
+        <h4>1 · La instrucción en texto plano</h4>
+        <p style="background:#f5f7fb;border-left:3px solid var(--amber);padding:13px 16px;border-radius:0 8px 8px 0;font-style:italic;color:var(--ink-soft)">"El programa toma una imagen desde un enlace, la analiza para extraer su paleta de colores y su estilo, y con esa información genera automáticamente una presentación PPTX sobre las 'Tendencias de Diseño 2026', con un máximo de 10 diapositivas. El archivo final se envía a un correo específico."</p>
+        <h4>2 · La misma instrucción, estructurada en JSON</h4>
+        <div class="code-card">
+          <div class="code-top"><span class="dot" style="background:#ff5f57"></span><span class="dot" style="background:#febc2e"></span><span class="dot" style="background:#28c840"></span>generar-presentacion.json<span class="tag">json</span><button class="copy" data-copy>Copiar</button></div>
+          <pre><code class="json-code">{
+  "actionName": "generatePresentation",
+  "sourceImage": {
+    "imageUrl": "https://ejemplo.com/estilo-base.jpg",
+    "extractColors": true,
+    "extractStyle": true
+  },
+  "presentationDetails": {
+    "topic": "Tendencias de Diseño 2026",
+    "outputFormat": "PPTX",
+    "maxSlidesCount": 10
+  },
+  "deliveryConfiguration": {
+    "deliveryMethod": "email",
+    "recipientEmail": "usuario@ejemplo.com"
+  },
+  "requestDate": "2026-06-10T08:15:00Z"
+}</code></pre>
+        </div>
+        <h4>3 · Por qué se estructuró así</h4>
+        <ul>
+          <li><strong>Claves claras y consistentes.</strong> Todo en <code class="inline">camelCase</code> (<code class="inline">imageUrl</code>, <code class="inline">deliveryConfiguration</code>) y con nombres completos en vez de abreviaturas crípticas.</li>
+          <li><strong>Tipos de datos correctos.</strong> Booleanos reales (<code class="inline">true</code>) para las instrucciones de extracción —no el texto <code class="inline">"true"</code>— y un entero (<code class="inline">10</code>) para el límite de diapositivas.</li>
+          <li><strong>Fecha estandarizada.</strong> <code class="inline">requestDate</code> en ISO-8601 y UTC, para evitar problemas de zonas horarias.</li>
+          <li><strong>Profundidad controlada.</strong> La información se agrupó por contextos lógicos (<code class="inline">sourceImage</code>, <code class="inline">presentationDetails</code>, <code class="inline">deliveryConfiguration</code>) sin pasar de 4–5 niveles de anidación, para que sea predecible y fácil de leer.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- VALIDADOR -->
+    <section class="panel is-live" id="validador">
+      <button class="head" aria-expanded="false"><span class="num">{}</span>
+        <h3>Validador interactivo<span class="sub">Pega tu JSON: valídalo, formatéalo o minifícalo al instante</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <p>Escribe o pega cualquier JSON a la izquierda y pulsa un botón. Si hay un error, te dice qué falla; si es válido, te muestra estadísticas y el resultado formateado con resaltado de sintaxis a la derecha.</p>
+        <div class="validator">
+          <div class="val-grid">
+            <div class="val-col">
+              <label for="jsonInput">Tu JSON</label>
+              <textarea id="jsonInput" spellcheck="false">{"nombre":"Ana","edad":28,"activo":true,"cursos":["GED","ASE"],"saldo":1999}</textarea>
+            </div>
+            <div class="val-col">
+              <label>Resultado</label>
+              <div class="val-out"><pre><code id="jsonOutput" class="json-code"></code></pre></div>
+            </div>
+          </div>
+          <div class="val-actions">
+            <button class="primary" id="btnFormat">Validar y formatear</button>
+            <button id="btnMinify">Minificar</button>
+            <button id="btnSample">Cargar ejemplo</button>
+            <button id="btnClear">Limpiar</button>
+            <button class="copy" id="btnCopyOut" data-copy-out style="margin-left:auto;border:1px solid var(--line);background:var(--surface);color:var(--ink-soft)">Copiar resultado</button>
+          </div>
+          <div class="val-status" id="valStatus" role="status" aria-live="polite"></div>
+        </div>
+        <div class="tip"><span class="ic">i</span><p>Todo ocurre en tu navegador, sin enviar nada a internet. Las estadísticas cuentan claves, profundidad máxima de anidación y tamaño en bytes (útil para decidir si conviene minificar y comprimir).</p></div>
+      </div>
+    </section>
+
+    <!-- GLOSARIO -->
+    <section class="panel" id="glosario">
+      <button class="head" aria-expanded="false"><span class="num">A·Z</span>
+        <h3>Glosario<span class="sub">Vocabulario esencial · usa el buscador de arriba para filtrar</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <table class="tbl" id="gloTable">
+          <caption>Términos clave de JSON con su definición y un ejemplo.</caption>
+          <thead><tr><th scope="col">Término</th><th scope="col">Definición y ejemplo</th></tr></thead>
+          <tbody>
+            <tr class="glo-row"><td><strong>JSON</strong></td><td>Formato ligero de intercambio de datos basado en pares clave-valor, legible para humanos y procesable por máquinas.</td></tr>
+            <tr class="glo-row"><td><strong>Objeto</strong></td><td>Colección de pares clave-valor entre llaves. <code>{"nombre": "Ana", "edad": 28}</code></td></tr>
+            <tr class="glo-row"><td><strong>Array (matriz)</strong></td><td>Lista ordenada de elementos entre corchetes. <code>["rojo", "verde", "azul"]</code></td></tr>
+            <tr class="glo-row"><td><strong>Cadena (string)</strong></td><td>Texto entre comillas dobles. <code>"Hola mundo"</code></td></tr>
+            <tr class="glo-row"><td><strong>Número</strong></td><td>Entero o decimal, sin comillas. Para dinero, usa enteros (centavos). <code>42 · 3.14</code></td></tr>
+            <tr class="glo-row"><td><strong>Booleano</strong></td><td>Valor lógico real, nunca entre comillas. <code>true · false</code></td></tr>
+            <tr class="glo-row"><td><strong>Nulo (null)</strong></td><td>Ausencia explícita de valor; distinto de un campo ausente. <code>"segundoNombre": null</code></td></tr>
+            <tr class="glo-row"><td><strong>Parsear</strong></td><td>Convertir una cadena JSON en un objeto del lenguaje. <code>JSON.parse('{"activo": true}')</code></td></tr>
+            <tr class="glo-row"><td><strong>Serializar</strong></td><td>Convertir un objeto del lenguaje en una cadena JSON. <code>JSON.stringify({activo: true})</code></td></tr>
+            <tr class="glo-row"><td><strong>Datos anidados</strong></td><td>Objetos o arrays dentro de otros. Evita pasar de 4-5 niveles. <code>{"usuario": {"direccion": {"calle": "Principal"}}}</code></td></tr>
+            <tr class="glo-row"><td><strong>Encadenamiento opcional (<code>?.</code>)</strong></td><td>Operador de JavaScript que navega propiedades anidadas con seguridad; devuelve <code>undefined</code> en vez de fallar. <code>user?.address?.street</code></td></tr>
+            <tr class="glo-row"><td><strong>Method chaining</strong></td><td>Diseño donde los métodos devuelven el propio objeto para encadenar llamadas legibles. <code>obj.metodo1().metodo2()</code></td></tr>
+            <tr class="glo-row"><td><strong>camelCase / snake_case</strong></td><td>Convenciones para nombrar claves de forma consistente. <code>"duracionMs" · "peso_kg"</code></td></tr>
+            <tr class="glo-row"><td><strong>ISO-8601</strong></td><td>Formato estándar para fechas y horas, idealmente en UTC. <code>"2025-09-09T16:30:00Z"</code></td></tr>
+            <tr class="glo-row"><td><strong>JSON Schema</strong></td><td>Estándar que actúa como contrato: valida claves requeridas, tipos, rangos y patrones.</td></tr>
+            <tr class="glo-row"><td><strong>Pretty-print</strong></td><td>JSON con sangrías y saltos de línea para leerlo; se desaconseja en producción.</td></tr>
+            <tr class="glo-row"><td><strong>Cabecera HTTP</strong></td><td>Identificador para transmitir JSON por una API. <code>Content-Type: application/json; charset=utf-8</code></td></tr>
+          </tbody>
+        </table>
+        <p class="no-results" id="noResults">No hay términos que coincidan con tu búsqueda.</p>
+      </div>
+    </section>
+
+    <!-- CHEAT -->
+    <section class="panel" id="cheat">
+      <button class="head" aria-expanded="false"><span class="num">≡</span>
+        <h3>Hoja de referencia rápida<span class="sub">Las reglas de oro, de un vistazo</span></h3>
+        <svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="body">
+        <ul>
+          <li><strong>Comillas dobles</strong> en claves y cadenas, siempre.</li>
+          <li><strong>Seis tipos</strong> de valor: string, number, boolean, null, object, array.</li>
+          <li><strong>Sin comas finales</strong> ni comentarios.</li>
+          <li><strong>true / false / null</strong> en minúscula; <code class="inline">undefined</code> no existe.</li>
+          <li><strong>Parsear</strong> con <code class="inline">JSON.parse()</code> / <code class="inline">json.loads()</code>; <strong>serializar</strong> con <code class="inline">JSON.stringify()</code> / <code class="inline">json.dumps()</code>.</li>
+          <li><strong>Encadena con <code class="inline">?.</code></strong> solo en lo que sea de verdad opcional.</li>
+          <li><strong>Claves consistentes</strong> (camelCase o snake_case) y con unidades cuando ayude.</li>
+          <li><strong>Dinero en enteros</strong> (centavos), nunca en <code class="inline">float</code>.</li>
+          <li><strong>Fechas en ISO-8601 UTC.</strong></li>
+          <li><strong>Máximo 4-5 niveles</strong> de anidación; si crece, divide por <code class="inline">id</code>.</li>
+          <li><strong>Valida con JSON Schema</strong> (AJV / jsonschema).</li>
+          <li><strong>Jamás <code class="inline">eval()</code></strong>; compacta y comprime en producción.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  <div class="fin">
+    <p class="big">Guía maestra de JSON · Estructura, encadenamiento y buenas prácticas</p>
+    <p>Documento de referencia para uso personal. Contenido base generado con NotebookLM y ampliado para servir como manual.</p>
+    <p style="margin-top:14px">© 2026 <strong style="color:#dbe5f3">José M. Fernández</strong>, ABE/ASE Math Master Teacher · Harry S. Truman College — City Colleges of Chicago.<br>
+    Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> (Atribución–NoComercial–CompartirIgual).</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  function esc(t){return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+
+  /* ---- Resaltado JSON ---- */
+  function highlightJSON(raw){
+    var s = esc(raw);
+    return s.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false)\b|\bnull\b|-?\d+(?:\.\d+)?(?:[eE][+\-]?\d+)?)/g, function(m){
+      var cls = "j-num";
+      if(/^"/.test(m)){ cls = /:\s*$/.test(m) ? "j-key" : "j-str"; }
+      else if(/true|false/.test(m)){ cls = "j-bool"; }
+      else if(/null/.test(m)){ cls = "j-null"; }
+      return '<span class="'+cls+'">'+m+'</span>';
+    });
+  }
+  /* ---- Resaltado ligero para JS/Python: cadenas y comentarios ---- */
+  function highlightCode(raw){
+    var s = esc(raw);
+    return s.replace(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`|\/\/[^\n]*|#[^\n]*)/g, function(m){
+      var first = m.charAt(0);
+      if(first === '/' || first === '#'){ return '<span class="c-com">'+m+'</span>'; }
+      return '<span class="c-str">'+m+'</span>';
+    });
+  }
+  document.querySelectorAll("code.json-code").forEach(function(el){
+    if(el.id === "jsonOutput") return; // el de salida se gestiona aparte
+    el.setAttribute("data-raw", el.textContent);
+    el.innerHTML = highlightJSON(el.textContent);
+  });
+  document.querySelectorAll("code.code-snippet").forEach(function(el){
+    el.setAttribute("data-raw", el.textContent);
+    el.innerHTML = highlightCode(el.textContent);
+  });
+
+  /* ---- Copiar bloques de código ---- */
+  document.addEventListener("click", function(e){
+    var btn = e.target.closest("[data-copy]");
+    if(!btn) return;
+    var card = btn.closest(".code-card");
+    var codeEl = card.querySelector("code");
+    copyText(codeEl.getAttribute("data-raw") || codeEl.textContent, btn, "Copiar");
+  });
+  function copyText(text, btn, original){
+    var done = function(){
+      var old = btn.dataset.label || btn.textContent;
+      btn.textContent = "¡Copiado!"; btn.classList.add("done");
+      setTimeout(function(){ btn.textContent = old; btn.classList.remove("done"); }, 1500);
+    };
+    btn.dataset.label = original;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(done, function(){ fallback(text); done(); });
+    } else { fallback(text); done(); }
+  }
+  function fallback(text){
+    var ta = document.createElement("textarea");
+    ta.value = text; ta.style.position="fixed"; ta.style.opacity="0";
+    document.body.appendChild(ta); ta.select();
+    try{ document.execCommand("copy"); }catch(err){}
+    document.body.removeChild(ta);
+  }
+
+  /* ---- Acordeón ---- */
+  document.querySelectorAll(".panel > .head").forEach(function(h){
+    h.addEventListener("click", function(){
+      var open = h.parentElement.classList.toggle("open");
+      h.setAttribute("aria-expanded", open ? "true":"false");
+    });
+  });
+  document.getElementById("expand").addEventListener("click", function(){
+    document.querySelectorAll(".panel").forEach(function(p){ p.classList.add("open"); p.querySelector(".head").setAttribute("aria-expanded","true"); });
+  });
+  document.getElementById("collapse").addEventListener("click", function(){
+    document.querySelectorAll(".panel").forEach(function(p){ p.classList.remove("open"); p.querySelector(".head").setAttribute("aria-expanded","false"); });
+  });
+
+  /* ---- Buscador del glosario ---- */
+  var q = document.getElementById("q");
+  var noRes = document.getElementById("noResults");
+  q.addEventListener("input", function(){
+    var term = q.value.trim().toLowerCase();
+    var glo = document.getElementById("glosario");
+    if(term){ glo.classList.add("open"); glo.querySelector(".head").setAttribute("aria-expanded","true"); }
+    var visible = 0;
+    document.querySelectorAll("#gloTable .glo-row").forEach(function(row){
+      var match = !term || row.textContent.toLowerCase().indexOf(term) > -1;
+      row.hidden = !match; if(match) visible++;
+    });
+    noRes.style.display = (term && visible===0) ? "block" : "none";
+  });
+
+  /* ---- Índice activo (scroll-spy) ---- */
+  var links = Array.prototype.slice.call(document.querySelectorAll("nav.toc a"));
+  var map = {}; links.forEach(function(a){ map[a.getAttribute("href").slice(1)] = a; });
+  if("IntersectionObserver" in window){
+    var obs = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          links.forEach(function(l){ l.classList.remove("active"); });
+          var a = map[en.target.id]; if(a) a.classList.add("active");
+        }
+      });
+    }, {rootMargin:"-30% 0px -60% 0px"});
+    document.querySelectorAll("main .panel").forEach(function(p){ obs.observe(p); });
+  }
+  links.forEach(function(a){
+    a.addEventListener("click", function(){
+      var t = document.getElementById(a.getAttribute("href").slice(1));
+      if(t){ t.classList.add("open"); t.querySelector(".head").setAttribute("aria-expanded","true"); }
+    });
+  });
+
+  /* ---- Validador interactivo ---- */
+  var input = document.getElementById("jsonInput");
+  var output = document.getElementById("jsonOutput");
+  var status = document.getElementById("valStatus");
+  var sample = '{\n  "actionName": "generatePresentation",\n  "sourceImage": { "imageUrl": "https://ejemplo.com/base.jpg", "extractColors": true },\n  "presentationDetails": { "topic": "Tendencias de Diseño 2026", "maxSlidesCount": 10 },\n  "requestDate": "2026-06-10T08:15:00Z"\n}';
+
+  function bytes(str){
+    if(window.TextEncoder){ return new TextEncoder().encode(str).length; }
+    return unescape(encodeURIComponent(str)).length;
+  }
+  function depthOf(v){
+    if(v && typeof v === "object"){
+      var max = 0;
+      for(var k in v){ if(Object.prototype.hasOwnProperty.call(v,k)){ max = Math.max(max, depthOf(v[k])); } }
+      return 1 + max;
+    }
+    return 0;
+  }
+  function countKeys(v){
+    var n = 0;
+    if(Array.isArray(v)){ v.forEach(function(x){ n += countKeys(x); }); }
+    else if(v && typeof v === "object"){
+      for(var k in v){ if(Object.prototype.hasOwnProperty.call(v,k)){ n++; n += countKeys(v[k]); } }
+    }
+    return n;
+  }
+  function setStatus(type, html){
+    status.className = "val-status " + type;
+    status.innerHTML = html;
+  }
+  function showResult(text){ output.innerHTML = highlightJSON(text); output.setAttribute("data-raw", text); }
+
+  function process(pretty){
+    var raw = input.value;
+    if(!raw.trim()){ showResult(""); setStatus("err", "Escribe o pega algún JSON para empezar."); return; }
+    try{
+      var obj = JSON.parse(raw);
+      var out = pretty ? JSON.stringify(obj, null, 2) : JSON.stringify(obj);
+      showResult(out);
+      setStatus("ok", "<b>✓ JSON válido.</b>  " + countKeys(obj) + " claves · profundidad " + depthOf(obj) + " · " + bytes(out) + " bytes" + (pretty ? "" : " (minificado)"));
+    }catch(err){
+      var msg = String(err.message || err);
+      var pos = msg.match(/position\s+(\d+)/i);
+      var extra = "";
+      if(pos){
+        var p = parseInt(pos[1],10);
+        var before = raw.slice(0, p);
+        var line = before.split("\n").length;
+        var col = p - before.lastIndexOf("\n");
+        extra = " (línea " + line + ", columna " + col + ")";
+      }
+      showResult("");
+      setStatus("err", "<b>✗ JSON inválido.</b> " + esc(msg) + extra);
+    }
+  }
+
+  document.getElementById("btnFormat").addEventListener("click", function(){ process(true); });
+  document.getElementById("btnMinify").addEventListener("click", function(){ process(false); });
+  document.getElementById("btnSample").addEventListener("click", function(){ input.value = sample; process(true); });
+  document.getElementById("btnClear").addEventListener("click", function(){ input.value=""; showResult(""); status.className="val-status"; status.textContent=""; input.focus(); });
+  document.getElementById("btnCopyOut").addEventListener("click", function(){
+    var text = output.getAttribute("data-raw") || output.textContent;
+    if(text){ copyText(text, this, "Copiar resultado"); }
+  });
+
+  /* Primer formateo al cargar */
+  process(true);
+})();
+</script>
+</body>
+</html>
