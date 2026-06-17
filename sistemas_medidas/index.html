@@ -359,6 +359,22 @@
   details.acc[data-sys="usa"] .answer{background:var(--usa-tint);color:var(--usa-deep);}
   details.acc[data-sys="time"] .answer{background:var(--time-tint);color:var(--time-deep);}
 
+  /* acordeón de introducción */
+  details.acc.intro .qnum{background:var(--gold-deep);font-size:1.15rem;}
+  .acc-body p.intro-p{margin:16px 0 0;color:var(--ink-soft);font-size:1.02rem;}
+  .acc-body p.intro-p:first-child{margin-top:18px;}
+  .acc-body p.intro-p b{color:var(--ink);}
+  .magtable{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;}
+  .magbox{border-radius:12px;padding:16px 18px;border:1px solid var(--line);}
+  .magbox.escalar{background:var(--metric-tint);border-color:#bfe2dc;}
+  .magbox.vector{background:var(--usa-tint);border-color:#e8cdb9;}
+  .magbox h4{margin:0 0 6px;font-size:1.05rem;}
+  .magbox.escalar h4{color:var(--metric-deep);}
+  .magbox.vector h4{color:var(--usa-deep);}
+  .magbox p{margin:0 0 8px;font-size:.95rem;color:var(--ink);}
+  .magbox .ej{font-family:var(--mono);font-size:.82rem;color:var(--ink-soft);display:block;}
+  @media (max-width:560px){.magtable{grid-template-columns:1fr;}}
+
   /* ---------- QUIZ ---------- */
   .quizcard{
     background:var(--card);border:1px solid var(--line);border-radius:14px;
@@ -434,6 +450,57 @@
     </div>
   </div>
 </header>
+
+<!-- ====================== ANTES DE EMPEZAR (INTRO) ====================== -->
+<section>
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <p class="kicker">Antes de empezar</p>
+      <h2>Dos ideas para entrar en tema</h2>
+      <p>Una base breve para situar lo que viene. Abre cada apartado cuando quieras.</p>
+    </div>
+
+    <details class="acc intro">
+      <summary>
+        <span class="qnum" aria-hidden="true">?</span>
+        <span class="qtext">¿Por qué medimos?</span>
+        <span class="summary-chevron" aria-hidden="true">›</span>
+      </summary>
+      <div class="acc-body">
+        <p class="intro-p">Medir es ponerle un número a algo del mundo para poder <b>describirlo, compararlo y comunicarlo</b> sin ambigüedades. Decir que una tabla es «larga» depende de quien mire; decir que mide «2 yardas» significa lo mismo para todos.</p>
+        <p class="intro-p">Medir consiste en comparar una cantidad con una <b>unidad</b> elegida de antemano. El resultado siempre tiene dos partes inseparables: un <b>número</b> y una <b>unidad</b>. «8» no dice nada; «8 tazas» sí.</p>
+        <p class="intro-p">Por eso medir aparece en casi todo: una receta, la dosis de un medicamento, el corte de una madera, el tiempo de un viaje o el peso de un envío. Saber medir —y convertir entre unidades— es una destreza práctica que se evalúa en el examen GED y se usa todos los días.</p>
+      </div>
+    </details>
+
+    <details class="acc intro">
+      <summary>
+        <span class="qnum" aria-hidden="true">→</span>
+        <span class="qtext">Magnitudes escalares y vectoriales</span>
+        <span class="summary-chevron" aria-hidden="true">›</span>
+      </summary>
+      <div class="acc-body">
+        <p class="intro-p">No todas las cantidades se describen igual. Según lo que necesiten para quedar completas, las magnitudes se separan en dos grupos.</p>
+        <div class="magtable">
+          <div class="magbox escalar">
+            <h4>Escalares</h4>
+            <p>Quedan definidas con un <b>número y su unidad</b>. No necesitan dirección.</p>
+            <span class="ej">Ej.: 8 tazas · 2 litros · 5 libras · 20 °C · 30 minutos</span>
+          </div>
+          <div class="magbox vector">
+            <h4>Vectoriales</h4>
+            <p>Necesitan además una <b>dirección y un sentido</b> para quedar completas.</p>
+            <span class="ej">Ej.: 60 km/h al norte · una fuerza hacia arriba · un desplazamiento</span>
+          </div>
+        </div>
+        <p class="intro-p">Una pista sencilla: si preguntar «¿hacia dónde?» tiene sentido, es vectorial; si no, es escalar. La <b>masa</b> es escalar (5 kg no apuntan a ningún lado); el <b>peso</b>, en física, es vectorial porque la gravedad tira hacia abajo.</p>
+        <p class="intro-p">En esta lección trabajaremos sobre todo con magnitudes <b>escalares</b> —longitud, capacidad, masa y tiempo—, las de la vida diaria. Conviene tener clara la distinción para más adelante, cuando aparezcan la velocidad o la fuerza.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<div class="ruler" aria-hidden="true"></div>
 
 <!-- ====================== MÉTODO APLICAR ====================== -->
 <section>
