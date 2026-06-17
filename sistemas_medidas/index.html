@@ -1,1 +1,1079 @@
+<!DOCTYPE html>
+<!--
+  Sistemas de medida: el americano y el métrico
+  © José M. Fernández — Licencia CC BY-NC-SA 4.0
+  Autor: José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago.
+  https://creativecommons.org/licenses/by-nc-sa/4.0/
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistemas de medida: el americano y el métrico</title>
+<meta name="description" content="Lección interactiva GED para reforzar el sistema de medidas americano y el métrico decimal, con una escalera de potencias de 10 y práctica en acordeón.">
+<meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago.">
+<meta name="license" content="CC BY-NC-SA 4.0">
+<link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#15212f;
+    --ink-soft:#3a4a5c;
+    --paper:#f3f5f1;
+    --card:#ffffff;
+    --line:#d7ddd4;
+    --line-strong:#b9c2b4;
 
+    --metric:#0d8c80;        /* teal: el sistema decimal */
+    --metric-deep:#0a5f57;
+    --metric-tint:#e4f3f0;
+
+    --usa:#b85c2e;           /* clay/óxido: unidades humanas irregulares */
+    --usa-deep:#7c3a16;
+    --usa-tint:#f6e9df;
+
+    --time:#5b5391;          /* tiempo sexagesimal */
+    --time-deep:#3f3868;
+    --time-tint:#ebe9f4;
+
+    --gold:#e0971b;          /* el punto decimal que se desliza */
+    --gold-deep:#8a5a00;
+
+    --ok:#1f7a3d;
+    --no:#b0322b;
+
+    --display:'Space Grotesk',system-ui,sans-serif;
+    --body:'Spectral',Georgia,serif;
+    --mono:'Space Mono','Courier New',monospace;
+
+    --r:14px;
+    --shadow:0 1px 2px rgba(21,33,47,.06), 0 10px 30px -18px rgba(21,33,47,.35);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    font-size:18px;
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  /* franja de marcas de regla, motivo recurrente */
+  .ruler{
+    height:14px;
+    background:
+      repeating-linear-gradient(90deg, var(--line-strong) 0 1px, transparent 1px 100%) 0 0 / 12px 14px,
+      repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 100%) 0 0 / 60px 14px;
+    background-position:bottom;
+    background-repeat:repeat-x;
+    opacity:.5;
+  }
+
+  .wrap{max-width:1040px;margin:0 auto;padding:0 22px;}
+
+  h1,h2,h3,h4{font-family:var(--display);line-height:1.15;letter-spacing:-.01em;font-weight:600;}
+  a{color:var(--metric-deep);}
+  .mono{font-family:var(--mono);}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    background:
+      radial-gradient(1200px 500px at 80% -10%, rgba(13,140,128,.10), transparent 60%),
+      radial-gradient(900px 500px at 0% 120%, rgba(184,92,46,.10), transparent 55%),
+      var(--ink);
+    color:#eef2ee;
+    padding:64px 0 70px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{position:relative;z-index:2;}
+  .eyebrow{
+    font-family:var(--mono);font-size:.74rem;letter-spacing:.28em;text-transform:uppercase;
+    color:#9fd8cf;margin:0 0 18px;
+  }
+  .hero h1{
+    font-size:clamp(2.1rem,5.4vw,3.7rem);margin:0;color:#fff;font-weight:700;
+    text-wrap:balance;
+  }
+  .hero h1 .em{color:var(--gold);font-style:normal;}
+  .hero p.lead{
+    font-size:clamp(1.05rem,2.4vw,1.3rem);max-width:54ch;margin:22px 0 0;color:#cfd9d2;
+  }
+  .hero-strip{
+    display:flex;gap:10px;flex-wrap:wrap;margin-top:30px;
+  }
+  .chip{
+    font-family:var(--mono);font-size:.78rem;letter-spacing:.04em;
+    padding:7px 13px;border-radius:999px;border:1px solid rgba(255,255,255,.22);
+    color:#dfe8e2;background:rgba(255,255,255,.04);
+  }
+  .chip b{color:#fff;}
+  .hero-ticks{
+    position:absolute;inset:auto 0 0 0;height:24px;z-index:1;opacity:.35;
+    background:repeating-linear-gradient(90deg,#fff 0 1px,transparent 1px 100%) 0 100% / 14px 24px;
+    -webkit-mask:linear-gradient(0deg,#000,transparent);mask:linear-gradient(0deg,#000,transparent);
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:58px 0;}
+  .sec-head{margin-bottom:30px;}
+  .sec-head .kicker{
+    font-family:var(--mono);font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--metric-deep);margin:0 0 8px;
+  }
+  .sec-head h2{font-size:clamp(1.6rem,3.4vw,2.3rem);margin:0;color:var(--ink);}
+  .sec-head p{margin:12px 0 0;color:var(--ink-soft);max-width:62ch;}
+
+  /* ---------- MÉTODO APLICAR ---------- */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .step{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    padding:26px 22px 24px;position:relative;box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  .step::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--metric);
+  }
+  .step .num{
+    font-family:var(--mono);font-size:.8rem;color:var(--metric-deep);letter-spacing:.1em;
+  }
+  .step h3{font-size:1.18rem;margin:10px 0 8px;color:var(--ink);}
+  .step p{margin:0;color:var(--ink-soft);font-size:1rem;}
+  .aplicar-word{
+    display:flex;gap:6px;flex-wrap:wrap;font-family:var(--mono);font-weight:700;
+    font-size:clamp(1.3rem,4vw,2rem);color:var(--ink);margin:0 0 24px;letter-spacing:.06em;
+  }
+  .aplicar-word span{color:var(--gold-deep);}
+
+  /* ---------- COMPARATIVA ---------- */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  .syscard{
+    border-radius:var(--r);padding:24px 22px;border:1px solid var(--line);
+    background:var(--card);box-shadow:var(--shadow);
+  }
+  .syscard.metric{border-top:5px solid var(--metric);}
+  .syscard.usa{border-top:5px solid var(--usa);}
+  .syscard h3{font-size:1.25rem;margin:0 0 4px;display:flex;align-items:center;gap:10px;}
+  .badge{
+    font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;
+    padding:4px 9px;border-radius:6px;font-weight:700;
+  }
+  .badge.metric{background:var(--metric-tint);color:var(--metric-deep);}
+  .badge.usa{background:var(--usa-tint);color:var(--usa-deep);}
+  .badge.time{background:var(--time-tint);color:var(--time-deep);}
+  .syscard p.sub{margin:2px 0 16px;color:var(--ink-soft);font-size:.98rem;}
+
+  table{width:100%;border-collapse:collapse;font-size:.95rem;margin-top:6px;}
+  caption{text-align:left;font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;
+    text-transform:uppercase;color:#555;padding-bottom:8px;}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);}
+  thead th{font-family:var(--display);font-weight:600;color:var(--ink);font-size:.85rem;
+    border-bottom:2px solid var(--line-strong);}
+  td .mono{font-size:.92rem;}
+  tbody tr:last-child td{border-bottom:none;}
+
+  /* ---------- ESCALERA INTERACTIVA ---------- */
+  .lab{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .lab-controls{
+    display:flex;flex-wrap:wrap;gap:18px 28px;align-items:flex-end;
+    padding:22px 24px;border-bottom:1px solid var(--line);background:#fbfcfa;
+  }
+  .ctrl{display:flex;flex-direction:column;gap:7px;}
+  .ctrl .lbl{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#555;}
+  .unit-btns{display:flex;gap:8px;}
+  .unit-btns button, .pill{
+    font-family:var(--display);font-weight:500;font-size:.95rem;cursor:pointer;
+    border:1.5px solid var(--line-strong);background:#fff;color:var(--ink);
+    padding:9px 16px;border-radius:10px;transition:.18s;
+  }
+  .unit-btns button:hover{border-color:var(--metric);}
+  .unit-btns button[aria-pressed="true"]{
+    background:var(--metric);border-color:var(--metric);color:#fff;
+  }
+  .ctrl input[type=number], .ctrl select{
+    font-family:var(--mono);font-size:1.05rem;padding:9px 12px;border-radius:10px;
+    border:1.5px solid var(--line-strong);background:#fff;color:var(--ink);min-width:120px;
+  }
+  .ctrl input:focus, .ctrl select:focus, button:focus-visible{
+    outline:3px solid rgba(13,140,128,.4);outline-offset:2px;
+  }
+
+  /* staircase */
+  .stairs{padding:30px 24px 12px;overflow-x:auto;}
+  .stair-row{
+    display:grid;grid-template-columns:repeat(7,minmax(112px,1fr));gap:6px;
+    align-items:end;min-width:760px;
+  }
+  .tread{
+    position:relative;border-radius:12px 12px 0 0;padding:14px 10px 16px;text-align:center;
+    background:linear-gradient(180deg,#ffffff, #f4f6f2);
+    border:1px solid var(--line);border-bottom:4px solid var(--line-strong);
+    transition:.25s;
+  }
+  /* staircase descent: cada escalón baja respecto al anterior */
+  .tread.s0{margin-bottom:108px;} .tread.s1{margin-bottom:90px;}
+  .tread.s2{margin-bottom:72px;}  .tread.s3{margin-bottom:54px;}
+  .tread.s4{margin-bottom:36px;}  .tread.s5{margin-bottom:18px;}
+  .tread.s6{margin-bottom:0;}
+  .tread .pow{font-family:var(--mono);font-size:.74rem;color:#7a8a7f;}
+  .tread .sym{font-family:var(--display);font-weight:700;font-size:1.25rem;color:var(--ink);margin:3px 0;}
+  .tread .name{font-size:.78rem;color:var(--ink-soft);font-family:var(--body);}
+  .tread .val{
+    font-family:var(--mono);font-size:1.02rem;margin-top:10px;color:var(--metric-deep);
+    font-weight:700;word-break:break-all;
+  }
+  .tread.base{background:linear-gradient(180deg,#fff,#eef7f5);border-color:var(--metric);}
+  .tread.active{
+    border-color:var(--gold);border-bottom-color:var(--gold-deep);
+    background:linear-gradient(180deg,#fffaf0,#fdf2da);
+    box-shadow:0 10px 24px -12px rgba(224,151,27,.7);
+  }
+  .tread.active .val{color:var(--gold-deep);}
+  .tread.active::after{
+    content:"⬇ partida";position:absolute;top:-26px;left:50%;transform:translateX(-50%);
+    font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;color:var(--gold-deep);
+    white-space:nowrap;
+  }
+  .stair-meta{
+    display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    padding:0 24px 18px;font-family:var(--mono);font-size:.72rem;color:#7a8a7f;letter-spacing:.06em;
+  }
+  .stair-meta .down{color:var(--usa-deep);}
+  .stair-meta .up{color:var(--metric-deep);}
+
+  /* mover del punto decimal */
+  .mover{
+    border-top:1px solid var(--line);background:#fbfcfa;padding:24px;
+  }
+  .mover h4{margin:0 0 4px;font-size:1.1rem;}
+  .mover .mrow{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:14px;}
+  .mover select{font-family:var(--mono);padding:8px 11px;border-radius:9px;border:1.5px solid var(--line-strong);background:#fff;}
+  .readout{
+    margin-top:18px;background:var(--ink);color:#eef2ee;border-radius:12px;padding:18px 20px;
+    font-family:var(--mono);font-size:1.02rem;line-height:1.7;
+  }
+  .readout .big{font-size:1.35rem;color:var(--gold);font-weight:700;}
+  .readout .pt{color:var(--gold);font-weight:700;}
+  .readout .dir{color:#9fd8cf;}
+  .arrowsteps{margin-top:6px;font-size:.92rem;color:#bcd;}
+
+  /* ---------- TIEMPO (BASE 60) ---------- */
+  .time-kicker{color:var(--time-deep) !important;}
+  .timewarn{
+    background:var(--time-tint);border:1px solid #cfc9e6;border-left:5px solid var(--time);
+    border-radius:12px;padding:18px 20px;margin-bottom:22px;color:var(--time-deep);
+  }
+  .timewarn b{color:var(--time-deep);}
+  .timewarn .mono{background:#fff;padding:1px 7px;border-radius:5px;border:1px solid #d6d0ea;}
+  .timegrid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:stretch;}
+  .timecalc{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .timecalc .tc-controls{padding:22px 24px;border-bottom:1px solid var(--line);background:#fbfbfd;
+    display:flex;flex-wrap:wrap;gap:18px 26px;align-items:flex-end;}
+  .tfield{display:flex;flex-direction:column;gap:7px;}
+  .tfield .lbl{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#555;}
+  .tinputs{display:flex;align-items:center;gap:6px;}
+  .tinputs input{
+    font-family:var(--mono);font-size:1.05rem;width:62px;text-align:center;
+    padding:9px 6px;border-radius:9px;border:1.5px solid var(--line-strong);background:#fff;color:var(--ink);
+  }
+  .tinputs .colon{font-family:var(--mono);font-weight:700;font-size:1.2rem;color:var(--ink-soft);}
+  .tinputs .u{font-family:var(--mono);font-size:.85rem;color:#666;}
+  .ampm{display:flex;border:1.5px solid var(--line-strong);border-radius:9px;overflow:hidden;}
+  .ampm button{
+    font-family:var(--mono);font-weight:700;font-size:.85rem;border:none;background:#fff;color:var(--ink-soft);
+    padding:9px 12px;cursor:pointer;transition:.15s;
+  }
+  .ampm button[aria-pressed="true"]{background:var(--time);color:#fff;}
+  .tc-steps{padding:20px 24px;}
+  .tstep{display:flex;gap:13px;padding:10px 0;border-bottom:1px dashed var(--line);}
+  .tstep:last-child{border-bottom:none;}
+  .tstep .tk{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;text-transform:uppercase;
+    color:#fff;background:var(--time-deep);padding:3px 8px;border-radius:6px;height:fit-content;white-space:nowrap;}
+  .tstep .tv{flex:1;color:var(--ink);}
+  .tstep .carry{color:var(--gold-deep);font-weight:600;}
+  .tresult{
+    margin:16px 24px 22px;background:var(--time-deep);color:#fff;border-radius:12px;
+    padding:16px 20px;font-family:var(--mono);
+  }
+  .tresult .big{font-size:1.5rem;color:var(--gold);font-weight:700;}
+  .tresult .nb{display:block;margin-top:6px;font-size:.85rem;color:#cfc9e6;}
+  .clockwrap{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;
+  }
+  .clockwrap .clabel{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:#666;}
+  .clockwrap svg{width:100%;max-width:220px;height:auto;}
+  .clockwrap .digital{font-family:var(--mono);font-weight:700;font-size:1.4rem;color:var(--time-deep);}
+  .tref{margin-top:22px;}
+  @media (max-width:760px){.timegrid{grid-template-columns:1fr;}}
+
+  /* ---------- ACORDEÓN ---------- */
+  details.acc{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    margin-bottom:12px;overflow:hidden;box-shadow:0 1px 2px rgba(21,33,47,.05);
+    transition:.2s;
+  }
+  details.acc[open]{box-shadow:var(--shadow);}
+  details.acc summary{
+    list-style:none;cursor:pointer;padding:18px 22px;display:flex;gap:14px;align-items:flex-start;
+    font-family:var(--body);
+  }
+  details.acc summary::-webkit-details-marker{display:none;}
+  .qnum{
+    font-family:var(--mono);font-weight:700;color:#fff;background:var(--ink);
+    min-width:30px;height:30px;border-radius:8px;display:grid;place-items:center;font-size:.85rem;flex-shrink:0;
+  }
+  details.acc[data-sys="metric"] .qnum{background:var(--metric-deep);}
+  details.acc[data-sys="usa"] .qnum{background:var(--usa-deep);}
+  details.acc[data-sys="time"] .qnum{background:var(--time-deep);}
+  .qtext{flex:1;font-size:1.05rem;color:var(--ink);}
+  .qtags{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;}
+  .summary-chevron{margin-left:auto;font-family:var(--mono);color:#9aa89c;transition:.2s;flex-shrink:0;}
+  details.acc[open] .summary-chevron{transform:rotate(90deg);color:var(--ink);}
+  .acc-body{padding:0 22px 22px 66px;border-top:1px solid var(--line);}
+  .acc-body .aplicar-line{margin:16px 0 0;}
+  .acc-body .stepline{
+    display:flex;gap:12px;padding:11px 0;border-bottom:1px dashed var(--line);
+  }
+  .acc-body .stepline:last-child{border-bottom:none;}
+  .acc-body .stepkey{
+    font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;
+    color:#fff;background:var(--ink-soft);padding:3px 8px;border-radius:6px;height:fit-content;white-space:nowrap;
+  }
+  .acc-body .stepval{flex:1;color:var(--ink);}
+  .answer{
+    margin-top:16px;background:var(--metric-tint);border-radius:10px;padding:13px 16px;
+    font-family:var(--display);font-weight:600;color:var(--metric-deep);
+  }
+  details.acc[data-sys="usa"] .answer{background:var(--usa-tint);color:var(--usa-deep);}
+  details.acc[data-sys="time"] .answer{background:var(--time-tint);color:var(--time-deep);}
+
+  /* ---------- QUIZ ---------- */
+  .quizcard{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px 24px;margin-bottom:16px;box-shadow:0 1px 2px rgba(21,33,47,.05);
+  }
+  .quizcard .q{font-size:1.08rem;color:var(--ink);margin:0 0 4px;display:flex;gap:10px;align-items:flex-start;}
+  .quizcard .q .qn{font-family:var(--mono);color:#9aa89c;font-size:.95rem;}
+  .opts{display:grid;gap:9px;margin-top:14px;}
+  .opt{
+    text-align:left;font-family:var(--body);font-size:1rem;cursor:pointer;
+    border:1.5px solid var(--line-strong);background:#fff;color:var(--ink);
+    padding:12px 15px;border-radius:10px;transition:.15s;display:flex;gap:10px;align-items:center;
+  }
+  .opt:hover:not(:disabled){border-color:var(--metric);background:#fafdfc;}
+  .opt .mk{font-family:var(--mono);font-weight:700;color:#9aa89c;}
+  .opt.correct{border-color:var(--ok);background:#eaf6ee;color:#155e2e;}
+  .opt.correct .mk{color:var(--ok);}
+  .opt.wrong{border-color:var(--no);background:#fbeceb;color:#7f1e1a;}
+  .opt.wrong .mk{color:var(--no);}
+  .opt:disabled{cursor:default;}
+  .fb{margin-top:12px;font-size:.96rem;border-radius:9px;padding:11px 14px;display:none;}
+  .fb.show{display:block;}
+  .fb.good{background:#eaf6ee;color:#155e2e;}
+  .fb.bad{background:#fbeceb;color:#7f1e1a;}
+  .scorebar{
+    position:sticky;bottom:16px;margin-top:8px;background:var(--ink);color:#fff;border-radius:999px;
+    padding:12px 22px;display:flex;justify-content:space-between;align-items:center;gap:16px;
+    font-family:var(--mono);box-shadow:0 12px 30px -12px rgba(21,33,47,.6);
+  }
+  .scorebar b{color:var(--gold);font-size:1.15rem;}
+  .scorebar button{
+    font-family:var(--display);font-weight:600;border:none;background:#fff;color:var(--ink);
+    padding:8px 16px;border-radius:999px;cursor:pointer;font-size:.9rem;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--ink);color:#bcc8c0;padding:40px 0;font-size:.9rem;}
+  footer .wrap{display:flex;flex-wrap:wrap;gap:18px;justify-content:space-between;align-items:center;}
+  footer a{color:#9fd8cf;}
+  footer .lic{font-family:var(--mono);font-size:.78rem;letter-spacing:.03em;line-height:1.7;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:760px){
+    body{font-size:17px;}
+    .steps{grid-template-columns:1fr;}
+    .two{grid-template-columns:1fr;}
+    .acc-body{padding-left:22px;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none !important;scroll-behavior:auto !important;}
+  }
+
+  /* scroll reveal */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<div class="ruler" aria-hidden="true"></div>
+
+<header class="hero">
+  <div class="hero-ticks" aria-hidden="true"></div>
+  <div class="wrap">
+    <p class="eyebrow">Matemáticas GED · Medición</p>
+    <h1>Medir el mundo: del <span class="em">cuarto de galón</span> a la <span class="em">potencia de 10</span></h1>
+    <p class="lead">Dos sistemas conviven a tu alrededor. El americano se aprende de memoria; el métrico se entiende con una sola idea: multiplicar y dividir entre diez. Aquí los verás funcionar y practicarás los dos.</p>
+    <div class="hero-strip">
+      <span class="chip"><b>Sistema americano</b> · pulgada, libra, galón</span>
+      <span class="chip"><b>Sistema métrico</b> · metro, gramo, litro</span>
+      <span class="chip"><b>Tiempo</b> · base 60</span>
+    </div>
+  </div>
+</header>
+
+<!-- ====================== MÉTODO APLICAR ====================== -->
+<section>
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <p class="kicker">Una rutina para cualquier problema</p>
+      <h2>El método APLICAR</h2>
+      <p>Antes de calcular, ordena la situación. Tres pasos que sirven igual para tazas, para mililitros o para horas.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <span class="num">Paso 01</span>
+        <h3>Identifico</h3>
+        <p>¿Qué se mide y en qué sistema? ¿Las unidades son iguales o distintas?</p>
+      </div>
+      <div class="step">
+        <span class="num">Paso 02</span>
+        <h3>Convierto si hace falta</h3>
+        <p>Si las unidades son distintas, las igualo antes de operar.</p>
+      </div>
+      <div class="step">
+        <span class="num">Paso 03</span>
+        <h3>Calculo y respondo</h3>
+        <p>Hago la operación y expreso el resultado con su unidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ruler" aria-hidden="true"></div>
+
+<!-- ====================== DOS SISTEMAS ====================== -->
+<section>
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <p class="kicker">El mapa de las unidades</p>
+      <h2>Dos sistemas, dos lógicas</h2>
+      <p>En el sistema americano cada conversión es un número distinto que conviene memorizar. En el métrico siempre es una potencia de 10. Compáralos lado a lado.</p>
+    </div>
+
+    <div class="two">
+      <div class="syscard usa">
+        <h3>Sistema americano <span class="badge usa">memoria</span></h3>
+        <p class="sub">Factores irregulares: 12, 3, 16, 4… Hay que conocerlos.</p>
+        <table>
+          <caption>Equivalencias usuales del sistema americano</caption>
+          <thead><tr><th scope="col">Magnitud</th><th scope="col">Equivalencia</th></tr></thead>
+          <tbody>
+            <tr><td>Longitud</td><td class="mono">1 pie = 12 pulgadas</td></tr>
+            <tr><td>Longitud</td><td class="mono">1 yarda = 3 pies</td></tr>
+            <tr><td>Longitud</td><td class="mono">1 milla = 1 760 yardas</td></tr>
+            <tr><td>Peso</td><td class="mono">1 libra = 16 onzas</td></tr>
+            <tr><td>Capacidad</td><td class="mono">1 taza = 8 onzas líq.</td></tr>
+            <tr><td>Capacidad</td><td class="mono">1 cuarto = 4 tazas</td></tr>
+            <tr><td>Capacidad</td><td class="mono">1 galón = 4 cuartos</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="syscard metric">
+        <h3>Sistema métrico <span class="badge metric">×10</span></h3>
+        <p class="sub">Una sola base por magnitud y prefijos que son potencias de 10.</p>
+        <table>
+          <caption>Prefijos del sistema métrico decimal</caption>
+          <thead><tr><th scope="col">Prefijo</th><th scope="col">Valor</th></tr></thead>
+          <tbody>
+            <tr><td>kilo (k)</td><td class="mono">1 000 = 10³</td></tr>
+            <tr><td>hecto (h)</td><td class="mono">100 = 10²</td></tr>
+            <tr><td>deca (da)</td><td class="mono">10 = 10¹</td></tr>
+            <tr><td>unidad base</td><td class="mono">1 = 10⁰</td></tr>
+            <tr><td>deci (d)</td><td class="mono">0,1 = 10⁻¹</td></tr>
+            <tr><td>centi (c)</td><td class="mono">0,01 = 10⁻²</td></tr>
+            <tr><td>mili (m)</td><td class="mono">0,001 = 10⁻³</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ruler" aria-hidden="true"></div>
+
+<!-- ====================== ESCALERA INTERACTIVA ====================== -->
+<section>
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <p class="kicker">El corazón del sistema métrico</p>
+      <h2>La escalera de potencias de 10</h2>
+      <p>Elige una magnitud, escribe un valor y mira cómo la misma cantidad se reescribe en cada unidad. <b>Bajar un escalón multiplica por 10</b> (el punto decimal se corre a la derecha); subir un escalón divide entre 10.</p>
+    </div>
+
+    <div class="lab">
+      <div class="lab-controls">
+        <div class="ctrl">
+          <span class="lbl">Magnitud</span>
+          <div class="unit-btns" id="unitBtns" role="group" aria-label="Elegir magnitud base">
+            <button data-base="metro" aria-pressed="true">Longitud · metro</button>
+            <button data-base="litro" aria-pressed="false">Capacidad · litro</button>
+            <button data-base="gramo" aria-pressed="false">Masa · gramo</button>
+          </div>
+        </div>
+        <div class="ctrl">
+          <span class="lbl">Valor de partida</span>
+          <input type="number" id="valIn" value="1" step="any" inputmode="decimal" aria-label="Valor de partida">
+        </div>
+        <div class="ctrl">
+          <span class="lbl">Unidad de partida</span>
+          <select id="startSel" aria-label="Unidad de partida"></select>
+        </div>
+      </div>
+
+      <div class="stairs">
+        <div class="stair-row" id="stairRow"></div>
+      </div>
+      <div class="stair-meta">
+        <span class="down">◀ subir = ÷10 (punto a la izquierda)</span>
+        <span class="up">bajar = ×10 (punto a la derecha) ▶</span>
+      </div>
+
+      <!-- Mover del punto decimal -->
+      <div class="mover">
+        <h4>¿Cuánto se corre el punto decimal?</h4>
+        <p style="margin:4px 0 0;color:var(--ink-soft);font-size:.98rem;">Convierte entre dos unidades y observa cuántas posiciones salta el punto.</p>
+        <div class="mrow">
+          <span class="mono" style="font-size:.8rem;color:#555;">DESDE</span>
+          <select id="fromSel" aria-label="Convertir desde"></select>
+          <span class="mono" style="font-size:1.2rem;color:var(--gold-deep);">→</span>
+          <span class="mono" style="font-size:.8rem;color:#555;">HASTA</span>
+          <select id="toSel" aria-label="Convertir hasta"></select>
+        </div>
+        <div class="readout" id="readout"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ruler" aria-hidden="true"></div>
+
+<!-- ====================== TIEMPO (BASE 60) ====================== -->
+<section>
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <p class="kicker time-kicker">Donde más se equivocan</p>
+      <h2>El tiempo: la trampa de la base 60</h2>
+      <p>El tiempo no es decimal. No se cuenta de 10 en 10, sino de 60 en 60. Por eso el error más común es tratar los minutos como si fueran décimas.</p>
+    </div>
+
+    <div class="timewarn">
+      <b>La idea clave:</b> en el sistema métrico llevas una unidad cuando llegas a <b>10</b>; en el tiempo llevas <b>1 hora</b> cuando llegas a <b>60 minutos</b>. Por eso <span class="mono">8:75</span> no existe: esos 75 minutos son 1 h 15 min, así que <span class="mono">8:75</span> → <span class="mono">9:15</span>.
+    </div>
+
+    <div class="timegrid">
+      <div class="timecalc">
+        <div class="tc-controls">
+          <div class="tfield">
+            <span class="lbl">Hora de salida</span>
+            <div class="tinputs">
+              <input type="number" id="sH" min="1" max="12" value="9" aria-label="Hora de salida">
+              <span class="colon">:</span>
+              <input type="number" id="sM" min="0" max="59" value="30" aria-label="Minutos de salida">
+              <div class="ampm" id="sAmPm" role="group" aria-label="Mañana o tarde de la salida">
+                <button data-v="am" aria-pressed="true">a.&nbsp;m.</button>
+                <button data-v="pm" aria-pressed="false">p.&nbsp;m.</button>
+              </div>
+            </div>
+          </div>
+          <div class="tfield">
+            <span class="lbl">Duración del viaje</span>
+            <div class="tinputs">
+              <input type="number" id="dH" min="0" value="3" aria-label="Horas de duración">
+              <span class="u">h</span>
+              <input type="number" id="dM" min="0" max="59" value="45" aria-label="Minutos de duración">
+              <span class="u">min</span>
+            </div>
+          </div>
+        </div>
+        <div class="tc-steps" id="tSteps"></div>
+        <div class="tresult" id="tResult"></div>
+      </div>
+
+      <div class="clockwrap">
+        <span class="clabel">Hora de llegada</span>
+        <svg id="clock" viewBox="0 0 200 200" role="img" aria-label="Reloj que muestra la hora de llegada">
+          <circle cx="100" cy="100" r="94" fill="#fff" stroke="#cfc9e6" stroke-width="3"/>
+          <g id="ticks"></g>
+          <line id="hHand" x1="100" y1="100" x2="100" y2="55" stroke="#3f3868" stroke-width="6" stroke-linecap="round"/>
+          <line id="mHand" x1="100" y1="100" x2="100" y2="32" stroke="#5b5391" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="100" cy="100" r="6" fill="#e0971b"/>
+        </svg>
+        <span class="digital" id="clockDigital">—</span>
+      </div>
+    </div>
+
+    <div class="syscard tref" style="border-top:5px solid var(--time);">
+      <h3>Unidades de tiempo <span class="badge time">base 60 y 24</span></h3>
+      <table>
+        <caption>Equivalencias del tiempo</caption>
+        <thead><tr><th scope="col">Unidad</th><th scope="col">Equivalencia</th></tr></thead>
+        <tbody>
+          <tr><td>1 minuto</td><td class="mono">60 segundos</td></tr>
+          <tr><td>1 hora</td><td class="mono">60 minutos</td></tr>
+          <tr><td>1 día</td><td class="mono">24 horas</td></tr>
+          <tr><td>Mediodía</td><td class="mono">12:00 p. m.</td></tr>
+          <tr><td>Medianoche</td><td class="mono">12:00 a. m.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="ruler" aria-hidden="true"></div>
+
+<!-- ====================== PRÁCTICA EN ACORDEÓN ====================== -->
+<section>
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <p class="kicker">Resueltos paso a paso con APLICAR</p>
+      <h2>Practiquemos</h2>
+      <p>Lee cada situación, intenta resolverla y luego abre el acordeón para revisar el razonamiento completo.</p>
+    </div>
+    <div id="practice"></div>
+  </div>
+</section>
+
+<div class="ruler" aria-hidden="true"></div>
+
+<!-- ====================== QUIZ ====================== -->
+<section>
+  <div class="wrap reveal">
+    <div class="sec-head">
+      <p class="kicker">Sistema americano y métrico</p>
+      <h2>Ponte a prueba</h2>
+      <p>Elige una respuesta en cada pregunta. Recibirás la explicación al instante.</p>
+    </div>
+    <div id="quiz"></div>
+    <div class="scorebar">
+      <span>Aciertos: <b id="score">0</b> / <span id="total">0</span></span>
+      <button id="resetQuiz" type="button">Reiniciar</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="lic">
+      <strong style="color:#eef2ee;">Sistemas de medida: el americano y el métrico</strong><br>
+      José M. Fernández, ABE/ASE Math Master Teacher<br>
+      Harry S. Truman College — City Colleges of Chicago.
+    </div>
+    <div class="lic">
+      Licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license">CC BY-NC-SA 4.0</a><br>
+      Material educativo gratuito · GEDparaHispanos
+    </div>
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+/* ---------- DATOS DE LOS PREFIJOS ---------- */
+const PREFIXES = [
+  {sym:"k",  name:"kilo",  factor:1000,  exp:3},
+  {sym:"h",  name:"hecto", factor:100,   exp:2},
+  {sym:"da", name:"deca",  factor:10,    exp:1},
+  {sym:"",   name:"base",  factor:1,     exp:0},
+  {sym:"d",  name:"deci",  factor:0.1,   exp:-1},
+  {sym:"c",  name:"centi", factor:0.01,  exp:-2},
+  {sym:"m",  name:"mili",  factor:0.001, exp:-3}
+];
+const BASES = {
+  metro:{sym:"m", nombre:"metro", magn:"longitud"},
+  litro:{sym:"L", nombre:"litro", magn:"capacidad"},
+  gramo:{sym:"g", nombre:"gramo", magn:"masa"}
+};
+let currentBase = "metro";
+
+/* ---------- FORMATEO DE NÚMEROS (estilo español) ---------- */
+function fmt(n){
+  if(!isFinite(n)) return "—";
+  let r = Math.round(n*1e9)/1e9;
+  const neg = r<0; r = Math.abs(r);
+  let s = (r.toString().includes("e")) ? r.toFixed(12) : r.toString();
+  let [ip, dp=""] = s.split(".");
+  ip = ip.replace(/\B(?=(\d{3})+(?!\d))/g,"\u202F");      // espacio fino como separador de miles
+  dp = dp.replace(/0+$/,"");
+  return (neg?"-":"") + (dp ? ip+","+dp : ip);
+}
+function powLabel(exp){
+  if(exp===0) return "10⁰";
+  const sup = String(Math.abs(exp)).replace(/\d/g,d=>"⁰¹²³⁴⁵⁶⁷⁸⁹"[d]);
+  return exp<0 ? "10⁻"+sup : "10"+sup;
+}
+
+/* ---------- CONSTRUIR LA ESCALERA ---------- */
+const stairRow = document.getElementById("stairRow");
+const startSel = document.getElementById("startSel");
+const fromSel  = document.getElementById("fromSel");
+const toSel    = document.getElementById("toSel");
+const valIn    = document.getElementById("valIn");
+
+function fullSym(p){ return p.sym + BASES[currentBase].sym; }
+
+function buildSelectors(){
+  const opts = PREFIXES.map((p,i)=>`<option value="${i}">${fullSym(p)} — ${p.name==="base"?BASES[currentBase].nombre:p.name+BASES[currentBase].nombre}</option>`).join("");
+  startSel.innerHTML = opts; startSel.value = "3";   // base por defecto
+  fromSel.innerHTML  = opts; fromSel.value  = "0";   // kilo
+  toSel.innerHTML    = opts; toSel.value    = "3";   // base
+}
+
+function buildStairs(){
+  stairRow.innerHTML = PREFIXES.map((p,i)=>`
+    <div class="tread s${i} ${p.name==="base"?"base":""}" data-i="${i}">
+      <div class="pow">${powLabel(p.exp)}</div>
+      <div class="sym">${fullSym(p)}</div>
+      <div class="name">${p.name==="base"?BASES[currentBase].nombre:p.name+BASES[currentBase].nombre}</div>
+      <div class="val" id="val-${i}">—</div>
+    </div>`).join("");
+}
+
+function renderStairs(){
+  const v = parseFloat(valIn.value);
+  const startI = parseInt(startSel.value,10);
+  const baseVal = (isFinite(v)?v:0) * PREFIXES[startI].factor;   // valor en la unidad base
+  PREFIXES.forEach((p,i)=>{
+    const cell = stairRow.querySelector(`[data-i="${i}"]`);
+    cell.classList.toggle("active", i===startI);
+    document.getElementById("val-"+i).textContent = fmt(baseVal / p.factor) + " " + fullSym(p);
+  });
+}
+
+/* ---------- MOVER DEL PUNTO DECIMAL ---------- */
+const readout = document.getElementById("readout");
+function renderMover(){
+  const v = parseFloat(valIn.value);
+  const fi = parseInt(fromSel.value,10), ti = parseInt(toSel.value,10);
+  const from = PREFIXES[fi], to = PREFIXES[ti];
+  const steps = from.exp - to.exp;            // + = bajar (×10), - = subir (÷10)
+  const factor = Math.pow(10, steps);
+  const value = isFinite(v)?v:1;
+  const result = value * factor;
+
+  let dirTxt, opTxt, moveTxt;
+  if(steps===0){
+    dirTxt = "misma unidad"; opTxt = "× 1"; moveTxt = "el punto no se mueve";
+  } else if(steps>0){
+    dirTxt = `bajas ${steps} escalón${steps>1?"es":""}`;
+    opTxt  = `× 10<sup>${steps}</sup> = ×&nbsp;${fmt(factor)}`;
+    moveTxt = `corres el punto ${steps} posición${steps>1?"es":""} a la <span class="dir">derecha</span>`;
+  } else {
+    const s=Math.abs(steps);
+    dirTxt = `subes ${s} escalón${s>1?"es":""}`;
+    opTxt  = `÷ 10<sup>${s}</sup> = ÷&nbsp;${fmt(1/factor)}`;
+    moveTxt = `corres el punto ${s} posición${s>1?"es":""} a la <span class="dir">izquierda</span>`;
+  }
+
+  readout.innerHTML =
+    `<div><span class="big">${fmt(value)} ${fullSym(from)}</span> = <span class="big">${fmt(result)} ${fullSym(to)}</span></div>`+
+    `<div class="arrowsteps">De ${fullSym(from)} a ${fullSym(to)}: ${dirTxt} → ${opTxt}.</div>`+
+    `<div class="arrowsteps">Truco: ${moveTxt}.</div>`;
+}
+
+/* ---------- EVENTOS ESCALERA ---------- */
+document.getElementById("unitBtns").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  currentBase = b.dataset.base;
+  [...e.currentTarget.querySelectorAll("button")].forEach(x=>x.setAttribute("aria-pressed", x===b));
+  buildSelectors(); buildStairs(); renderStairs(); renderMover();
+});
+[valIn,startSel].forEach(el=>el.addEventListener("input", ()=>{renderStairs(); renderMover();}));
+[fromSel,toSel].forEach(el=>el.addEventListener("input", renderMover));
+
+buildSelectors(); buildStairs(); renderStairs(); renderMover();
+
+/* ====================== CALCULADORA DE TIEMPO (BASE 60) ====================== */
+const tEls = {
+  sH:document.getElementById("sH"), sM:document.getElementById("sM"),
+  dH:document.getElementById("dH"), dM:document.getElementById("dM"),
+  steps:document.getElementById("tSteps"), result:document.getElementById("tResult"),
+  digital:document.getElementById("clockDigital"),
+  hHand:document.getElementById("hHand"), mHand:document.getElementById("mHand")
+};
+let startAmPm = "am";
+
+// marcas del reloj
+(function(){
+  let t="";
+  for(let i=0;i<12;i++){
+    const a=(i*30)*Math.PI/180;
+    const x1=100+Math.sin(a)*86, y1=100-Math.cos(a)*86;
+    const x2=100+Math.sin(a)*78, y2=100-Math.cos(a)*78;
+    t+=`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#9b93c4" stroke-width="${i%3===0?4:2}"/>`;
+  }
+  document.getElementById("ticks").innerHTML=t;
+})();
+
+function clampInt(v,min,max){v=parseInt(v,10);if(isNaN(v))v=min;if(v<min)v=min;if(max!=null&&v>max)v=max;return v;}
+function to24(h12,m,ampm){h12=h12%12;if(ampm==="pm")h12+=12;return h12*60+m;}
+function fmt12(totalMin){
+  let h24=Math.floor(totalMin/60), m=totalMin%60;
+  const ap = h24>=12 ? "p. m." : "a. m.";
+  let h=h24%12; if(h===0)h=12;
+  return {h, m, ap, h24};
+}
+
+function renderTime(){
+  const sH=clampInt(tEls.sH.value,1,12), sM=clampInt(tEls.sM.value,0,59);
+  const dH=clampInt(tEls.dH.value,0,null), dM=clampInt(tEls.dM.value,0,null);
+  tEls.sH.value=sH; tEls.sM.value=sM; tEls.dH.value=dH; tEls.dM.value=dM;
+
+  // --- pasos pedagógicos ---
+  const mSum = sM + dM;
+  const carryH = Math.floor(mSum/60);
+  const remM = mSum % 60;
+  const hTotal = sH + dH + carryH;
+
+  let steps = "";
+  steps += `<div class="tstep"><span class="tk">Paso 1 · minutos</span><span class="tv">Sumo los minutos: ${sM} + ${dM} = <b>${mSum} min</b>.</span></div>`;
+  if(mSum>=60){
+    steps += `<div class="tstep"><span class="tk">Paso 2 · acarreo</span><span class="tv">Como 60 min = 1 h, reparto: ${mSum} min = <span class="carry">${carryH} h y ${remM} min</span>. Llevo ${carryH} h a las horas.</span></div>`;
+  } else {
+    steps += `<div class="tstep"><span class="tk">Paso 2 · acarreo</span><span class="tv">${mSum} min es menos de 60, así que <span class="carry">no acarreo</span> nada.</span></div>`;
+  }
+  steps += `<div class="tstep"><span class="tk">Paso 3 · horas</span><span class="tv">Sumo las horas: ${sH} + ${dH}${carryH?` + ${carryH}`:""} = <b>${hTotal}</b>, con <b>${remM} min</b>.</span></div>`;
+
+  // --- resultado real (con a.m./p.m. y días) ---
+  const start = to24(sH,sM,startAmPm);
+  const total = start + dH*60 + dM;
+  const dayWrap = Math.floor(total/1440);
+  const within = ((total%1440)+1440)%1440;
+  const r = fmt12(within);
+
+  // aviso de cruce de mediodía / día
+  let note="";
+  if(dayWrap>0) note = dayWrap===1 ? "Llega al día siguiente." : `Llega ${dayWrap} días después.`;
+  else if(startAmPm==="am" && r.ap==="p. m.") note = "Cruza el mediodía: pasa de a. m. a p. m.";
+  else if(startAmPm==="pm" && r.ap==="a. m.") note = "Cruza la medianoche.";
+
+  tEls.steps.innerHTML = steps;
+  tEls.result.innerHTML =
+    `Llega a las <span class="big">${r.h}:${String(r.m).padStart(2,"0")} ${r.ap}</span>` +
+    (note?`<span class="nb">${note}</span>`:"");
+
+  // --- reloj ---
+  const mAngle = r.m*6;
+  const hAngle = (r.h24%12)*30 + r.m*0.5;
+  tEls.hHand.setAttribute("transform",`rotate(${hAngle} 100 100)`);
+  tEls.mHand.setAttribute("transform",`rotate(${mAngle} 100 100)`);
+  tEls.digital.textContent = `${r.h}:${String(r.m).padStart(2,"0")} ${r.ap}`;
+}
+
+document.getElementById("sAmPm").addEventListener("click", e=>{
+  const b=e.target.closest("button"); if(!b) return;
+  startAmPm=b.dataset.v;
+  [...e.currentTarget.querySelectorAll("button")].forEach(x=>x.setAttribute("aria-pressed", x===b));
+  renderTime();
+});
+["sH","sM","dH","dM"].forEach(id=>tEls[id].addEventListener("input", renderTime));
+renderTime();
+
+/* ====================== PRÁCTICA (ACORDEÓN) ====================== */
+const PRACTICE = [
+  {
+    sys:"usa", tags:[["usa","Americano"],["usa","Capacidad"]],
+    q:"Una receta necesita 2 cuartos de leche, pero usted solo tiene tazas medidoras. ¿Cuántas tazas debe medir?",
+    id:"Se mide capacidad en el sistema americano. Las unidades son distintas: cuartos y tazas.",
+    co:"1 cuarto equivale a 4 tazas, así que convierto: 2 cuartos × 4 = 8 tazas.",
+    ca:"No hay más operaciones: el resultado ya está en tazas.",
+    ans:"Debe medir 8 tazas."
+  },
+  {
+    sys:"metric", tags:[["metric","Métrico"],["metric","Capacidad"]],
+    q:"Un médico recomienda tomar 2 000 mililitros de agua al día. ¿Cuántos litros son? (1 litro = 1 000 mililitros)",
+    id:"Se mide capacidad en el sistema métrico. Unidades distintas: mililitros y litros.",
+    co:"De mililitro a litro subo 3 escalones, así que divido entre 10³ = 1 000: 2 000 ÷ 1 000 = 2.",
+    ca:"El punto decimal se corre 3 lugares a la izquierda: 2 000 → 2.",
+    ans:"Son 2 litros."
+  },
+  {
+    sys:"usa", tags:[["usa","Americano"],["usa","Longitud"]],
+    q:"Un carpintero necesita una tabla de 2 yardas, pero la tienda la vende por pies. ¿Cuántos pies debe pedir? (1 yarda = 3 pies)",
+    id:"Se mide longitud en el sistema americano. Unidades distintas: yardas y pies.",
+    co:"Convierto con el factor conocido: 2 yardas × 3 = 6 pies.",
+    ca:"El resultado ya queda expresado en pies.",
+    ans:"Debe pedir 6 pies."
+  },
+  {
+    sys:"time", tags:[["time","Tiempo"],["time","Suma de horas"]],
+    q:"Un viaje en carro dura 3 horas y 45 minutos. Si sale a las 9:30 a. m., ¿a qué hora llega?",
+    id:"Se mide tiempo. Sumo una duración a una hora de salida; cuido que 60 minutos hacen 1 hora.",
+    co:"No cambio de sistema, pero ordeno: sumo primero los minutos y luego las horas.",
+    ca:"30 min + 45 min = 75 min = 1 h 15 min. Horas: 9 + 3 + 1 = 13 (la 1 viene del exceso de minutos) → 13:15.",
+    ans:"Llega a la 1:15 p. m."
+  },
+  {
+    sys:"usa", tags:[["usa","Americano"],["usa","Peso"]],
+    q:"Un técnico carga 3 cajas de 8 libras cada una. ¿Cuántas onzas carga en total?",
+    id:"Se mide peso en el sistema americano. La pregunta pide onzas, así que habrá conversión.",
+    co:"Primero el total en libras: 3 × 8 = 24 libras. Luego convierto: 1 libra = 16 onzas.",
+    ca:"24 libras × 16 = 384 onzas.",
+    ans:"Carga 384 onzas en total."
+  },
+  {
+    sys:"metric", tags:[["metric","Métrico"],["metric","Capacidad"]],
+    q:"Un trabajador llena 5 botellas de 2 litros cada una. ¿Cuántos litros de líquido usó en total?",
+    id:"Se mide capacidad en el sistema métrico. Todas las unidades ya son litros: no hace falta convertir.",
+    co:"No hay conversión, las unidades son iguales.",
+    ca:"Multiplico: 5 × 2 = 10 litros.",
+    ans:"Usó 10 litros en total."
+  },
+  {
+    sys:"time", tags:[["time","Tiempo"],["time","Suma de horas"]],
+    q:"Un tren sale a las 6:20 a. m. y el viaje dura 2 horas y 50 minutos. ¿A qué hora llega?",
+    id:"Se mide tiempo. Sumo la duración a la hora de salida, vigilando los 60 minutos.",
+    co:"No cambio de sistema; separo minutos y horas para sumar con orden.",
+    ca:"20 min + 50 min = 70 min = 1 h 10 min. Horas: 6 + 2 + 1 = 9 → 9:10.",
+    ans:"Llega a las 9:10 a. m."
+  },
+  {
+    sys:"time", tags:[["time","Tiempo"],["time","Resta de horas"]],
+    q:"Una cita empieza a las 11:45 a. m. y termina a la 1:15 p. m. ¿Cuánto duró?",
+    id:"Se mide tiempo y pido una duración: resto la hora de inicio a la de fin.",
+    co:"Paso a un mismo formato. De 11:45 a. m. al mediodía (12:00) hay 15 min; del mediodía a la 1:15 p. m. hay 1 h 15 min.",
+    ca:"Sumo los dos tramos: 15 min + 1 h 15 min = 1 h 30 min.",
+    ans:"Duró 1 hora y 30 minutos."
+  },
+  {
+    sys:"time", tags:[["time","Tiempo"],["time","Cruza el mediodía"]],
+    q:"Un taller comienza a las 10:50 a. m. y dura 3 horas y 40 minutos. ¿A qué hora termina?",
+    id:"Se mide tiempo. Sumo la duración cuidando el acarreo de 60 min y el cambio a p. m.",
+    co:"No cambio de sistema; ordeno minutos y horas y vigilo el mediodía.",
+    ca:"50 min + 40 min = 90 min = 1 h 30 min. Horas: 10 + 3 + 1 = 14 → en formato de 12 h, las 14:00 son las 2:00 p. m. → 2:30 p. m.",
+    ans:"Termina a las 2:30 p. m."
+  }
+];
+
+const practiceEl = document.getElementById("practice");
+practiceEl.innerHTML = PRACTICE.map((p,i)=>`
+  <details class="acc" data-sys="${p.sys}">
+    <summary>
+      <span class="qnum">${i+1}</span>
+      <span class="qtext">${p.q}
+        <span class="qtags">${p.tags.map(t=>`<span class="badge ${t[0]}">${t[1]}</span>`).join("")}</span>
+      </span>
+      <span class="summary-chevron" aria-hidden="true">›</span>
+    </summary>
+    <div class="acc-body">
+      <div class="aplicar-line">
+        <div class="stepline"><span class="stepkey">Identifico</span><span class="stepval">${p.id}</span></div>
+        <div class="stepline"><span class="stepkey">Convierto</span><span class="stepval">${p.co}</span></div>
+        <div class="stepline"><span class="stepkey">Calculo</span><span class="stepval">${p.ca}</span></div>
+      </div>
+      <div class="answer">✓ ${p.ans}</div>
+    </div>
+  </details>`).join("");
+
+/* ====================== QUIZ ====================== */
+const QUIZ = [
+  {sys:"usa", q:"¿A cuántas pulgadas equivalen 3 pies? (1 pie = 12 pulgadas)",
+   opts:["24 pulgadas","30 pulgadas","36 pulgadas","48 pulgadas"], ok:2,
+   fb:"3 × 12 = 36 pulgadas."},
+  {sys:"metric", q:"¿Cuántos metros hay en 4 kilómetros?",
+   opts:["40 m","400 m","4 000 m","40 000 m"], ok:2,
+   fb:"De km a m bajas 3 escalones: ×10³ = ×1 000. 4 × 1 000 = 4 000 m."},
+  {sys:"metric", q:"750 gramos, ¿cuántos kilogramos son?",
+   opts:["0,75 kg","7,5 kg","75 kg","7 500 kg"], ok:0,
+   fb:"De g a kg subes 3 escalones: ÷1 000. 750 ÷ 1 000 = 0,75 kg."},
+  {sys:"usa", q:"Un galón tiene 4 cuartos. ¿Cuántas tazas hay en 1 galón? (1 cuarto = 4 tazas)",
+   opts:["8 tazas","12 tazas","16 tazas","20 tazas"], ok:2,
+   fb:"4 cuartos × 4 tazas = 16 tazas."},
+  {sys:"metric", q:"Para pasar de centímetros a metros, ¿qué haces con el punto decimal?",
+   opts:["Lo corres 2 lugares a la derecha","Lo corres 2 lugares a la izquierda","Lo corres 3 lugares a la izquierda","No lo mueves"], ok:1,
+   fb:"De cm a m subes 2 escalones (÷100): el punto va 2 lugares a la izquierda."},
+  {sys:"usa", q:"Un saco pesa 5 libras. ¿Cuántas onzas son? (1 libra = 16 onzas)",
+   opts:["21 onzas","64 onzas","80 onzas","96 onzas"], ok:2,
+   fb:"5 × 16 = 80 onzas."},
+  {sys:"time", q:"Una película empieza a las 7:40 p. m. y dura 1 hora 35 minutos. ¿A qué hora termina?",
+   opts:["9:05 p. m.","9:15 p. m.","8:75 p. m.","9:25 p. m."], ok:1,
+   fb:"40 + 35 = 75 min = 1 h 15 min. Sumado a la hora de duración: 7:40 + 1:35 = 9:15 p. m."},
+  {sys:"metric", q:"¿Cuántos mililitros hay en 1,5 litros?",
+   opts:["15 mL","150 mL","1 500 mL","15 000 mL"], ok:2,
+   fb:"De L a mL bajas 3 escalones: ×1 000. 1,5 × 1 000 = 1 500 mL."},
+  {sys:"time", q:"Un autobús sale a las 8:50 a. m. y llega a las 10:20 a. m. ¿Cuánto duró el viaje?",
+   opts:["1 h 30 min","1 h 70 min","2 h 30 min","1 h 50 min"], ok:0,
+   fb:"De 8:50 a 10:20: de 8:50 a 9:50 es 1 h; de 9:50 a 10:20 son 30 min más. Total: 1 h 30 min."}
+];
+
+const quizEl = document.getElementById("quiz");
+const scoreEl = document.getElementById("score");
+const totalEl = document.getElementById("total");
+totalEl.textContent = QUIZ.length;
+let answered = new Array(QUIZ.length).fill(false);
+let score = 0;
+const LETTERS = ["A","B","C","D"];
+
+function renderQuiz(){
+  quizEl.innerHTML = QUIZ.map((item,qi)=>`
+    <div class="quizcard">
+      <p class="q"><span class="qn">${qi+1}.</span> <span>${item.q} <span class="badge ${item.sys}">${item.sys==="usa"?"Americano":item.sys==="metric"?"Métrico":"Tiempo"}</span></span></p>
+      <div class="opts" data-q="${qi}">
+        ${item.opts.map((o,oi)=>`<button class="opt" data-q="${qi}" data-o="${oi}" type="button"><span class="mk">${LETTERS[oi]}</span><span>${o}</span></button>`).join("")}
+      </div>
+      <div class="fb" id="fb-${qi}"></div>
+    </div>`).join("");
+}
+renderQuiz();
+
+quizEl.addEventListener("click", e=>{
+  const btn = e.target.closest(".opt"); if(!btn) return;
+  const qi = +btn.dataset.q, oi = +btn.dataset.o;
+  if(answered[qi]) return;
+  answered[qi] = true;
+  const item = QUIZ[qi];
+  const opts = quizEl.querySelectorAll(`.opt[data-q="${qi}"]`);
+  opts.forEach(b=>{
+    b.disabled = true;
+    const bi = +b.dataset.o;
+    if(bi===item.ok) b.classList.add("correct");
+    else if(bi===oi) b.classList.add("wrong");
+  });
+  const fb = document.getElementById("fb-"+qi);
+  const good = oi===item.ok;
+  if(good) score++;
+  fb.className = "fb show " + (good?"good":"bad");
+  fb.innerHTML = (good?"✓ ¡Correcto! ":"✗ Revisa: ") + item.fb;
+  scoreEl.textContent = score;
+});
+
+document.getElementById("resetQuiz").addEventListener("click", ()=>{
+  answered = new Array(QUIZ.length).fill(false);
+  score = 0; scoreEl.textContent = 0;
+  renderQuiz();
+  document.querySelector("#quiz").scrollIntoView({behavior:"smooth", block:"start"});
+});
+
+/* ====================== SCROLL REVEAL ====================== */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add("in"); io.unobserve(en.target);} });
+},{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
