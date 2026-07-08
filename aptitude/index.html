@@ -345,6 +345,29 @@
     }
     footer.foot a { color: var(--brand); }
 
+    /* ---------- Timer ---------- */
+    .question-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .question-row .badge { margin-bottom: 0; }
+    .timer {
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--brand-dk);
+      background: #e5e9fb;
+      padding: 5px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .timer.warn   { color: #5C3900; background: #fdf1d6; }
+    .timer.danger { color: #fff;    background: var(--error); }
+    .timer.no-timer { display: none; }
+
     .hidden { display: none !important; }
 
     /* Accessibility: visible focus */
@@ -386,6 +409,16 @@
         </div>
       </div>
 
+      <div class="field">
+        <span class="label" id="lbl-time">Time per question</span>
+        <div class="option-group" role="group" aria-labelledby="lbl-time">
+          <button type="button" class="chip" data-time="0" aria-pressed="false">Off</button>
+          <button type="button" class="chip" data-time="45" aria-pressed="false">45s</button>
+          <button type="button" class="chip" data-time="60" aria-pressed="true">60s</button>
+          <button type="button" class="chip" data-time="90" aria-pressed="false">90s</button>
+        </div>
+      </div>
+
       <button type="button" class="btn-primary" id="btn-start">Start</button>
 
       <p class="start-note">
@@ -408,7 +441,10 @@
       </div>
 
       <div class="card">
-        <span class="badge" id="badge-category">Category</span>
+        <div class="question-row">
+          <span class="badge" id="badge-category">Category</span>
+          <span class="timer" id="timer" role="timer" aria-label="Time remaining" aria-live="off">1:00</span>
+        </div>
         <p class="prompt" id="prompt"></p>
 
         <ul class="answer-list" id="answer-list"></ul>
@@ -702,7 +738,11 @@
     /* =========================================================
        STATE AND DOM REFERENCES
        ========================================================= */
-    var state = { count: 40, questions: [], index: 0, correct: 0 };
+    var state = {
+      count: 40, seconds: 60,
+      questions: [], index: 0, correct: 0,
+      timerId: null, timeLeft: 0
+    };
 
     var el = {
       start:       document.getElementById("screen-start"),
@@ -714,6 +754,7 @@
       counterCor:  document.getElementById("counter-correct"),
       progressbar: document.getElementById("progressbar"),
       fill:        document.getElementById("fill"),
+      timer:       document.getElementById("timer"),
       badge:       document.getElementById("badge-category"),
       prompt:      document.getElementById("prompt"),
       list:        document.getElementById("answer-list"),
@@ -735,9 +776,13 @@
        ========================================================= */
     el.chips.forEach(function (chip) {
       chip.addEventListener("click", function () {
-        el.chips.forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+        var group = chip.parentElement;
+        group.querySelectorAll(".chip").forEach(function (c) {
+          c.setAttribute("aria-pressed", "false");
+        });
         chip.setAttribute("aria-pressed", "true");
-        state.count = parseInt(chip.dataset.count, 10);
+        if (chip.dataset.count) { state.count = parseInt(chip.dataset.count, 10); }
+        if (chip.dataset.time)  { state.seconds = parseInt(chip.dataset.time, 10); }
       });
     });
 
@@ -753,6 +798,7 @@
     }
 
     function renderQuestion() {
+      stopTimer();
       var q = state.questions[state.index];
       var total = state.questions.length;
 
@@ -785,9 +831,12 @@
       });
 
       el.btnNext.textContent = (state.index + 1 === total) ? "See results" : "Next";
+
+      startTimer();
     }
 
     function answer(chosenButton, option, question) {
+      stopTimer();
       var buttons = el.list.querySelectorAll(".answer");
       buttons.forEach(function (b) { b.disabled = true; });
 
@@ -862,9 +911,76 @@
     }
 
     /* =========================================================
+       PER-QUESTION TIMER
+       ========================================================= */
+    function formatTime(sec) {
+      var m = Math.floor(sec / 60);
+      var s = sec % 60;
+      return m + ":" + (s < 10 ? "0" + s : s);
+    }
+
+    function stopTimer() {
+      if (state.timerId) {
+        clearInterval(state.timerId);
+        state.timerId = null;
+      }
+    }
+
+    function paintTimer() {
+      el.timer.textContent = "\u23F1 " + formatTime(state.timeLeft);
+      el.timer.classList.remove("warn", "danger");
+      if (state.timeLeft <= 5) {
+        el.timer.classList.add("danger");
+      } else if (state.timeLeft <= 15) {
+        el.timer.classList.add("warn");
+      }
+    }
+
+    function startTimer() {
+      stopTimer();
+      if (!state.seconds) {                   // "Off": no time limit
+        el.timer.classList.add("no-timer");
+        return;
+      }
+      el.timer.classList.remove("no-timer");
+      state.timeLeft = state.seconds;
+      paintTimer();
+      state.timerId = setInterval(function () {
+        state.timeLeft--;
+        paintTimer();
+        if (state.timeLeft <= 0) {
+          stopTimer();
+          timeUp();
+        }
+      }, 1000);
+    }
+
+    function timeUp() {
+      var question = state.questions[state.index];
+      var buttons = el.list.querySelectorAll(".answer");
+      buttons.forEach(function (b) { b.disabled = true; });
+      buttons.forEach(function (b) {
+        var text = b.querySelector("span:last-child").textContent;
+        var isCorrect = question.options.some(function (o) {
+          return o.correct && o.text === text;
+        });
+        if (isCorrect) {
+          b.classList.add("right");
+          b.querySelector(".icon").textContent = "\u2713";
+        }
+      });
+      el.feedback.className = "feedback shown miss";
+      el.fbTitle.textContent = "\u23F1 Time's up";
+      el.fbBody.innerHTML = question.explanationHTML;
+      el.btnNext.className = "btn-primary btn-next shown";
+      el.btnNext.focus();
+    }
+
+    /* =========================================================
        SCREEN SWITCHING
        ========================================================= */
     function show(section) {
+      stopTimer();
       [el.start, el.test, el.result].forEach(function (s) {
         s.classList.add("hidden");
       });
