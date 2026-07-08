@@ -99,7 +99,7 @@
     }
     .grupo-opciones {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
       gap: 10px;
     }
     .chip {
@@ -359,7 +359,6 @@
 
     @media (max-width: 380px) {
       .cabecera h1 { font-size: 1.5rem; }
-      .grupo-opciones { grid-template-columns: repeat(3, 1fr); }
     }
   </style>
 </head>
@@ -379,9 +378,11 @@
       <div class="campo">
         <span class="etiqueta" id="lbl-cantidad">¿Cuántas preguntas quieres practicar?</span>
         <div class="grupo-opciones" role="group" aria-labelledby="lbl-cantidad">
-          <button type="button" class="chip" data-cantidad="5" aria-pressed="false">5</button>
-          <button type="button" class="chip" data-cantidad="10" aria-pressed="true">10</button>
-          <button type="button" class="chip" data-cantidad="15" aria-pressed="false">15</button>
+          <button type="button" class="chip" data-cantidad="10" aria-pressed="false">10</button>
+          <button type="button" class="chip" data-cantidad="20" aria-pressed="false">20</button>
+          <button type="button" class="chip" data-cantidad="30" aria-pressed="false">30</button>
+          <button type="button" class="chip" data-cantidad="40" aria-pressed="true">40</button>
+          <button type="button" class="chip" data-cantidad="50" aria-pressed="false">50</button>
         </div>
       </div>
 
@@ -705,7 +706,7 @@
     /* =========================================================
        ESTADO Y REFERENCIAS DEL DOM
        ========================================================= */
-    var estado = { cantidad: 10, preguntas: [], indice: 0, aciertos: 0 };
+    var estado = { cantidad: 40, preguntas: [], indice: 0, aciertos: 0 };
 
     var el = {
       inicio:      document.getElementById("pantalla-inicio"),
@@ -850,7 +851,7 @@
       var mensaje, subtexto;
       if (pct >= 80) {
         mensaje = "¡Excelente trabajo!";
-        subtexto = "Dominas muy bien estos razonamientos. Sube a 15 preguntas para un reto mayor.";
+        subtexto = "Dominas muy bien estos razonamientos. Prueba con un examen completo de 50 preguntas.";
       } else if (pct >= 50) {
         mensaje = "Vas por buen camino.";
         subtexto = "Repasa las explicaciones y practica de nuevo; cada intento trae preguntas distintas.";
