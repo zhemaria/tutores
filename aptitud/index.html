@@ -345,6 +345,29 @@
     }
     footer.pie a { color: var(--brand); }
 
+    /* ---------- Temporizador ---------- */
+    .fila-pregunta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .fila-pregunta .insignia { margin-bottom: 0; }
+    .temporizador {
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--brand-dk);
+      background: #e5e9fb;
+      padding: 5px 12px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .temporizador.aviso   { color: #5C3900; background: #fdf1d6; }
+    .temporizador.peligro { color: #fff;    background: var(--error); }
+    .temporizador.sin-timer { display: none; }
+
     .oculto { display: none !important; }
 
     /* Accesibilidad: foco visible */
@@ -386,6 +409,16 @@
         </div>
       </div>
 
+      <div class="campo">
+        <span class="etiqueta" id="lbl-tiempo">Tiempo por pregunta</span>
+        <div class="grupo-opciones" role="group" aria-labelledby="lbl-tiempo">
+          <button type="button" class="chip" data-tiempo="0" aria-pressed="false">Libre</button>
+          <button type="button" class="chip" data-tiempo="45" aria-pressed="false">45 s</button>
+          <button type="button" class="chip" data-tiempo="60" aria-pressed="true">60 s</button>
+          <button type="button" class="chip" data-tiempo="90" aria-pressed="false">90 s</button>
+        </div>
+      </div>
+
       <button type="button" class="boton-principal" id="btn-comenzar">Comenzar</button>
 
       <p class="nota-inicio">
@@ -408,7 +441,10 @@
       </div>
 
       <div class="tarjeta">
-        <span class="insignia" id="insignia-categoria">Categoría</span>
+        <div class="fila-pregunta">
+          <span class="insignia" id="insignia-categoria">Categoría</span>
+          <span class="temporizador" id="temporizador" role="timer" aria-label="Tiempo restante" aria-live="off">1:00</span>
+        </div>
         <p class="enunciado" id="enunciado"></p>
 
         <ul class="lista-respuestas" id="lista-respuestas"></ul>
@@ -706,7 +742,11 @@
     /* =========================================================
        ESTADO Y REFERENCIAS DEL DOM
        ========================================================= */
-    var estado = { cantidad: 40, preguntas: [], indice: 0, aciertos: 0 };
+    var estado = {
+      cantidad: 40, segundos: 60,
+      preguntas: [], indice: 0, aciertos: 0,
+      temporizadorId: null, tiempoRestante: 0
+    };
 
     var el = {
       inicio:      document.getElementById("pantalla-inicio"),
@@ -718,6 +758,7 @@
       marcadorAci: document.getElementById("marcador-aciertos"),
       progressbar: document.getElementById("progressbar"),
       relleno:     document.getElementById("relleno"),
+      temporizador: document.getElementById("temporizador"),
       insignia:    document.getElementById("insignia-categoria"),
       enunciado:   document.getElementById("enunciado"),
       lista:       document.getElementById("lista-respuestas"),
@@ -739,9 +780,13 @@
        ========================================================= */
     el.chips.forEach(function (chip) {
       chip.addEventListener("click", function () {
-        el.chips.forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+        var grupo = chip.parentElement;
+        grupo.querySelectorAll(".chip").forEach(function (c) {
+          c.setAttribute("aria-pressed", "false");
+        });
         chip.setAttribute("aria-pressed", "true");
-        estado.cantidad = parseInt(chip.dataset.cantidad, 10);
+        if (chip.dataset.cantidad) { estado.cantidad = parseInt(chip.dataset.cantidad, 10); }
+        if (chip.dataset.tiempo)   { estado.segundos = parseInt(chip.dataset.tiempo, 10); }
       });
     });
 
@@ -757,6 +802,7 @@
     }
 
     function pintarPregunta() {
+      detenerTemporizador();
       var q = estado.preguntas[estado.indice];
       var total = estado.preguntas.length;
 
@@ -789,9 +835,12 @@
       });
 
       el.btnSig.textContent = (estado.indice + 1 === total) ? "Ver resultados" : "Siguiente";
+
+      iniciarTemporizador();
     }
 
     function responder(botonElegido, opcion, pregunta) {
+      detenerTemporizador();
       var botones = el.lista.querySelectorAll(".respuesta");
       botones.forEach(function (b) { b.disabled = true; });
 
@@ -867,9 +916,76 @@
     }
 
     /* =========================================================
+       TEMPORIZADOR POR PREGUNTA
+       ========================================================= */
+    function formatoTiempo(seg) {
+      var m = Math.floor(seg / 60);
+      var s = seg % 60;
+      return m + ":" + (s < 10 ? "0" + s : s);
+    }
+
+    function detenerTemporizador() {
+      if (estado.temporizadorId) {
+        clearInterval(estado.temporizadorId);
+        estado.temporizadorId = null;
+      }
+    }
+
+    function pintarTemporizador() {
+      el.temporizador.textContent = "\u23F1 " + formatoTiempo(estado.tiempoRestante);
+      el.temporizador.classList.remove("aviso", "peligro");
+      if (estado.tiempoRestante <= 5) {
+        el.temporizador.classList.add("peligro");
+      } else if (estado.tiempoRestante <= 15) {
+        el.temporizador.classList.add("aviso");
+      }
+    }
+
+    function iniciarTemporizador() {
+      detenerTemporizador();
+      if (!estado.segundos) {                 // "Libre": sin límite de tiempo
+        el.temporizador.classList.add("sin-timer");
+        return;
+      }
+      el.temporizador.classList.remove("sin-timer");
+      estado.tiempoRestante = estado.segundos;
+      pintarTemporizador();
+      estado.temporizadorId = setInterval(function () {
+        estado.tiempoRestante--;
+        pintarTemporizador();
+        if (estado.tiempoRestante <= 0) {
+          detenerTemporizador();
+          tiempoAgotado();
+        }
+      }, 1000);
+    }
+
+    function tiempoAgotado() {
+      var pregunta = estado.preguntas[estado.indice];
+      var botones = el.lista.querySelectorAll(".respuesta");
+      botones.forEach(function (b) { b.disabled = true; });
+      botones.forEach(function (b) {
+        var texto = b.querySelector("span:last-child").textContent;
+        var esCorrecta = pregunta.opciones.some(function (o) {
+          return o.correcta && o.texto === texto;
+        });
+        if (esCorrecta) {
+          b.classList.add("correcta");
+          b.querySelector(".icono").textContent = "\u2713";
+        }
+      });
+      el.retro.className = "retro visible fallo";
+      el.retroTit.textContent = "\u23F1 Se acab\u00F3 el tiempo";
+      el.retroExp.innerHTML = pregunta.explicacionHTML;
+      el.btnSig.className = "boton-principal boton-siguiente visible";
+      el.btnSig.focus();
+    }
+
+    /* =========================================================
        CAMBIO DE PANTALLA
        ========================================================= */
     function mostrar(seccion) {
+      detenerTemporizador();
       [el.inicio, el.examen, el.resultado].forEach(function (s) {
         s.classList.add("oculto");
       });
