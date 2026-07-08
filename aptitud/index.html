@@ -1,1 +1,889 @@
+<!DOCTYPE html>
+<!--
+  Examen de práctica tipo aptitud — recurso educativo abierto.
+  Licencia: Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0)
+  Autor: José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago.
+  Las preguntas se generan de forma aleatoria: cada intento es distinto.
+-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Examen de práctica: razonamiento y aptitud</title>
 
+  <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago">
+  <meta name="license" content="CC BY-NC-SA 4.0">
+  <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+  <meta name="description" content="Examen de práctica tipo test de aptitud con preguntas aleatorias y retroalimentación inmediata.">
+
+  <style>
+    :root {
+      --bg:        #eef1f7;
+      --surface:   #ffffff;
+      --ink:       #17213d;
+      --muted:     #555c70;
+      --brand:     #2743c9;
+      --brand-dk:  #1c2f8f;
+      --success:   #0f7a56;
+      --success-bg:#e5f4ee;
+      --error:     #b0233a;
+      --error-bg:  #fbeaec;
+      --line:      #d7dced;
+      --focus:     #ffb300;
+      --radius:    16px;
+      --shadow:    0 6px 22px rgba(23,33,61,.10);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.55;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .lienzo {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 20px 16px 48px;
+      min-height: 100vh;
+    }
+
+    /* ---------- Encabezado ---------- */
+    header.cabecera {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .cabecera .kicker {
+      display: inline-block;
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--brand);
+      background: #e5e9fb;
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+    .cabecera h1 {
+      font-size: 1.7rem;
+      line-height: 1.2;
+      margin: 14px 0 6px;
+      letter-spacing: -.01em;
+    }
+    .cabecera p {
+      color: var(--muted);
+      margin: 0;
+      font-size: .98rem;
+    }
+
+    /* ---------- Tarjetas ---------- */
+    .tarjeta {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 20px;
+    }
+
+    /* ---------- Pantalla de inicio ---------- */
+    .campo { margin-bottom: 20px; }
+    .campo > .etiqueta {
+      display: block;
+      font-weight: 700;
+      font-size: .95rem;
+      margin-bottom: 10px;
+    }
+    .grupo-opciones {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .chip {
+      appearance: none;
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 14px 6px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s, transform .05s;
+    }
+    .chip:hover { border-color: var(--brand); }
+    .chip:active { transform: scale(.98); }
+    .chip[aria-pressed="true"] {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .boton-principal {
+      display: block;
+      width: 100%;
+      appearance: none;
+      border: none;
+      background: var(--brand);
+      color: #fff;
+      font-size: 1.08rem;
+      font-weight: 700;
+      padding: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background .15s, transform .05s;
+    }
+    .boton-principal:hover { background: var(--brand-dk); }
+    .boton-principal:active { transform: scale(.99); }
+
+    .boton-secundario {
+      display: block;
+      width: 100%;
+      appearance: none;
+      border: 2px solid var(--brand);
+      background: #fff;
+      color: var(--brand);
+      font-size: 1.02rem;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .boton-secundario:hover { background: #eef1ff; }
+
+    .nota-inicio {
+      margin-top: 20px;
+      font-size: .9rem;
+      color: var(--muted);
+      background: #f5f7fc;
+      border-left: 4px solid var(--brand);
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+    }
+
+    /* ---------- Barra de progreso ---------- */
+    .barra-superior {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .pista {
+      flex: 1;
+      height: 10px;
+      background: #dfe4f2;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .relleno {
+      height: 100%;
+      width: 0;
+      background: var(--brand);
+      border-radius: 999px;
+      transition: width .3s ease;
+    }
+    .marcador { white-space: nowrap; }
+
+    /* ---------- Pregunta ---------- */
+    .insignia {
+      display: inline-block;
+      font-size: .72rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--brand-dk);
+      background: #e5e9fb;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .enunciado {
+      font-size: 1.16rem;
+      line-height: 1.5;
+      margin: 0 0 20px;
+    }
+    .enunciado .pasaje {
+      display: block;
+      background: #f5f7fc;
+      border-left: 4px solid var(--brand);
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      margin: 0 0 14px;
+      font-size: 1rem;
+    }
+    .enunciado strong { color: var(--brand-dk); }
+
+    .lista-respuestas {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .respuesta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      appearance: none;
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font-size: 1.04rem;
+      padding: 15px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      min-height: 54px;
+    }
+    .respuesta:hover:not(:disabled) { border-color: var(--brand); }
+    .respuesta:disabled { cursor: default; }
+    .respuesta .icono {
+      flex: none;
+      width: 26px;
+      height: 26px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: .95rem;
+      color: #fff;
+    }
+    .respuesta.correcta {
+      border-color: var(--success);
+      background: var(--success-bg);
+    }
+    .respuesta.correcta .icono {
+      display: flex;
+      background: var(--success);
+    }
+    .respuesta.incorrecta {
+      border-color: var(--error);
+      background: var(--error-bg);
+    }
+    .respuesta.incorrecta .icono {
+      display: flex;
+      background: var(--error);
+    }
+
+    /* ---------- Retroalimentación ---------- */
+    .retro {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: .98rem;
+      display: none;
+    }
+    .retro.visible { display: block; }
+    .retro.acierto {
+      background: var(--success-bg);
+      border: 1px solid var(--success);
+    }
+    .retro.fallo {
+      background: var(--error-bg);
+      border: 1px solid var(--error);
+    }
+    .retro .titulo {
+      font-weight: 800;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .retro.acierto .titulo { color: var(--success); }
+    .retro.fallo .titulo { color: var(--error); }
+    .retro .explicacion { color: var(--ink); }
+
+    .boton-siguiente {
+      margin-top: 16px;
+      display: none;
+    }
+    .boton-siguiente.visible { display: block; }
+
+    /* ---------- Resultados ---------- */
+    .resultado-centro { text-align: center; }
+    .anillo {
+      width: 150px;
+      height: 150px;
+      margin: 6px auto 18px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .anillo .porcentaje { font-size: 2.4rem; font-weight: 800; line-height: 1; }
+    .anillo .detalle { font-size: .9rem; font-weight: 600; opacity: .95; margin-top: 4px; }
+    .mensaje-final {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 6px 0 4px;
+    }
+    .subtexto-final {
+      color: var(--muted);
+      margin: 0 0 22px;
+    }
+
+    /* ---------- Pie / licencia ---------- */
+    footer.pie {
+      text-align: center;
+      margin-top: 26px;
+      font-size: .8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    footer.pie a { color: var(--brand); }
+
+    .oculto { display: none !important; }
+
+    /* Accesibilidad: foco visible */
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+
+    @media (max-width: 380px) {
+      .cabecera h1 { font-size: 1.5rem; }
+      .grupo-opciones { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <main class="lienzo">
+
+    <header class="cabecera">
+      <span class="kicker">Práctica de aptitud</span>
+      <h1>Entrenamiento de razonamiento</h1>
+      <p>Preguntas nuevas en cada intento, con explicación inmediata.</p>
+    </header>
+
+    <!-- ===================== PANTALLA DE INICIO ===================== -->
+    <section id="pantalla-inicio" class="tarjeta" aria-labelledby="tit-inicio">
+      <h2 id="tit-inicio" class="oculto">Configuración del examen</h2>
+
+      <div class="campo">
+        <span class="etiqueta" id="lbl-cantidad">¿Cuántas preguntas quieres practicar?</span>
+        <div class="grupo-opciones" role="group" aria-labelledby="lbl-cantidad">
+          <button type="button" class="chip" data-cantidad="5" aria-pressed="false">5</button>
+          <button type="button" class="chip" data-cantidad="10" aria-pressed="true">10</button>
+          <button type="button" class="chip" data-cantidad="15" aria-pressed="false">15</button>
+        </div>
+      </div>
+
+      <button type="button" class="boton-principal" id="btn-comenzar">Comenzar</button>
+
+      <p class="nota-inicio">
+        El examen mezcla razonamiento numérico, verbal y lógico, igual que los test de aptitud.
+        Al responder verás de inmediato si acertaste y por qué.
+      </p>
+    </section>
+
+    <!-- ===================== PANTALLA DE EXAMEN ===================== -->
+    <section id="pantalla-examen" class="oculto" aria-labelledby="tit-examen">
+      <h2 id="tit-examen" class="oculto">Pregunta en curso</h2>
+
+      <div class="barra-superior">
+        <span class="marcador" id="marcador-num" aria-hidden="true">1 / 10</span>
+        <div class="pista" role="progressbar" aria-label="Progreso del examen"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressbar">
+          <div class="relleno" id="relleno"></div>
+        </div>
+        <span class="marcador" id="marcador-aciertos">0 correctas</span>
+      </div>
+
+      <div class="tarjeta">
+        <span class="insignia" id="insignia-categoria">Categoría</span>
+        <p class="enunciado" id="enunciado"></p>
+
+        <ul class="lista-respuestas" id="lista-respuestas"></ul>
+
+        <div class="retro" id="retro" role="status" aria-live="polite">
+          <span class="titulo" id="retro-titulo"></span>
+          <span class="explicacion" id="retro-explicacion"></span>
+        </div>
+
+        <button type="button" class="boton-principal boton-siguiente" id="btn-siguiente">Siguiente</button>
+      </div>
+    </section>
+
+    <!-- ===================== PANTALLA DE RESULTADOS ===================== -->
+    <section id="pantalla-resultado" class="oculto" aria-labelledby="tit-resultado">
+      <div class="tarjeta resultado-centro">
+        <h2 id="tit-resultado" class="oculto">Resultados</h2>
+        <div class="anillo" id="anillo">
+          <span class="porcentaje" id="res-porcentaje">0%</span>
+          <span class="detalle" id="res-detalle">0 de 0</span>
+        </div>
+        <p class="mensaje-final" id="res-mensaje"></p>
+        <p class="subtexto-final" id="res-subtexto"></p>
+
+        <button type="button" class="boton-principal" id="btn-nuevo">Practicar de nuevo (preguntas nuevas)</button>
+        <button type="button" class="boton-secundario" id="btn-cambiar">Cambiar cantidad de preguntas</button>
+      </div>
+    </section>
+
+    <footer class="pie">
+      <p>
+        Recurso educativo abierto ·
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license">CC BY-NC-SA 4.0</a><br>
+        José M. Fernández — Harry S. Truman College, City Colleges of Chicago
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+
+    /* =========================================================
+       UTILIDADES DE AZAR
+       ========================================================= */
+    function entero(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function elegir(lista) {
+      return lista[entero(0, lista.length - 1)];
+    }
+    function barajar(lista) {                 // Fisher-Yates
+      var copia = lista.slice();
+      for (var i = copia.length - 1; i > 0; i--) {
+        var j = entero(0, i);
+        var tmp = copia[i]; copia[i] = copia[j]; copia[j] = tmp;
+      }
+      return copia;
+    }
+
+    /* Construye exactamente 4 opciones numéricas distintas.
+       'correcta' se incluye siempre; se agregan candidatos válidos
+       y, si faltan, se rellena variando el valor correcto. */
+    function opcionesNumericas(correcta, candidatos, sufijo) {
+      sufijo = sufijo || "";
+      var vistos = {};
+      var valores = [correcta];
+      vistos[correcta] = true;
+
+      candidatos.forEach(function (v) {
+        if (valores.length < 4 && v >= 0 && !vistos[v]) {
+          vistos[v] = true;
+          valores.push(v);
+        }
+      });
+      var paso = 1;
+      while (valores.length < 4) {
+        var v = correcta + paso;
+        if (!vistos[v] && v >= 0) { vistos[v] = true; valores.push(v); }
+        paso = paso > 0 ? -paso : (-paso + 1);
+      }
+      return valores.map(function (v) {
+        return { texto: v + sufijo, correcta: v === correcta };
+      });
+    }
+
+    /* =========================================================
+       GENERADORES DE PREGUNTAS
+       Cada uno devuelve:
+       { categoria, enunciadoHTML, opciones:[{texto,correcta}], explicacionHTML }
+       ========================================================= */
+
+    // 1) Aumento porcentual (interpretación de datos)
+    function genPorcentaje() {
+      var meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio"];
+      var i = entero(0, meses.length - 2);
+      var base = entero(5, 25) * 20;          // múltiplo de 20 → resultados enteros
+      var pct = elegir([10, 20, 25, 50]);
+      var final = base + base * pct / 100;
+
+      var contexto = elegir([
+        { v: "recibió", n: "solicitudes de empleo" },
+        { v: "registró", n: "clientes atendidos" },
+        { v: "vendió", n: "unidades" },
+        { v: "tuvo", n: "visitantes" }
+      ]);
+
+      var errorDenom = Math.round((final - base) / final * 100);
+      var opciones = opcionesNumericas(pct, [errorDenom, pct + 5, pct - 5, pct * 2], "%");
+
+      return {
+        categoria: "Razonamiento numérico",
+        enunciadoHTML: "Una empresa " + contexto.v + " <strong>" + base + "</strong> " +
+          contexto.n + " en " + meses[i] + " y <strong>" + final + "</strong> en " +
+          meses[i + 1] + ". ¿Cuál fue el porcentaje de aumento?",
+        opciones: opciones,
+        explicacionHTML: "El aumento siempre se calcula sobre el valor inicial: " +
+          "(" + final + " − " + base + ") ÷ " + base + " × 100 = <strong>" + pct + "%</strong>. " +
+          "Un error frecuente es dividir entre el valor final."
+      };
+    }
+
+    // 2) Serie aritmética
+    function genSerieAritmetica() {
+      var a = entero(2, 7);
+      var b = entero(0, 9);
+      var terminos = [];
+      for (var x = 1; x <= 5; x++) { terminos.push(a * x + b); }
+
+      var hueco = entero(1, 3);               // no el primero ni el último
+      var correcta = terminos[hueco];
+
+      var visibles = terminos.map(function (t, idx) {
+        return idx === hueco ? "___" : String(t);
+      }).join(", ");
+
+      var opciones = opcionesNumericas(correcta,
+        [correcta + a, correcta - a, correcta + 1, correcta - 1], "");
+
+      return {
+        categoria: "Razonamiento lógico",
+        enunciadoHTML: "Completa la serie: <strong>" + visibles + "</strong>",
+        opciones: opciones,
+        explicacionHTML: "Cada término aumenta de <strong>" + a + " en " + a +
+          "</strong>. Por eso el número que falta es <strong>" + correcta + "</strong>."
+      };
+    }
+
+    // 3) Serie geométrica (multiplicativa)
+    function genSerieGeometrica() {
+      var inicio = entero(1, 4);
+      var razon = entero(2, 3);
+      var terminos = [];
+      var actual = inicio;
+      for (var k = 0; k < 5; k++) { terminos.push(actual); actual *= razon; }
+
+      var hueco = entero(1, 3);
+      var correcta = terminos[hueco];
+
+      var visibles = terminos.map(function (t, idx) {
+        return idx === hueco ? "___" : String(t);
+      }).join(", ");
+
+      var opciones = opcionesNumericas(correcta,
+        [correcta * razon, Math.round(correcta / razon), correcta + razon, correcta - razon], "");
+
+      return {
+        categoria: "Razonamiento lógico",
+        enunciadoHTML: "Completa la serie: <strong>" + visibles + "</strong>",
+        opciones: opciones,
+        explicacionHTML: "Cada término se multiplica por <strong>" + razon +
+          "</strong>. Por eso el número que falta es <strong>" + correcta + "</strong>."
+      };
+    }
+
+    // 4) Razonamiento verbal (Verdadero / Falso / No se puede determinar)
+    function genVerbal() {
+      var nombres = ["Juan", "María", "Ana", "Pedro", "Luis", "Sofía", "Carlos", "Elena", "Diego", "Rosa"];
+      var actividades = [
+        { p: "completaron la capacitación en seguridad", s: "completó la capacitación en seguridad" },
+        { p: "asistieron a la reunión anual", s: "asistió a la reunión anual" },
+        { p: "recibieron el certificado", s: "recibió el certificado" },
+        { p: "aprobaron la evaluación", s: "aprobó la evaluación" },
+        { p: "tomaron el curso de inglés", s: "tomó el curso de inglés" }
+      ];
+
+      var nombre = elegir(nombres);
+      var act = elegir(actividades);
+      var estructura = entero(1, 4);
+      var premisa, correcta, explicacion;
+
+      if (estructura === 1) {                 // Verdadero
+        premisa = "Todos los integrantes del equipo A " + act.p +
+          ". " + nombre + " pertenece al equipo A.";
+        correcta = "Verdadero";
+        explicacion = "La premisa afirma que <strong>todos</strong> los del equipo A lo hicieron, " +
+          "y " + nombre + " es del equipo A. Por lo tanto, es necesariamente verdadero.";
+      } else if (estructura === 2) {          // No se puede determinar
+        premisa = "Todos los integrantes del equipo A " + act.p +
+          ". " + nombre + " pertenece al equipo B.";
+        correcta = "No se puede determinar";
+        explicacion = "La información solo habla del equipo A. Como " + nombre +
+          " es del equipo B, del que no se dice nada, no se puede determinar.";
+      } else if (estructura === 3) {          // Falso
+        premisa = "Ningún integrante del equipo A " + act.s +
+          ". " + nombre + " pertenece al equipo A.";
+        correcta = "Falso";
+        explicacion = "Si <strong>ningún</strong> integrante del equipo A lo hizo y " + nombre +
+          " es del equipo A, la afirmación es falsa.";
+      } else {                                // No se puede determinar (existencial)
+        premisa = "Algunos integrantes del equipo A " + act.p +
+          ". " + nombre + " pertenece al equipo A.";
+        correcta = "No se puede determinar";
+        explicacion = "<strong>Algunos</strong> no significa todos. No sabemos si " + nombre +
+          " está incluido, así que no se puede determinar.";
+      }
+
+      var afirmacion = nombre + " " + act.s + ".";
+      var opciones = ["Verdadero", "Falso", "No se puede determinar"].map(function (op) {
+        return { texto: op, correcta: op === correcta };
+      });
+
+      return {
+        categoria: "Razonamiento verbal",
+        enunciadoHTML: "<span class=\"pasaje\">" + premisa + "</span>" +
+          "Según la información anterior, la afirmación «<strong>" + afirmacion +
+          "</strong>» es:",
+        opciones: opciones,
+        explicacionHTML: explicacion
+      };
+    }
+
+    // 5) Promedio
+    function genPromedio() {
+      var nombre = elegir(["Ana", "Luis", "Marta", "Jorge", "Clara", "Raúl"]);
+      var promedio = entero(60, 88);
+      var delta = entero(-15, 15);
+      var primero = Math.min(100, Math.max(40, promedio + delta));
+      var segundo = 2 * promedio - primero;
+
+      var opciones = opcionesNumericas(segundo,
+        [promedio + primero, Math.abs(promedio - primero), primero, segundo + 5], "");
+
+      return {
+        categoria: "Razonamiento numérico",
+        enunciadoHTML: "En una evaluación de dos partes, el promedio de " + nombre +
+          " fue <strong>" + promedio + "</strong> puntos. Si en la primera parte obtuvo <strong>" +
+          primero + "</strong> puntos, ¿cuántos obtuvo en la segunda?",
+        opciones: opciones,
+        explicacionHTML: "Como el promedio es (a + b) ÷ 2, entonces b = 2 × promedio − a = " +
+          "2 × " + promedio + " − " + primero + " = <strong>" + segundo + "</strong>."
+      };
+    }
+
+    // 6) Proporción (regla de tres)
+    function genProporcion() {
+      var articulo = elegir(["cuadernos", "lápices", "boletos", "cajas", "libros"]);
+      var unitario = entero(2, 12);
+      var n = entero(2, 6);
+      var m = entero(7, 12);
+      var costoN = unitario * n;
+      var costoM = unitario * m;
+
+      var opciones = opcionesNumericas(costoM,
+        [unitario * (m + 1), unitario * (m - 1), costoM + unitario, costoM - unitario], "");
+
+      return {
+        categoria: "Razonamiento numérico",
+        enunciadoHTML: "Si <strong>" + n + "</strong> " + articulo + " cuestan <strong>$" +
+          costoN + "</strong>, ¿cuánto cuestan <strong>" + m + "</strong> " + articulo +
+          " al mismo precio?",
+        opciones: opciones.map(function (o) { return { texto: "$" + o.texto, correcta: o.correcta }; }),
+        explicacionHTML: "Primero se halla el precio de uno: $" + costoN + " ÷ " + n + " = $" +
+          unitario + ". Luego $" + unitario + " × " + m + " = <strong>$" + costoM + "</strong>."
+      };
+    }
+
+    var GENERADORES = [
+      genPorcentaje, genSerieAritmetica, genSerieGeometrica,
+      genVerbal, genPromedio, genProporcion
+    ];
+
+    function generarExamen(cantidad) {
+      var preguntas = [];
+      for (var i = 0; i < cantidad; i++) {
+        var g = elegir(GENERADORES);
+        var q = g();
+        q.opciones = barajar(q.opciones);
+        preguntas.push(q);
+      }
+      return preguntas;
+    }
+
+    /* =========================================================
+       ESTADO Y REFERENCIAS DEL DOM
+       ========================================================= */
+    var estado = { cantidad: 10, preguntas: [], indice: 0, aciertos: 0 };
+
+    var el = {
+      inicio:      document.getElementById("pantalla-inicio"),
+      examen:      document.getElementById("pantalla-examen"),
+      resultado:   document.getElementById("pantalla-resultado"),
+      chips:       document.querySelectorAll(".chip"),
+      btnComenzar: document.getElementById("btn-comenzar"),
+      marcadorNum: document.getElementById("marcador-num"),
+      marcadorAci: document.getElementById("marcador-aciertos"),
+      progressbar: document.getElementById("progressbar"),
+      relleno:     document.getElementById("relleno"),
+      insignia:    document.getElementById("insignia-categoria"),
+      enunciado:   document.getElementById("enunciado"),
+      lista:       document.getElementById("lista-respuestas"),
+      retro:       document.getElementById("retro"),
+      retroTit:    document.getElementById("retro-titulo"),
+      retroExp:    document.getElementById("retro-explicacion"),
+      btnSig:      document.getElementById("btn-siguiente"),
+      anillo:      document.getElementById("anillo"),
+      resPct:      document.getElementById("res-porcentaje"),
+      resDet:      document.getElementById("res-detalle"),
+      resMsg:      document.getElementById("res-mensaje"),
+      resSub:      document.getElementById("res-subtexto"),
+      btnNuevo:    document.getElementById("btn-nuevo"),
+      btnCambiar:  document.getElementById("btn-cambiar")
+    };
+
+    /* =========================================================
+       SELECCIÓN DE CANTIDAD
+       ========================================================= */
+    el.chips.forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        el.chips.forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+        chip.setAttribute("aria-pressed", "true");
+        estado.cantidad = parseInt(chip.dataset.cantidad, 10);
+      });
+    });
+
+    /* =========================================================
+       FLUJO DEL EXAMEN
+       ========================================================= */
+    function iniciarExamen() {
+      estado.preguntas = generarExamen(estado.cantidad);
+      estado.indice = 0;
+      estado.aciertos = 0;
+      mostrar(el.examen);
+      pintarPregunta();
+    }
+
+    function pintarPregunta() {
+      var q = estado.preguntas[estado.indice];
+      var total = estado.preguntas.length;
+
+      el.marcadorNum.textContent = (estado.indice + 1) + " / " + total;
+      el.marcadorAci.textContent = estado.aciertos +
+        (estado.aciertos === 1 ? " correcta" : " correctas");
+      var avance = Math.round(estado.indice / total * 100);
+      el.relleno.style.width = avance + "%";
+      el.progressbar.setAttribute("aria-valuenow", String(avance));
+
+      el.insignia.textContent = q.categoria;
+      el.enunciado.innerHTML = q.enunciadoHTML;
+
+      // Reiniciar retroalimentación
+      el.retro.className = "retro";
+      el.btnSig.className = "boton-principal boton-siguiente";
+
+      // Construir respuestas
+      el.lista.innerHTML = "";
+      q.opciones.forEach(function (op) {
+        var li = document.createElement("li");
+        var boton = document.createElement("button");
+        boton.type = "button";
+        boton.className = "respuesta";
+        boton.innerHTML = "<span class=\"icono\" aria-hidden=\"true\"></span><span>" +
+          op.texto + "</span>";
+        boton.addEventListener("click", function () { responder(boton, op, q); });
+        li.appendChild(boton);
+        el.lista.appendChild(li);
+      });
+
+      el.btnSig.textContent = (estado.indice + 1 === total) ? "Ver resultados" : "Siguiente";
+    }
+
+    function responder(botonElegido, opcion, pregunta) {
+      var botones = el.lista.querySelectorAll(".respuesta");
+      botones.forEach(function (b) { b.disabled = true; });
+
+      // Marcar la correcta y, si falló, la elegida
+      botones.forEach(function (b) {
+        var texto = b.querySelector("span:last-child").textContent;
+        var esCorrecta = pregunta.opciones.some(function (o) {
+          return o.correcta && o.texto === texto;
+        });
+        if (esCorrecta) {
+          b.classList.add("correcta");
+          b.querySelector(".icono").textContent = "\u2713";
+        }
+      });
+
+      if (opcion.correcta) {
+        estado.aciertos++;
+        el.retro.className = "retro visible acierto";
+        el.retroTit.textContent = "\u2713 Correcto";
+      } else {
+        botonElegido.classList.add("incorrecta");
+        botonElegido.querySelector(".icono").textContent = "\u2717";
+        el.retro.className = "retro visible fallo";
+        el.retroTit.textContent = "\u2717 Incorrecto";
+      }
+      el.retroExp.innerHTML = pregunta.explicacionHTML;
+
+      el.marcadorAci.textContent = estado.aciertos +
+        (estado.aciertos === 1 ? " correcta" : " correctas");
+      el.btnSig.className = "boton-principal boton-siguiente visible";
+      el.btnSig.focus();
+    }
+
+    function siguiente() {
+      if (estado.indice + 1 < estado.preguntas.length) {
+        estado.indice++;
+        pintarPregunta();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        mostrarResultado();
+      }
+    }
+
+    function mostrarResultado() {
+      var total = estado.preguntas.length;
+      var pct = Math.round(estado.aciertos / total * 100);
+
+      el.resPct.textContent = pct + "%";
+      el.resDet.textContent = estado.aciertos + " de " + total;
+
+      var color;
+      if (pct >= 80) color = "var(--success)";
+      else if (pct >= 50) color = "var(--brand)";
+      else color = "var(--error)";
+      el.anillo.style.background = color;
+
+      var mensaje, subtexto;
+      if (pct >= 80) {
+        mensaje = "¡Excelente trabajo!";
+        subtexto = "Dominas muy bien estos razonamientos. Sube a 15 preguntas para un reto mayor.";
+      } else if (pct >= 50) {
+        mensaje = "Vas por buen camino.";
+        subtexto = "Repasa las explicaciones y practica de nuevo; cada intento trae preguntas distintas.";
+      } else {
+        mensaje = "Sigue practicando.";
+        subtexto = "Lee con calma cada explicación. Con la práctica, la mejora llega.";
+      }
+      el.resMsg.textContent = mensaje;
+      el.resSub.textContent = subtexto;
+
+      mostrar(el.resultado);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /* =========================================================
+       CAMBIO DE PANTALLA
+       ========================================================= */
+    function mostrar(seccion) {
+      [el.inicio, el.examen, el.resultado].forEach(function (s) {
+        s.classList.add("oculto");
+      });
+      seccion.classList.remove("oculto");
+    }
+
+    /* =========================================================
+       EVENTOS PRINCIPALES
+       ========================================================= */
+    el.btnComenzar.addEventListener("click", iniciarExamen);
+    el.btnSig.addEventListener("click", siguiente);
+    el.btnNuevo.addEventListener("click", iniciarExamen);
+    el.btnCambiar.addEventListener("click", function () { mostrar(el.inicio); });
+
+  })();
+  </script>
+</body>
+</html>
