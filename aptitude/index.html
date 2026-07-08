@@ -1,1 +1,885 @@
+<!DOCTYPE html>
+<!--
+  Aptitude practice test — open educational resource.
+  License: Creative Commons Attribution-NonCommercial-ShareAlike 4.0 (CC BY-NC-SA 4.0)
+  Author: José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago.
+  Questions are generated at random: every attempt is different.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Practice test: reasoning and aptitude</title>
 
+  <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago">
+  <meta name="license" content="CC BY-NC-SA 4.0">
+  <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+  <meta name="description" content="Aptitude-style practice test with random questions and immediate feedback.">
+
+  <style>
+    :root {
+      --bg:        #eef1f7;
+      --surface:   #ffffff;
+      --ink:       #17213d;
+      --muted:     #555c70;
+      --brand:     #2743c9;
+      --brand-dk:  #1c2f8f;
+      --success:   #0f7a56;
+      --success-bg:#e5f4ee;
+      --error:     #b0233a;
+      --error-bg:  #fbeaec;
+      --line:      #d7dced;
+      --focus:     #ffb300;
+      --radius:    16px;
+      --shadow:    0 6px 22px rgba(23,33,61,.10);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      line-height: 1.55;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .canvas {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 20px 16px 48px;
+      min-height: 100vh;
+    }
+
+    /* ---------- Header ---------- */
+    header.masthead {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+    .masthead .kicker {
+      display: inline-block;
+      font-size: .72rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--brand);
+      background: #e5e9fb;
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+    .masthead h1 {
+      font-size: 1.7rem;
+      line-height: 1.2;
+      margin: 14px 0 6px;
+      letter-spacing: -.01em;
+    }
+    .masthead p {
+      color: var(--muted);
+      margin: 0;
+      font-size: .98rem;
+    }
+
+    /* ---------- Cards ---------- */
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px 20px;
+    }
+
+    /* ---------- Start screen ---------- */
+    .field { margin-bottom: 20px; }
+    .field > .label {
+      display: block;
+      font-weight: 700;
+      font-size: .95rem;
+      margin-bottom: 10px;
+    }
+    .option-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
+      gap: 10px;
+    }
+    .chip {
+      appearance: none;
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 14px 6px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s, transform .05s;
+    }
+    .chip:hover { border-color: var(--brand); }
+    .chip:active { transform: scale(.98); }
+    .chip[aria-pressed="true"] {
+      border-color: var(--brand);
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .btn-primary {
+      display: block;
+      width: 100%;
+      appearance: none;
+      border: none;
+      background: var(--brand);
+      color: #fff;
+      font-size: 1.08rem;
+      font-weight: 700;
+      padding: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background .15s, transform .05s;
+    }
+    .btn-primary:hover { background: var(--brand-dk); }
+    .btn-primary:active { transform: scale(.99); }
+
+    .btn-secondary {
+      display: block;
+      width: 100%;
+      appearance: none;
+      border: 2px solid var(--brand);
+      background: #fff;
+      color: var(--brand);
+      font-size: 1.02rem;
+      font-weight: 700;
+      padding: 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .btn-secondary:hover { background: #eef1ff; }
+
+    .start-note {
+      margin-top: 20px;
+      font-size: .9rem;
+      color: var(--muted);
+      background: #f5f7fc;
+      border-left: 4px solid var(--brand);
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+    }
+
+    /* ---------- Progress bar ---------- */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+      font-size: .9rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .track {
+      flex: 1;
+      height: 10px;
+      background: #dfe4f2;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .fill {
+      height: 100%;
+      width: 0;
+      background: var(--brand);
+      border-radius: 999px;
+      transition: width .3s ease;
+    }
+    .counter { white-space: nowrap; }
+
+    /* ---------- Question ---------- */
+    .badge {
+      display: inline-block;
+      font-size: .72rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--brand-dk);
+      background: #e5e9fb;
+      padding: 4px 10px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .prompt {
+      font-size: 1.16rem;
+      line-height: 1.5;
+      margin: 0 0 20px;
+    }
+    .prompt .passage {
+      display: block;
+      background: #f5f7fc;
+      border-left: 4px solid var(--brand);
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      margin: 0 0 14px;
+      font-size: 1rem;
+    }
+    .prompt strong { color: var(--brand-dk); }
+
+    .answer-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .answer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+      appearance: none;
+      border: 2px solid var(--line);
+      background: #fff;
+      color: var(--ink);
+      font-size: 1.04rem;
+      padding: 15px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      min-height: 54px;
+    }
+    .answer:hover:not(:disabled) { border-color: var(--brand); }
+    .answer:disabled { cursor: default; }
+    .answer .icon {
+      flex: none;
+      width: 26px;
+      height: 26px;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      font-weight: 900;
+      font-size: .95rem;
+      color: #fff;
+    }
+    .answer.right {
+      border-color: var(--success);
+      background: var(--success-bg);
+    }
+    .answer.right .icon {
+      display: flex;
+      background: var(--success);
+    }
+    .answer.wrong {
+      border-color: var(--error);
+      background: var(--error-bg);
+    }
+    .answer.wrong .icon {
+      display: flex;
+      background: var(--error);
+    }
+
+    /* ---------- Feedback ---------- */
+    .feedback {
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      font-size: .98rem;
+      display: none;
+    }
+    .feedback.shown { display: block; }
+    .feedback.hit {
+      background: var(--success-bg);
+      border: 1px solid var(--success);
+    }
+    .feedback.miss {
+      background: var(--error-bg);
+      border: 1px solid var(--error);
+    }
+    .feedback .fb-title {
+      font-weight: 800;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .feedback.hit .fb-title { color: var(--success); }
+    .feedback.miss .fb-title { color: var(--error); }
+    .feedback .fb-body { color: var(--ink); }
+
+    .btn-next {
+      margin-top: 16px;
+      display: none;
+    }
+    .btn-next.shown { display: block; }
+
+    /* ---------- Results ---------- */
+    .result-center { text-align: center; }
+    .ring {
+      width: 150px;
+      height: 150px;
+      margin: 6px auto 18px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .ring .percent { font-size: 2.4rem; font-weight: 800; line-height: 1; }
+    .ring .detail { font-size: .9rem; font-weight: 600; opacity: .95; margin-top: 4px; }
+    .final-message {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 6px 0 4px;
+    }
+    .final-sub {
+      color: var(--muted);
+      margin: 0 0 22px;
+    }
+
+    /* ---------- Footer / license ---------- */
+    footer.foot {
+      text-align: center;
+      margin-top: 26px;
+      font-size: .8rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    footer.foot a { color: var(--brand); }
+
+    .hidden { display: none !important; }
+
+    /* Accessibility: visible focus */
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+
+    @media (max-width: 380px) {
+      .masthead h1 { font-size: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="canvas">
+
+    <header class="masthead">
+      <span class="kicker">Aptitude practice</span>
+      <h1>Reasoning workout</h1>
+      <p>Fresh questions on every attempt, with instant explanations.</p>
+    </header>
+
+    <!-- ===================== START SCREEN ===================== -->
+    <section id="screen-start" class="card" aria-labelledby="start-title">
+      <h2 id="start-title" class="hidden">Test setup</h2>
+
+      <div class="field">
+        <span class="label" id="lbl-count">How many questions do you want to practice?</span>
+        <div class="option-group" role="group" aria-labelledby="lbl-count">
+          <button type="button" class="chip" data-count="10" aria-pressed="false">10</button>
+          <button type="button" class="chip" data-count="20" aria-pressed="false">20</button>
+          <button type="button" class="chip" data-count="30" aria-pressed="false">30</button>
+          <button type="button" class="chip" data-count="40" aria-pressed="true">40</button>
+          <button type="button" class="chip" data-count="50" aria-pressed="false">50</button>
+        </div>
+      </div>
+
+      <button type="button" class="btn-primary" id="btn-start">Start</button>
+
+      <p class="start-note">
+        The test mixes numerical, verbal, and logical reasoning, just like real aptitude tests.
+        When you answer, you'll immediately see whether you were right and why.
+      </p>
+    </section>
+
+    <!-- ===================== TEST SCREEN ===================== -->
+    <section id="screen-test" class="hidden" aria-labelledby="test-title">
+      <h2 id="test-title" class="hidden">Current question</h2>
+
+      <div class="topbar">
+        <span class="counter" id="counter-num" aria-hidden="true">1 / 40</span>
+        <div class="track" role="progressbar" aria-label="Test progress"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progressbar">
+          <div class="fill" id="fill"></div>
+        </div>
+        <span class="counter" id="counter-correct">0 correct</span>
+      </div>
+
+      <div class="card">
+        <span class="badge" id="badge-category">Category</span>
+        <p class="prompt" id="prompt"></p>
+
+        <ul class="answer-list" id="answer-list"></ul>
+
+        <div class="feedback" id="feedback" role="status" aria-live="polite">
+          <span class="fb-title" id="fb-title"></span>
+          <span class="fb-body" id="fb-body"></span>
+        </div>
+
+        <button type="button" class="btn-primary btn-next" id="btn-next">Next</button>
+      </div>
+    </section>
+
+    <!-- ===================== RESULTS SCREEN ===================== -->
+    <section id="screen-result" class="hidden" aria-labelledby="result-title">
+      <div class="card result-center">
+        <h2 id="result-title" class="hidden">Results</h2>
+        <div class="ring" id="ring">
+          <span class="percent" id="res-percent">0%</span>
+          <span class="detail" id="res-detail">0 of 0</span>
+        </div>
+        <p class="final-message" id="res-message"></p>
+        <p class="final-sub" id="res-sub"></p>
+
+        <button type="button" class="btn-primary" id="btn-again">Practice again (new questions)</button>
+        <button type="button" class="btn-secondary" id="btn-change">Change number of questions</button>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p>
+        Open educational resource ·
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="license">CC BY-NC-SA 4.0</a><br>
+        José M. Fernández — Harry S. Truman College, City Colleges of Chicago
+      </p>
+    </footer>
+
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+
+    /* =========================================================
+       RANDOM HELPERS
+       ========================================================= */
+    function intBetween(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function pick(list) {
+      return list[intBetween(0, list.length - 1)];
+    }
+    function shuffle(list) {                   // Fisher-Yates
+      var copy = list.slice();
+      for (var i = copy.length - 1; i > 0; i--) {
+        var j = intBetween(0, i);
+        var tmp = copy[i]; copy[i] = copy[j]; copy[j] = tmp;
+      }
+      return copy;
+    }
+
+    /* Builds exactly 4 distinct numeric options.
+       'correct' is always included; valid distractors are added and,
+       if any are missing, filled by varying the correct value. */
+    function numericOptions(correct, candidates, suffix) {
+      suffix = suffix || "";
+      var seen = {};
+      var values = [correct];
+      seen[correct] = true;
+
+      candidates.forEach(function (v) {
+        if (values.length < 4 && v >= 0 && !seen[v]) {
+          seen[v] = true;
+          values.push(v);
+        }
+      });
+      var step = 1;
+      while (values.length < 4) {
+        var v = correct + step;
+        if (!seen[v] && v >= 0) { seen[v] = true; values.push(v); }
+        step = step > 0 ? -step : (-step + 1);
+      }
+      return values.map(function (v) {
+        return { text: v + suffix, correct: v === correct };
+      });
+    }
+
+    /* =========================================================
+       QUESTION GENERATORS
+       Each returns:
+       { category, promptHTML, options:[{text,correct}], explanationHTML }
+       ========================================================= */
+
+    // 1) Percentage increase (data interpretation)
+    function genPercent() {
+      var months = ["January", "February", "March", "April", "May", "June", "July"];
+      var i = intBetween(0, months.length - 2);
+      var base = intBetween(5, 25) * 20;       // multiple of 20 → whole-number results
+      var pct = pick([10, 20, 25, 50]);
+      var end = base + base * pct / 100;
+
+      var ctx = pick([
+        { v: "received", n: "job applications" },
+        { v: "logged", n: "customers" },
+        { v: "sold", n: "units" },
+        { v: "had", n: "visitors" }
+      ]);
+
+      var wrongDenom = Math.round((end - base) / end * 100);
+      var options = numericOptions(pct, [wrongDenom, pct + 5, pct - 5, pct * 2], "%");
+
+      return {
+        category: "Numerical reasoning",
+        promptHTML: "A company " + ctx.v + " <strong>" + base + "</strong> " +
+          ctx.n + " in " + months[i] + " and <strong>" + end + "</strong> in " +
+          months[i + 1] + ". What was the percentage increase?",
+        options: options,
+        explanationHTML: "The increase is always calculated on the starting value: " +
+          "(" + end + " − " + base + ") ÷ " + base + " × 100 = <strong>" + pct + "%</strong>. " +
+          "A common mistake is dividing by the final value."
+      };
+    }
+
+    // 2) Arithmetic series
+    function genArithmetic() {
+      var a = intBetween(2, 7);
+      var b = intBetween(0, 9);
+      var terms = [];
+      for (var x = 1; x <= 5; x++) { terms.push(a * x + b); }
+
+      var gap = intBetween(1, 3);              // not the first or last
+      var correct = terms[gap];
+
+      var visible = terms.map(function (t, idx) {
+        return idx === gap ? "___" : String(t);
+      }).join(", ");
+
+      var options = numericOptions(correct,
+        [correct + a, correct - a, correct + 1, correct - 1], "");
+
+      return {
+        category: "Logical reasoning",
+        promptHTML: "Complete the series: <strong>" + visible + "</strong>",
+        options: options,
+        explanationHTML: "Each term goes up by <strong>" + a +
+          "</strong>. That's why the missing number is <strong>" + correct + "</strong>."
+      };
+    }
+
+    // 3) Geometric series (multiplicative)
+    function genGeometric() {
+      var start = intBetween(1, 4);
+      var ratio = intBetween(2, 3);
+      var terms = [];
+      var current = start;
+      for (var k = 0; k < 5; k++) { terms.push(current); current *= ratio; }
+
+      var gap = intBetween(1, 3);
+      var correct = terms[gap];
+
+      var visible = terms.map(function (t, idx) {
+        return idx === gap ? "___" : String(t);
+      }).join(", ");
+
+      var options = numericOptions(correct,
+        [correct * ratio, Math.round(correct / ratio), correct + ratio, correct - ratio], "");
+
+      return {
+        category: "Logical reasoning",
+        promptHTML: "Complete the series: <strong>" + visible + "</strong>",
+        options: options,
+        explanationHTML: "Each term is multiplied by <strong>" + ratio +
+          "</strong>. That's why the missing number is <strong>" + correct + "</strong>."
+      };
+    }
+
+    // 4) Verbal reasoning (True / False / Cannot say)
+    function genVerbal() {
+      var names = ["John", "Maria", "Anna", "Peter", "Louis", "Sophia", "Carl", "Helen", "Diego", "Rose"];
+      var actions = [
+        { p: "completed the safety training", s: "completed the safety training" },
+        { p: "attended the annual meeting", s: "attended the annual meeting" },
+        { p: "received the certificate", s: "received the certificate" },
+        { p: "passed the assessment", s: "passed the assessment" },
+        { p: "took the English course", s: "took the English course" }
+      ];
+
+      var name = pick(names);
+      var act = pick(actions);
+      var structure = intBetween(1, 4);
+      var premise, correct, explanation;
+
+      if (structure === 1) {                   // True
+        premise = "Everyone on Team A " + act.p + ". " + name + " is on Team A.";
+        correct = "True";
+        explanation = "The premise says <strong>everyone</strong> on Team A did it, and " +
+          name + " is on Team A. So it must be true.";
+      } else if (structure === 2) {            // Cannot say
+        premise = "Everyone on Team A " + act.p + ". " + name + " is on Team B.";
+        correct = "Cannot say";
+        explanation = "The information only covers Team A. Since " + name +
+          " is on Team B, about which nothing is said, we cannot say.";
+      } else if (structure === 3) {            // False
+        premise = "No one on Team A " + act.s + ". " + name + " is on Team A.";
+        correct = "False";
+        explanation = "If <strong>no one</strong> on Team A did it and " + name +
+          " is on Team A, the statement is false.";
+      } else {                                 // Cannot say (existential)
+        premise = "Some people on Team A " + act.p + ". " + name + " is on Team A.";
+        correct = "Cannot say";
+        explanation = "<strong>Some</strong> does not mean all. We don't know whether " + name +
+          " is included, so we cannot say.";
+      }
+
+      var statement = name + " " + act.s + ".";
+      var options = ["True", "False", "Cannot say"].map(function (op) {
+        return { text: op, correct: op === correct };
+      });
+
+      return {
+        category: "Verbal reasoning",
+        promptHTML: "<span class=\"passage\">" + premise + "</span>" +
+          "Based on the information above, the statement \u201C<strong>" + statement +
+          "</strong>\u201D is:",
+        options: options,
+        explanationHTML: explanation
+      };
+    }
+
+    // 5) Average
+    function genAverage() {
+      var name = pick(["Anna", "Louis", "Martha", "George", "Clara", "Ralph"]);
+      var average = intBetween(60, 88);
+      var delta = intBetween(-15, 15);
+      var first = Math.min(100, Math.max(40, average + delta));
+      var second = 2 * average - first;
+
+      var options = numericOptions(second,
+        [average + first, Math.abs(average - first), first, second + 5], "");
+
+      return {
+        category: "Numerical reasoning",
+        promptHTML: "On a two-part test, " + name + "'s average was <strong>" + average +
+          "</strong> points. If the first part scored <strong>" + first +
+          "</strong> points, what was the second part?",
+        options: options,
+        explanationHTML: "Since the average is (a + b) ÷ 2, then b = 2 × average − a = " +
+          "2 × " + average + " − " + first + " = <strong>" + second + "</strong>."
+      };
+    }
+
+    // 6) Proportion (rule of three)
+    function genProportion() {
+      var item = pick(["notebooks", "pencils", "tickets", "boxes", "books"]);
+      var unit = intBetween(2, 12);
+      var n = intBetween(2, 6);
+      var m = intBetween(7, 12);
+      var costN = unit * n;
+      var costM = unit * m;
+
+      var options = numericOptions(costM,
+        [unit * (m + 1), unit * (m - 1), costM + unit, costM - unit], "");
+
+      return {
+        category: "Numerical reasoning",
+        promptHTML: "If <strong>" + n + "</strong> " + item + " cost <strong>$" +
+          costN + "</strong>, how much do <strong>" + m + "</strong> " + item +
+          " cost at the same price?",
+        options: options.map(function (o) { return { text: "$" + o.text, correct: o.correct }; }),
+        explanationHTML: "First find the price of one: $" + costN + " ÷ " + n + " = $" +
+          unit + ". Then $" + unit + " × " + m + " = <strong>$" + costM + "</strong>."
+      };
+    }
+
+    var GENERATORS = [
+      genPercent, genArithmetic, genGeometric,
+      genVerbal, genAverage, genProportion
+    ];
+
+    function buildTest(count) {
+      var questions = [];
+      for (var i = 0; i < count; i++) {
+        var g = pick(GENERATORS);
+        var q = g();
+        q.options = shuffle(q.options);
+        questions.push(q);
+      }
+      return questions;
+    }
+
+    /* =========================================================
+       STATE AND DOM REFERENCES
+       ========================================================= */
+    var state = { count: 40, questions: [], index: 0, correct: 0 };
+
+    var el = {
+      start:       document.getElementById("screen-start"),
+      test:        document.getElementById("screen-test"),
+      result:      document.getElementById("screen-result"),
+      chips:       document.querySelectorAll(".chip"),
+      btnStart:    document.getElementById("btn-start"),
+      counterNum:  document.getElementById("counter-num"),
+      counterCor:  document.getElementById("counter-correct"),
+      progressbar: document.getElementById("progressbar"),
+      fill:        document.getElementById("fill"),
+      badge:       document.getElementById("badge-category"),
+      prompt:      document.getElementById("prompt"),
+      list:        document.getElementById("answer-list"),
+      feedback:    document.getElementById("feedback"),
+      fbTitle:     document.getElementById("fb-title"),
+      fbBody:      document.getElementById("fb-body"),
+      btnNext:     document.getElementById("btn-next"),
+      ring:        document.getElementById("ring"),
+      resPct:      document.getElementById("res-percent"),
+      resDet:      document.getElementById("res-detail"),
+      resMsg:      document.getElementById("res-message"),
+      resSub:      document.getElementById("res-sub"),
+      btnAgain:    document.getElementById("btn-again"),
+      btnChange:   document.getElementById("btn-change")
+    };
+
+    /* =========================================================
+       COUNT SELECTION
+       ========================================================= */
+    el.chips.forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        el.chips.forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+        chip.setAttribute("aria-pressed", "true");
+        state.count = parseInt(chip.dataset.count, 10);
+      });
+    });
+
+    /* =========================================================
+       TEST FLOW
+       ========================================================= */
+    function startTest() {
+      state.questions = buildTest(state.count);
+      state.index = 0;
+      state.correct = 0;
+      show(el.test);
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      var q = state.questions[state.index];
+      var total = state.questions.length;
+
+      el.counterNum.textContent = (state.index + 1) + " / " + total;
+      el.counterCor.textContent = state.correct +
+        (state.correct === 1 ? " correct" : " correct");
+      var progress = Math.round(state.index / total * 100);
+      el.fill.style.width = progress + "%";
+      el.progressbar.setAttribute("aria-valuenow", String(progress));
+
+      el.badge.textContent = q.category;
+      el.prompt.innerHTML = q.promptHTML;
+
+      // Reset feedback
+      el.feedback.className = "feedback";
+      el.btnNext.className = "btn-primary btn-next";
+
+      // Build answers
+      el.list.innerHTML = "";
+      q.options.forEach(function (op) {
+        var li = document.createElement("li");
+        var button = document.createElement("button");
+        button.type = "button";
+        button.className = "answer";
+        button.innerHTML = "<span class=\"icon\" aria-hidden=\"true\"></span><span>" +
+          op.text + "</span>";
+        button.addEventListener("click", function () { answer(button, op, q); });
+        li.appendChild(button);
+        el.list.appendChild(li);
+      });
+
+      el.btnNext.textContent = (state.index + 1 === total) ? "See results" : "Next";
+    }
+
+    function answer(chosenButton, option, question) {
+      var buttons = el.list.querySelectorAll(".answer");
+      buttons.forEach(function (b) { b.disabled = true; });
+
+      // Mark the correct one and, if wrong, the chosen one
+      buttons.forEach(function (b) {
+        var text = b.querySelector("span:last-child").textContent;
+        var isCorrect = question.options.some(function (o) {
+          return o.correct && o.text === text;
+        });
+        if (isCorrect) {
+          b.classList.add("right");
+          b.querySelector(".icon").textContent = "\u2713";
+        }
+      });
+
+      if (option.correct) {
+        state.correct++;
+        el.feedback.className = "feedback shown hit";
+        el.fbTitle.textContent = "\u2713 Correct";
+      } else {
+        chosenButton.classList.add("wrong");
+        chosenButton.querySelector(".icon").textContent = "\u2717";
+        el.feedback.className = "feedback shown miss";
+        el.fbTitle.textContent = "\u2717 Incorrect";
+      }
+      el.fbBody.innerHTML = question.explanationHTML;
+
+      el.counterCor.textContent = state.correct + " correct";
+      el.btnNext.className = "btn-primary btn-next shown";
+      el.btnNext.focus();
+    }
+
+    function next() {
+      if (state.index + 1 < state.questions.length) {
+        state.index++;
+        renderQuestion();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      var total = state.questions.length;
+      var pct = Math.round(state.correct / total * 100);
+
+      el.resPct.textContent = pct + "%";
+      el.resDet.textContent = state.correct + " of " + total;
+
+      var color;
+      if (pct >= 80) color = "var(--success)";
+      else if (pct >= 50) color = "var(--brand)";
+      else color = "var(--error)";
+      el.ring.style.background = color;
+
+      var message, sub;
+      if (pct >= 80) {
+        message = "Excellent work!";
+        sub = "You've got a strong grasp of these. Try a full 50-question test for a bigger challenge.";
+      } else if (pct >= 50) {
+        message = "You're on the right track.";
+        sub = "Review the explanations and practice again; every attempt brings different questions.";
+      } else {
+        message = "Keep practicing.";
+        sub = "Read each explanation carefully. Improvement comes with practice.";
+      }
+      el.resMsg.textContent = message;
+      el.resSub.textContent = sub;
+
+      show(el.result);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    /* =========================================================
+       SCREEN SWITCHING
+       ========================================================= */
+    function show(section) {
+      [el.start, el.test, el.result].forEach(function (s) {
+        s.classList.add("hidden");
+      });
+      section.classList.remove("hidden");
+    }
+
+    /* =========================================================
+       MAIN EVENTS
+       ========================================================= */
+    el.btnStart.addEventListener("click", startTest);
+    el.btnNext.addEventListener("click", next);
+    el.btnAgain.addEventListener("click", startTest);
+    el.btnChange.addEventListener("click", function () { show(el.start); });
+
+  })();
+  </script>
+</body>
+</html>
