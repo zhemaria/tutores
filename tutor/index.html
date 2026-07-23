@@ -1,1 +1,864 @@
+<!DOCTYPE html>
+<!--
+  Tutor de matemáticas — Asistente conversacional para estudiantes ASE/GED
+  © 2026 José M. Fernández, ABE/ASE Math Master Teacher,
+  Harry S. Truman College — City Colleges of Chicago.
+  Licencia: Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional
+  (CC BY-NC-SA 4.0) — https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es
+-->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutor de matemáticas</title>
+<meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago">
+<meta name="license" content="CC BY-NC-SA 4.0">
+<meta name="description" content="Asistente conversacional de matemáticas para estudiantes adultos de preparación GED/ASE en español.">
+<link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es">
+<style>
+  :root{
+    --primario:#4338ca;
+    --primario-oscuro:#312e81;
+    --acento:#6d28d9;
+    --texto:#1f2937;
+    --texto-suave:#555555;
+    --fondo:#f5f4fb;
+    --superficie:#ffffff;
+    --borde:#d8d5ea;
+    --burbuja-bot:#eef2ff;
+    --burbuja-usuario:#4338ca;
+    --exito:#15803d;
+    --error:#b91c1c;
+    --aviso:#5C3900;
+    --aviso-fondo:#fff8e6;
+    --radio:14px;
+    --sombra:0 2px 10px rgba(49,46,129,.12);
+  }
+  body.oscuro{
+    --primario:#a5b4fc;
+    --primario-oscuro:#c7d2fe;
+    --acento:#c4b5fd;
+    --texto:#e8eaf3;
+    --texto-suave:#c2c7d6;
+    --fondo:#0f172a;
+    --superficie:#1b2437;
+    --borde:#3a4560;
+    --burbuja-bot:#243049;
+    --burbuja-usuario:#3730a3;
+    --exito:#86efac;
+    --error:#fca5a5;
+    --aviso:#fde68a;
+    --aviso-fondo:#2b2410;
+    --sombra:0 2px 10px rgba(0,0,0,.45);
+  }
 
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    padding:16px;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    font-size:17px;
+    line-height:1.6;
+    background:var(--fondo);
+    color:var(--texto);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .envoltorio{width:100%;max-width:860px;}
+
+  h1,h2,h3{line-height:1.3;}
+  a{color:var(--primario);}
+  body.oscuro a{color:var(--primario-oscuro);}
+
+  :focus-visible{outline:3px solid #b45309;outline-offset:2px;}
+  body.oscuro :focus-visible{outline-color:#fbbf24;}
+
+  /* ---------- Encabezado ---------- */
+  .cabecera{
+    background:linear-gradient(135deg,#312e81 0%,#5b21b6 100%);
+    color:#ffffff;
+    border-radius:var(--radio) var(--radio) 0 0;
+    padding:22px 24px;
+    text-align:center;
+  }
+  .cabecera h1{margin:0;font-size:1.6rem;font-weight:600;}
+  .cabecera p{margin:8px 0 0;font-size:.95rem;}
+
+  /* ---------- Tarjetas y paneles ---------- */
+  .panel{
+    background:var(--superficie);
+    border:1px solid var(--borde);
+    border-top:none;
+    padding:24px;
+  }
+  .panel:last-of-type{border-radius:0 0 var(--radio) var(--radio);}
+
+  /* ---------- Botones ---------- */
+  button{font-family:inherit;font-size:1rem;}
+  .boton{
+    background:var(--primario);
+    color:#ffffff;
+    border:2px solid transparent;
+    border-radius:28px;
+    padding:12px 26px;
+    font-weight:600;
+    cursor:pointer;
+    transition:background .2s ease,transform .15s ease;
+  }
+  body.oscuro .boton{background:#4f46e5;color:#ffffff;}
+  .boton:hover{background:var(--primario-oscuro);transform:translateY(-1px);}
+  body.oscuro .boton:hover{background:#6366f1;}
+  .boton:disabled{background:#9aa0b4;cursor:not-allowed;transform:none;}
+  .boton-secundario{
+    background:transparent;
+    color:var(--primario);
+    border:2px solid var(--primario);
+    border-radius:28px;
+    padding:9px 20px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  body.oscuro .boton-secundario{color:var(--primario);border-color:var(--primario);}
+  .boton-secundario:hover{background:var(--primario);color:#ffffff;}
+  body.oscuro .boton-secundario:hover{background:#4f46e5;color:#ffffff;}
+
+  /* ---------- Pantalla de configuración ---------- */
+  .pasos{list-style:none;counter-reset:paso;padding:0;margin:20px 0;}
+  .pasos li{
+    counter-increment:paso;
+    position:relative;
+    padding:0 0 16px 52px;
+    margin:0;
+  }
+  .pasos li::before{
+    content:counter(paso);
+    position:absolute;left:0;top:0;
+    width:34px;height:34px;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--primario);color:#ffffff;
+    border-radius:50%;font-weight:700;font-size:1rem;
+  }
+  body.oscuro .pasos li::before{background:#4f46e5;color:#ffffff;}
+  .pasos strong{display:block;}
+  .pasos span{color:var(--texto-suave);font-size:.95rem;}
+
+  .campo{margin:18px 0;}
+  .campo .rotulo{display:block;font-weight:600;margin-bottom:6px;}
+  input[type="password"],input[type="text"],select{
+    width:100%;
+    padding:12px 14px;
+    font-size:1rem;
+    font-family:inherit;
+    color:var(--texto);
+    background:var(--superficie);
+    border:2px solid var(--borde);
+    border-radius:10px;
+  }
+  input:focus,select:focus{border-color:var(--primario);outline-offset:1px;}
+
+  .conmutador{
+    display:inline-flex;align-items:center;gap:10px;
+    cursor:pointer;padding:8px 4px;border-radius:8px;
+    user-select:none;
+  }
+  .caja{
+    width:24px;height:24px;flex:0 0 24px;
+    border:2px solid var(--primario);border-radius:6px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:var(--primario);background:var(--superficie);
+  }
+  .conmutador[aria-checked="true"] .caja{background:var(--primario);color:#ffffff;}
+  body.oscuro .conmutador[aria-checked="true"] .caja{background:#4f46e5;color:#ffffff;}
+
+  .aviso{
+    background:var(--aviso-fondo);
+    border-left:5px solid var(--aviso);
+    color:var(--texto);
+    padding:14px 16px;
+    border-radius:8px;
+    margin:18px 0;
+    font-size:.95rem;
+  }
+  .aviso strong{color:var(--aviso);}
+
+  .mensaje-estado{margin-top:12px;font-weight:600;min-height:1.5em;}
+  .mensaje-estado.error{color:var(--error);}
+  .mensaje-estado.exito{color:var(--exito);}
+
+  /* ---------- Barra de temas ---------- */
+  .temas{
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+    padding:16px 24px;background:var(--superficie);
+    border-left:1px solid var(--borde);border-right:1px solid var(--borde);
+  }
+  .temas button{
+    background:var(--superficie);
+    color:var(--primario);
+    border:2px solid var(--primario);
+    border-radius:24px;
+    padding:8px 18px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .temas button:hover{background:var(--primario);color:#ffffff;}
+  body.oscuro .temas button:hover{background:#4f46e5;color:#ffffff;}
+
+  /* ---------- Conversación ---------- */
+  .conversacion{
+    background:var(--superficie);
+    border-left:1px solid var(--borde);
+    border-right:1px solid var(--borde);
+    padding:20px;
+    height:440px;
+    overflow-y:auto;
+  }
+  .mensaje{display:flex;gap:12px;margin-bottom:18px;align-items:flex-start;}
+  .mensaje.propio{flex-direction:row-reverse;}
+  .figura{
+    width:38px;height:38px;flex:0 0 38px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.2rem;
+    background:var(--burbuja-bot);
+    border:1px solid var(--borde);
+  }
+  .burbuja{
+    max-width:78%;
+    padding:14px 18px;
+    border-radius:16px;
+    background:var(--burbuja-bot);
+    border:1px solid var(--borde);
+    position:relative;
+  }
+  .mensaje.propio .burbuja{
+    background:var(--burbuja-usuario);
+    color:#ffffff;
+    border-color:transparent;
+  }
+  .burbuja p{margin:0 0 10px;}
+  .burbuja p:last-child{margin-bottom:0;}
+  .burbuja ul,.burbuja ol{margin:8px 0;padding-left:24px;}
+  .burbuja li{margin-bottom:6px;}
+  .burbuja code{
+    font-family:'Courier New',monospace;
+    background:rgba(67,56,202,.10);
+    padding:2px 6px;border-radius:5px;
+  }
+  body.oscuro .burbuja code{background:rgba(255,255,255,.12);}
+  .burbuja .formula{
+    display:block;text-align:center;
+    font-family:'Courier New',monospace;font-size:1.1rem;
+    background:rgba(67,56,202,.08);
+    padding:10px;border-radius:8px;margin:10px 0;
+  }
+  body.oscuro .burbuja .formula{background:rgba(255,255,255,.10);}
+  .copiar{
+    margin-top:10px;
+    background:transparent;
+    border:1px solid var(--borde);
+    color:var(--texto-suave);
+    border-radius:8px;
+    padding:4px 10px;
+    font-size:.85rem;
+    cursor:pointer;
+  }
+  .copiar:hover{background:var(--burbuja-bot);color:var(--texto);}
+
+  .cargando{
+    display:none;
+    padding:12px 20px;
+    background:var(--superficie);
+    border-left:1px solid var(--borde);border-right:1px solid var(--borde);
+    color:var(--texto-suave);
+    font-weight:600;
+  }
+  .cargando.visible{display:block;}
+  .punto{
+    display:inline-block;width:9px;height:9px;margin-left:3px;
+    border-radius:50%;background:var(--primario);
+    animation:latir 1.2s infinite ease-in-out;
+  }
+  .punto:nth-child(2){animation-delay:.2s;}
+  .punto:nth-child(3){animation-delay:.4s;}
+  @keyframes latir{0%,80%,100%{opacity:.25;}40%{opacity:1;}}
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+
+  .zona-entrada{
+    display:flex;gap:10px;
+    padding:16px 20px;
+    background:var(--superficie);
+    border:1px solid var(--borde);
+    border-top:2px solid var(--borde);
+  }
+  .zona-entrada input{flex:1;border-radius:28px;}
+
+  .herramientas{
+    display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+    margin:18px 0;
+  }
+
+  .pie{
+    max-width:860px;width:100%;
+    margin-top:24px;padding-top:16px;
+    border-top:1px solid var(--borde);
+    font-size:.85rem;color:var(--texto-suave);
+    text-align:center;
+  }
+
+  .oculto{display:none !important;}
+  .solo-lectores{
+    position:absolute;width:1px;height:1px;
+    padding:0;margin:-1px;overflow:hidden;
+    clip:rect(0,0,0,0);white-space:nowrap;border:0;
+  }
+
+  @media (max-width:600px){
+    body{padding:8px;font-size:16px;}
+    .panel,.conversacion{padding:16px;}
+    .burbuja{max-width:88%;}
+    .conversacion{height:56vh;}
+    .zona-entrada{flex-direction:column;}
+    .zona-entrada .boton{width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<div class="envoltorio">
+
+  <header class="cabecera">
+    <h1>Tutor de matemáticas</h1>
+    <p>Asistente de estudio para preparación GED / ASE en español</p>
+  </header>
+
+  <!-- ================= PANTALLA 1: CONFIGURACIÓN ================= -->
+  <section class="panel" id="pantallaClave" aria-labelledby="tituloConfig">
+    <h2 id="tituloConfig">Antes de comenzar: obtén tu clave gratuita</h2>
+    <p>
+      Este tutor funciona con Groq, un servicio de inteligencia artificial que ofrece
+      un nivel gratuito. Necesitas una clave personal (API key). Se obtiene en unos
+      tres minutos y no se pide tarjeta de crédito.
+    </p>
+
+    <ol class="pasos">
+      <li>
+        <strong>Abre la consola de Groq</strong>
+        <span>Ve a <a href="https://console.groq.com/keys" target="_blank" rel="noopener">console.groq.com/keys</a> en una pestaña nueva.</span>
+      </li>
+      <li>
+        <strong>Crea tu cuenta</strong>
+        <span>Puedes entrar con tu correo de Google o con cualquier correo electrónico.</span>
+      </li>
+      <li>
+        <strong>Pulsa «Create API Key»</strong>
+        <span>Ponle un nombre que reconozcas, por ejemplo: <code>tutor-matematicas</code>.</span>
+      </li>
+      <li>
+        <strong>Copia la clave completa</strong>
+        <span>Empieza con <code>gsk_</code>. Cópiala en ese momento: Groq no vuelve a mostrarla.</span>
+      </li>
+      <li>
+        <strong>Pégala aquí abajo y entra</strong>
+        <span>La clave se queda en tu navegador. No viaja a ningún servidor del colegio.</span>
+      </li>
+    </ol>
+
+    <div class="campo">
+      <span class="rotulo" id="rotuloClave">Tu clave de Groq</span>
+      <input type="password" id="entradaClave" placeholder="gsk_..." autocomplete="off"
+             spellcheck="false" aria-labelledby="rotuloClave"
+             aria-describedby="ayudaClave">
+      <p id="ayudaClave" style="font-size:.9rem;color:var(--texto-suave);margin:6px 0 0;">
+        La clave se guarda solo en este dispositivo si activas la casilla siguiente.
+      </p>
+    </div>
+
+    <div class="conmutador" id="recordarClave" role="checkbox" aria-checked="true" tabindex="0">
+      <span class="caja" aria-hidden="true">✓</span>
+      <span>Recordar mi clave en este dispositivo</span>
+    </div>
+
+    <div class="aviso">
+      <strong>Cuida tu clave.</strong> Es personal, como una contraseña. No la compartas
+      ni la escribas en trabajos, correos o foros del curso. Si crees que alguien más la
+      vio, bórrala en la consola de Groq y crea otra.
+    </div>
+
+    <p style="margin-top:22px;">
+      <button type="button" class="boton" id="botonEntrar">Entrar al tutor</button>
+    </p>
+    <p class="mensaje-estado" id="estadoClave" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- ================= PANTALLA 2: CONVERSACIÓN ================= -->
+  <div id="pantallaChat" class="oculto">
+
+    <div class="temas" role="group" aria-label="Temas sugeridos para empezar">
+      <button type="button" data-pregunta="Explícame qué es una fracción y para qué sirve, con un ejemplo de la vida diaria.">Fracciones</button>
+      <button type="button" data-pregunta="Explícame cómo se calcula la media, la mediana y la moda, con un ejemplo.">Estadística</button>
+      <button type="button" data-pregunta="Explícame cómo se resuelve una ecuación lineal de un paso, con ejemplos.">Álgebra</button>
+      <button type="button" data-pregunta="Explícame cómo se calcula el área y el perímetro de un rectángulo y de un triángulo.">Geometría</button>
+      <button type="button" data-pregunta="Explícame cómo se resuelven los problemas de porcentaje, con ejemplos del examen GED.">Porcentajes</button>
+    </div>
+
+    <div class="conversacion" id="conversacion" role="log" aria-live="polite"
+         aria-label="Conversación con el tutor" tabindex="0"></div>
+
+    <p class="cargando" id="cargando" role="status">
+      El tutor está escribiendo
+      <span class="punto" aria-hidden="true"></span><span class="punto" aria-hidden="true"></span><span class="punto" aria-hidden="true"></span>
+    </p>
+
+    <div class="zona-entrada">
+      <span class="solo-lectores" id="rotuloPregunta">Escribe tu pregunta de matemáticas</span>
+      <input type="text" id="entradaPregunta" aria-labelledby="rotuloPregunta"
+             placeholder="Escribe tu pregunta de matemáticas..." autocomplete="off">
+      <button type="button" class="boton" id="botonEnviar">Enviar</button>
+    </div>
+
+    <div class="herramientas">
+      <button type="button" class="boton-secundario" id="botonModo">Modo: explicación completa</button>
+      <button type="button" class="boton-secundario" id="botonTema">Contraste oscuro</button>
+      <button type="button" class="boton-secundario" id="botonLimpiar">Borrar conversación</button>
+      <button type="button" class="boton-secundario" id="botonClave">Cambiar clave</button>
+    </div>
+
+    <div class="campo" style="max-width:420px;margin:0 auto 8px;">
+      <span class="rotulo" id="rotuloModelo" style="font-size:.9rem;">Modelo de lenguaje</span>
+      <select id="selectorModelo" aria-labelledby="rotuloModelo"></select>
+    </div>
+  </div>
+
+</div>
+
+<footer class="pie">
+  <p>
+    Tutor de matemáticas · José M. Fernández, ABE/ASE Math Master Teacher,
+    Harry S. Truman College — City Colleges of Chicago
+  </p>
+  <p>
+    Obra bajo licencia
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="noopener">
+      Creative Commons Atribución-NoComercial-CompartirIgual 4.0 Internacional (CC BY-NC-SA 4.0)</a>.
+  </p>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ============ Configuración ============ */
+  var URL_CHAT   = 'https://api.groq.com/openai/v1/chat/completions';
+  var URL_MODELOS= 'https://api.groq.com/openai/v1/models';
+  var LLAVE_ALM  = 'tutor-mate-clave';
+  var LLAVE_TEMA = 'tutor-mate-tema';
+  var LLAVE_MODELO='tutor-mate-modelo';
+
+  var MODELOS_RESPALDO = [
+    { id:'openai/gpt-oss-20b',  nombre:'Rápido (gpt-oss-20b)' },
+    { id:'openai/gpt-oss-120b', nombre:'Detallado (gpt-oss-120b)' },
+    { id:'qwen/qwen3.6-27b',    nombre:'Alternativo (qwen3.6-27b)' }
+  ];
+  var EXCLUIR = ['whisper','tts','guard','embed','vision','distil'];
+
+  var SISTEMA_COMPLETO =
+    'Eres un tutor de matemáticas para estudiantes adultos hispanohablantes que se preparan ' +
+    'para el examen GED / ASE en Estados Unidos. Responde SIEMPRE en español claro y respetuoso, ' +
+    'tratando al estudiante de "tú". Explica paso a paso, con lenguaje sencillo y sin tecnicismos ' +
+    'innecesarios. Usa ejemplos de la vida diaria (compras, recetas, trabajo, medidas). ' +
+    'No uses LaTeX ni comandos como \\frac; escribe las expresiones en notación simple ' +
+    '(3/4, x^2, raíz cuadrada de 16). Usa listas numeradas para los pasos. ' +
+    'Sé breve: máximo unas 250 palabras, salvo que el estudiante pida más detalle. ' +
+    'Termina siempre con una pregunta corta que invite a practicar. ' +
+    'Si te preguntan algo que no es de matemáticas, redirige con amabilidad al tema.';
+
+  var SISTEMA_GUIA =
+    'Eres un tutor de matemáticas socrático para estudiantes adultos hispanohablantes que se ' +
+    'preparan para el examen GED / ASE. Responde SIEMPRE en español claro y respetuoso. ' +
+    'NO des la respuesta final directamente. Guía al estudiante con una pista concreta y una ' +
+    'pregunta a la vez, para que él llegue al resultado. Si el estudiante se equivoca, señala ' +
+    'con amabilidad dónde está el error y vuelve a preguntar. Si el estudiante pide la respuesta ' +
+    'dos veces seguidas, entonces sí resuélvelo paso a paso. No uses LaTeX; usa notación simple ' +
+    '(3/4, x^2). Máximo 150 palabras por respuesta.';
+
+  /* ============ Estado ============ */
+  var clave = '';
+  var recordar = true;
+  var modelo = MODELOS_RESPALDO[0].id;
+  var modoGuia = false;
+  var procesando = false;
+  var historial = [];
+
+  /* ============ Almacenamiento tolerante ============ */
+  var memoria = {};
+  function guardar(k,v){
+    try{ localStorage.setItem(k,v); }catch(e){ memoria[k]=v; }
+  }
+  function leer(k){
+    try{ var v = localStorage.getItem(k); return v!==null ? v : (memoria[k]||null); }
+    catch(e){ return memoria[k]||null; }
+  }
+  function borrar(k){
+    try{ localStorage.removeItem(k); }catch(e){}
+    delete memoria[k];
+  }
+
+  /* ============ Referencias ============ */
+  var $ = function(id){ return document.getElementById(id); };
+  var pantallaClave = $('pantallaClave');
+  var pantallaChat  = $('pantallaChat');
+  var entradaClave  = $('entradaClave');
+  var estadoClave   = $('estadoClave');
+  var recordarClave = $('recordarClave');
+  var conversacion  = $('conversacion');
+  var entradaPregunta = $('entradaPregunta');
+  var cargando      = $('cargando');
+  var selectorModelo= $('selectorModelo');
+
+  /* ============ Utilidades de texto ============ */
+  function escapar(t){
+    return String(t)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function aHtml(texto){
+    var t = escapar(texto);
+    // limpia restos de LaTeX que algunos modelos insisten en usar
+    t = t.replace(/\\\(|\\\)|\\\[|\\\]/g,'');
+    t = t.replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g,'($1)/($2)');
+    t = t.replace(/\\times/g,'×').replace(/\\cdot/g,'·').replace(/\\pi/g,'π');
+    t = t.replace(/\\sqrt\{([^}]*)\}/g,'√($1)');
+    t = t.replace(/\\\w+/g,'');
+    // código en línea
+    t = t.replace(/`([^`]+)`/g,'<code>$1</code>');
+    // negrita e itálica
+    t = t.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>');
+    t = t.replace(/(^|[^*])\*([^*\n]+)\*/g,'$1<em>$2</em>');
+    // encabezados de markdown -> negrita simple
+    t = t.replace(/^#{1,6}\s*(.+)$/gm,'<strong>$1</strong>');
+
+    // párrafos y listas
+    var lineas = t.split('\n');
+    var salida = '', enLista = false, tipoLista = '';
+    for(var i=0;i<lineas.length;i++){
+      var l = lineas[i].trim();
+      if(l===''){ if(enLista){ salida += '</'+tipoLista+'>'; enLista=false; } continue; }
+      var num = l.match(/^(\d+)[\.\)]\s+(.*)$/);
+      var vin = l.match(/^[-•*]\s+(.*)$/);
+      if(num){
+        if(!enLista||tipoLista!=='ol'){ if(enLista) salida+='</'+tipoLista+'>'; salida+='<ol>'; enLista=true; tipoLista='ol'; }
+        salida += '<li>'+num[2]+'</li>';
+      } else if(vin){
+        if(!enLista||tipoLista!=='ul'){ if(enLista) salida+='</'+tipoLista+'>'; salida+='<ul>'; enLista=true; tipoLista='ul'; }
+        salida += '<li>'+vin[1]+'</li>';
+      } else {
+        if(enLista){ salida += '</'+tipoLista+'>'; enLista=false; }
+        salida += '<p>'+l+'</p>';
+      }
+    }
+    if(enLista) salida += '</'+tipoLista+'>';
+    return salida || '<p>'+t+'</p>';
+  }
+
+  /* ============ Mensajes en pantalla ============ */
+  function agregarMensaje(texto, esPropio){
+    var fila = document.createElement('div');
+    fila.className = 'mensaje' + (esPropio ? ' propio' : '');
+
+    var fig = document.createElement('div');
+    fig.className = 'figura';
+    fig.setAttribute('aria-hidden','true');
+    fig.textContent = esPropio ? '🙋' : '🧮';
+
+    var burbuja = document.createElement('div');
+    burbuja.className = 'burbuja';
+
+    var rotulo = document.createElement('span');
+    rotulo.className = 'solo-lectores';
+    rotulo.textContent = esPropio ? 'Tú escribiste: ' : 'El tutor respondió: ';
+    burbuja.appendChild(rotulo);
+
+    var cuerpo = document.createElement('div');
+    cuerpo.innerHTML = esPropio ? '<p>'+escapar(texto)+'</p>' : aHtml(texto);
+    burbuja.appendChild(cuerpo);
+
+    if(!esPropio){
+      var btn = document.createElement('button');
+      btn.type='button';
+      btn.className='copiar';
+      btn.textContent='Copiar respuesta';
+      btn.addEventListener('click', function(){ copiar(texto, btn); });
+      burbuja.appendChild(btn);
+    }
+
+    fila.appendChild(fig);
+    fila.appendChild(burbuja);
+    conversacion.appendChild(fila);
+    conversacion.scrollTop = conversacion.scrollHeight;
+
+    if(!esPropio && window.MathJax && typeof window.MathJax.typeset==='function'){
+      try{ window.MathJax.typeset([cuerpo]); }catch(e){}
+    }
+  }
+
+  function copiar(texto, boton){
+    var listo = function(){
+      var original = boton.textContent;
+      boton.textContent = 'Copiado ✓';
+      setTimeout(function(){ boton.textContent = original; }, 1800);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texto).then(listo, function(){ respaldoCopiar(texto, listo); });
+    } else {
+      respaldoCopiar(texto, listo);
+    }
+  }
+  function respaldoCopiar(texto, listo){
+    var a = document.createElement('textarea');
+    a.value = texto; a.style.position='fixed'; a.style.opacity='0';
+    document.body.appendChild(a); a.select();
+    try{ document.execCommand('copy'); listo(); }catch(e){}
+    document.body.removeChild(a);
+  }
+
+  /* ============ Modelos ============ */
+  function pintarModelos(lista){
+    selectorModelo.innerHTML = '';
+    for(var i=0;i<lista.length;i++){
+      var o = document.createElement('option');
+      o.value = lista[i].id;
+      o.textContent = lista[i].nombre || lista[i].id;
+      selectorModelo.appendChild(o);
+    }
+    var guardado = leer(LLAVE_MODELO);
+    var existe = false;
+    for(var j=0;j<lista.length;j++){ if(lista[j].id===guardado) existe = true; }
+    modelo = existe ? guardado : lista[0].id;
+    selectorModelo.value = modelo;
+  }
+
+  function cargarModelos(){
+    pintarModelos(MODELOS_RESPALDO);
+    fetch(URL_MODELOS, { headers:{ 'Authorization':'Bearer '+clave } })
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(d){
+        if(!d || !d.data) return;
+        var lista = [];
+        for(var i=0;i<d.data.length;i++){
+          var id = d.data[i].id || '';
+          var malo = false;
+          for(var k=0;k<EXCLUIR.length;k++){ if(id.toLowerCase().indexOf(EXCLUIR[k])>-1) malo = true; }
+          if(!malo) lista.push({ id:id, nombre:id });
+        }
+        if(lista.length){
+          lista.sort(function(a,b){ return a.id.localeCompare(b.id); });
+          pintarModelos(lista);
+        }
+      })
+      .catch(function(){ /* se conserva la lista de respaldo */ });
+  }
+
+  /* ============ Llamada a Groq ============ */
+  function preguntar(texto){
+    var mensajes = [{ role:'system', content: modoGuia ? SISTEMA_GUIA : SISTEMA_COMPLETO }];
+    var recientes = historial.slice(-10);
+    for(var i=0;i<recientes.length;i++) mensajes.push(recientes[i]);
+    mensajes.push({ role:'user', content: texto });
+
+    return fetch(URL_CHAT, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Authorization':'Bearer '+clave },
+      body: JSON.stringify({
+        model: modelo,
+        messages: mensajes,
+        temperature: 0.3,
+        max_tokens: 1200
+      })
+    }).then(function(r){
+      if(r.status===401) throw new Error('CLAVE');
+      if(r.status===429) throw new Error('LIMITE');
+      if(r.status===404 || r.status===400) throw new Error('MODELO');
+      if(!r.ok) throw new Error('SERVIDOR');
+      return r.json();
+    }).then(function(d){
+      if(!d.choices || !d.choices.length) throw new Error('VACIO');
+      return d.choices[0].message.content.trim();
+    });
+  }
+
+  function mensajeError(e){
+    switch(e && e.message){
+      case 'CLAVE':
+        return 'Tu clave no es válida o ya venció. Pulsa «Cambiar clave» y pega una clave nueva de console.groq.com/keys.';
+      case 'LIMITE':
+        return 'Llegaste al límite gratuito por el momento. Espera un minuto y vuelve a preguntar, o elige un modelo más ligero en la lista de abajo.';
+      case 'MODELO':
+        return 'Ese modelo ya no está disponible. Elige otro en la lista «Modelo de lenguaje» que aparece debajo de los botones.';
+      case 'VACIO':
+        return 'El tutor no devolvió respuesta. Vuelve a escribir la pregunta con otras palabras.';
+      default:
+        return 'No hubo conexión con el servicio. Revisa tu internet y vuelve a intentarlo.';
+    }
+  }
+
+  /* ============ Envío ============ */
+  function enviar(texto){
+    if(procesando) return;
+    texto = (texto || entradaPregunta.value).trim();
+    if(!texto) return;
+
+    procesando = true;
+    $('botonEnviar').disabled = true;
+    agregarMensaje(texto, true);
+    entradaPregunta.value = '';
+    cargando.classList.add('visible');
+
+    preguntar(texto)
+      .then(function(respuesta){
+        historial.push({ role:'user', content:texto });
+        historial.push({ role:'assistant', content:respuesta });
+        agregarMensaje(respuesta, false);
+      })
+      .catch(function(e){
+        agregarMensaje(mensajeError(e), false);
+      })
+      .then(function(){
+        cargando.classList.remove('visible');
+        procesando = false;
+        $('botonEnviar').disabled = false;
+        entradaPregunta.focus();
+      });
+  }
+
+  /* ============ Pantallas ============ */
+  function entrarAlChat(){
+    pantallaClave.classList.add('oculto');
+    pantallaChat.classList.remove('oculto');
+    cargarModelos();
+    if(!conversacion.children.length){
+      agregarMensaje(
+        '¡Hola! Soy tu tutor de matemáticas. Puedes preguntarme sobre fracciones, ' +
+        'porcentajes, álgebra, geometría o estadística.\n\n' +
+        'Escribe tu pregunta abajo o pulsa uno de los temas de arriba para empezar. ' +
+        'Si prefieres que te dé pistas en vez de la respuesta, activa el botón ' +
+        '«Modo: guía paso a paso».\n\n¿Con qué tema quieres comenzar?',
+        false
+      );
+    }
+    entradaPregunta.focus();
+  }
+
+  function validarClave(){
+    var v = entradaClave.value.trim();
+    estadoClave.className = 'mensaje-estado';
+    if(!v){
+      estadoClave.textContent = 'Escribe tu clave de Groq para continuar.';
+      estadoClave.classList.add('error');
+      entradaClave.focus();
+      return;
+    }
+    if(v.indexOf('gsk_')!==0){
+      estadoClave.textContent = 'La clave de Groq empieza con gsk_. Revisa que la hayas copiado completa.';
+      estadoClave.classList.add('error');
+      entradaClave.focus();
+      return;
+    }
+    clave = v;
+    if(recordar) guardar(LLAVE_ALM, clave); else borrar(LLAVE_ALM);
+    estadoClave.textContent = 'Clave aceptada. Abriendo el tutor...';
+    estadoClave.classList.add('exito');
+    setTimeout(entrarAlChat, 400);
+  }
+
+  /* ============ Eventos ============ */
+  $('botonEntrar').addEventListener('click', validarClave);
+  entradaClave.addEventListener('keydown', function(e){
+    if(e.key==='Enter'){ e.preventDefault(); validarClave(); }
+  });
+
+  function alternarRecordar(){
+    recordar = !recordar;
+    recordarClave.setAttribute('aria-checked', recordar ? 'true' : 'false');
+  }
+  recordarClave.addEventListener('click', alternarRecordar);
+  recordarClave.addEventListener('keydown', function(e){
+    if(e.key===' '||e.key==='Enter'){ e.preventDefault(); alternarRecordar(); }
+  });
+
+  $('botonEnviar').addEventListener('click', function(){ enviar(); });
+  entradaPregunta.addEventListener('keydown', function(e){
+    if(e.key==='Enter'){ e.preventDefault(); enviar(); }
+  });
+
+  var botonesTema = document.querySelectorAll('.temas button');
+  for(var i=0;i<botonesTema.length;i++){
+    botonesTema[i].addEventListener('click', function(){
+      enviar(this.getAttribute('data-pregunta'));
+    });
+  }
+
+  $('botonModo').addEventListener('click', function(){
+    modoGuia = !modoGuia;
+    this.textContent = modoGuia ? 'Modo: guía paso a paso' : 'Modo: explicación completa';
+    agregarMensaje(
+      modoGuia
+        ? 'Cambié al modo de guía. A partir de ahora te daré pistas y preguntas para que tú llegues a la respuesta.'
+        : 'Cambié al modo de explicación completa. Te resolveré los ejercicios paso a paso.',
+      false
+    );
+  });
+
+  $('botonTema').addEventListener('click', function(){
+    var oscuro = document.body.classList.toggle('oscuro');
+    this.textContent = oscuro ? 'Contraste claro' : 'Contraste oscuro';
+    guardar(LLAVE_TEMA, oscuro ? 'oscuro' : 'claro');
+  });
+
+  $('botonLimpiar').addEventListener('click', function(){
+    historial = [];
+    conversacion.innerHTML = '';
+    agregarMensaje('Conversación borrada. ¿Qué quieres repasar ahora?', false);
+    entradaPregunta.focus();
+  });
+
+  $('botonClave').addEventListener('click', function(){
+    borrar(LLAVE_ALM);
+    clave = '';
+    entradaClave.value = '';
+    estadoClave.textContent = '';
+    estadoClave.className = 'mensaje-estado';
+    pantallaChat.classList.add('oculto');
+    pantallaClave.classList.remove('oculto');
+    entradaClave.focus();
+  });
+
+  selectorModelo.addEventListener('change', function(){
+    modelo = this.value;
+    guardar(LLAVE_MODELO, modelo);
+  });
+
+  /* ============ Arranque ============ */
+  (function iniciar(){
+    if(leer(LLAVE_TEMA)==='oscuro'){
+      document.body.classList.add('oscuro');
+      $('botonTema').textContent = 'Contraste claro';
+    }
+    var guardada = leer(LLAVE_ALM);
+    if(guardada && guardada.indexOf('gsk_')===0){
+      clave = guardada;
+      entradaClave.value = guardada;
+      entrarAlChat();
+    } else {
+      entradaClave.focus();
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
