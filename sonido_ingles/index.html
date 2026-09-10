@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
   The Reading Coach — English Pronunciation Trainer
   Author: José M. Fernández, ABE/ASE Math Master Teacher,
@@ -11,1039 +11,1543 @@
            Full terms: https://creativecommons.org/licenses/by-nc-sa/4.0/
 -->
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago">
-<meta name="license" content="CC BY-NC-SA 4.0">
-<link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-<title>Reading Coach &middot; English Pronunciation Trainer</title>
-<style>
-  :root{
-    --ink:#1a1410;
-    --paper:#f4ede0;
-    --card:#fbf6ec;
-    --accent:#9c3618;
-    --accent-soft:#e8d5c4;
-    --highlight:#f2c14e;
-    --muted:#8a7d6b;
-    --line:#d8c9b2;
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html,body{height:100%;}
-  body{
-    background:
-      radial-gradient(ellipse at top, #f7f0e2 0%, var(--paper) 60%),
-      var(--paper);
-    color:var(--ink);
-    font-family:Georgia,'Times New Roman',serif;
-    line-height:1.6;
-    padding:32px 20px 60px;
-    display:flex;
-    justify-content:center;
-  }
-  .wrap{width:100%;max-width:860px;}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago" />
+    <meta name="license" content="CC BY-NC-SA 4.0" />
+    <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
+    <title>Reading Coach &middot; English Pronunciation Trainer</title>
+    <style>
+      :root {
+        --ink: #1a1410;
+        --paper: #f4ede0;
+        --card: #fbf6ec;
+        --accent: #9c3618;
+        --accent-soft: #e8d5c4;
+        --highlight: #f2c14e;
+        --muted: #8a7d6b;
+        --line: #d8c9b2;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        background: radial-gradient(ellipse at top, #f7f0e2 0%, var(--paper) 60%), var(--paper);
+        color: var(--ink);
+        font-family: Georgia, 'Times New Roman', serif;
+        line-height: 1.6;
+        padding: 32px 20px 60px;
+        display: flex;
+        justify-content: center;
+      }
+      .wrap {
+        width: 100%;
+        max-width: 860px;
+      }
 
-  header{
-    border-bottom:2px solid var(--ink);
-    padding-bottom:14px;
-    margin-bottom:6px;
-  }
-  .kicker{
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    text-transform:uppercase;
-    letter-spacing:.32em;
-    font-size:11px;
-    color:var(--accent);
-    font-weight:700;
-  }
-  h1{
-    font-size:42px;
-    font-weight:400;
-    letter-spacing:-.5px;
-    margin-top:6px;
-    line-height:1.1;
-  }
-  h1 em{font-style:italic;color:var(--accent);}
-  .tagline{
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:13px;
-    color:var(--muted);
-    margin-top:10px;
-  }
+      header {
+        border-bottom: 2px solid var(--ink);
+        padding-bottom: 14px;
+        margin-bottom: 6px;
+      }
+      .kicker {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 0.32em;
+        font-size: 11px;
+        color: var(--accent);
+        font-weight: 700;
+      }
+      h1 {
+        font-size: 42px;
+        font-weight: 400;
+        letter-spacing: -0.5px;
+        margin-top: 6px;
+        line-height: 1.1;
+      }
+      h1 em {
+        font-style: italic;
+        color: var(--accent);
+      }
+      .tagline {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 10px;
+      }
 
-  .panel{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:4px;
-    padding:22px;
-    margin-top:24px;
-    box-shadow:0 8px 30px -18px rgba(40,25,10,.5);
-  }
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        padding: 22px;
+        margin-top: 24px;
+        box-shadow: 0 8px 30px -18px rgba(40, 25, 10, 0.5);
+      }
 
-  label.fld{
-    display:block;
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.18em;
-    color:var(--muted);
-    margin-bottom:8px;
-    font-weight:700;
-  }
-  textarea{
-    width:100%;
-    min-height:200px;
-    resize:vertical;
-    background:#fffdf8;
-    border:1px solid var(--line);
-    border-radius:3px;
-    padding:16px;
-    font-family:Georgia,serif;
-    font-size:17px;
-    line-height:1.7;
-    color:var(--ink);
-  }
-  textarea:focus{outline:2px solid var(--accent-soft);border-color:var(--accent);}
+      label.fld {
+        display: block;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--muted);
+        margin-bottom: 8px;
+        font-weight: 700;
+      }
+      /* Passage picker */
+      .picker {
+        margin-bottom: 20px;
+        padding-bottom: 18px;
+        border-bottom: 1px dashed var(--line);
+      }
+      .picker-note {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 12.5px;
+        line-height: 1.5;
+        color: var(--muted);
+        margin-top: 9px;
+        min-height: 18px;
+      }
+      .picker-note strong {
+        color: var(--accent);
+        font-weight: 700;
+      }
+      textarea {
+        width: 100%;
+        min-height: 200px;
+        resize: vertical;
+        background: #fffdf8;
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: 16px;
+        font-family: Georgia, serif;
+        font-size: 17px;
+        line-height: 1.7;
+        color: var(--ink);
+      }
+      textarea:focus {
+        outline: 2px solid var(--accent-soft);
+        border-color: var(--accent);
+      }
 
-  /* The live-reading stage */
-  .stage{
-    display:none;
-    background:#fffdf8;
-    border:1px solid var(--line);
-    border-radius:3px;
-    padding:22px;
-    font-size:21px;
-    line-height:1.95;
-    max-height:340px;
-    overflow-y:auto;
-  }
-  .stage.on{display:block;}
-  .word{transition:background .12s,color .12s;border-radius:3px;padding:1px 2px;}
-  .word.active{
-    background:var(--highlight);
-    color:var(--ink);
-    box-shadow:0 0 0 3px var(--highlight);
-  }
-  .word.done{color:var(--muted);}
+      /* The live-reading stage */
+      .stage {
+        display: none;
+        background: #fffdf8;
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: 22px;
+        font-size: 21px;
+        line-height: 1.95;
+        max-height: 340px;
+        overflow-y: auto;
+      }
+      .stage.on {
+        display: block;
+      }
+      .word {
+        transition:
+          background 0.12s,
+          color 0.12s;
+        border-radius: 3px;
+        padding: 1px 2px;
+      }
+      .word.active {
+        background: var(--highlight);
+        color: var(--ink);
+        box-shadow: 0 0 0 3px var(--highlight);
+      }
+      .word.done {
+        color: var(--muted);
+      }
 
-  .controls{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:18px;
-    align-items:center;
-  }
-  button{
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:13px;
-    font-weight:700;
-    letter-spacing:.04em;
-    padding:12px 20px;
-    border-radius:3px;
-    border:1px solid var(--ink);
-    cursor:pointer;
-    transition:transform .08s,background .15s,color .15s;
-  }
-  button:active{transform:translateY(1px);}
-  button:disabled{opacity:.4;cursor:not-allowed;}
-  .btn-primary{background:var(--accent);color:#fff;border-color:var(--accent);}
-  .btn-primary:hover:not(:disabled){background:#7d2a12;}
-  .btn-ghost{background:transparent;color:var(--ink);}
-  .btn-ghost:hover:not(:disabled){background:var(--accent-soft);}
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+        align-items: center;
+      }
+      button {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        padding: 12px 20px;
+        border-radius: 3px;
+        border: 1px solid var(--ink);
+        cursor: pointer;
+        transition:
+          transform 0.08s,
+          background 0.15s,
+          color 0.15s;
+      }
+      button:active {
+        transform: translateY(1px);
+      }
+      button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+      .btn-primary:hover:not(:disabled) {
+        background: #7d2a12;
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--ink);
+      }
+      .btn-ghost:hover:not(:disabled) {
+        background: var(--accent-soft);
+      }
 
-  .sliders{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:18px 28px;
-    margin-top:22px;
-  }
-  @media(max-width:560px){.sliders{grid-template-columns:1fr;}}
-  .slider-row .head{
-    display:flex;justify-content:space-between;
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:11px;text-transform:uppercase;letter-spacing:.16em;
-    color:var(--muted);font-weight:700;margin-bottom:7px;
-  }
-  .slider-row .val{color:var(--accent);}
-  input[type=range]{width:100%;accent-color:var(--accent);height:22px;}
-  select{
-    width:100%;
-    font-family:Georgia,serif;
-    font-size:15px;
-    padding:9px 10px;
-    border:1px solid var(--line);
-    border-radius:3px;
-    background:#fffdf8;
-    color:var(--ink);
-  }
+      .sliders {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px 28px;
+        margin-top: 22px;
+      }
+      @media (max-width: 560px) {
+        .sliders {
+          grid-template-columns: 1fr;
+        }
+      }
+      .slider-row .head {
+        display: flex;
+        justify-content: space-between;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        color: var(--muted);
+        font-weight: 700;
+        margin-bottom: 7px;
+      }
+      .slider-row .val {
+        color: var(--accent);
+      }
+      input[type='range'] {
+        width: 100%;
+        accent-color: var(--accent);
+        height: 22px;
+      }
+      select {
+        width: 100%;
+        font-family: Georgia, serif;
+        font-size: 15px;
+        padding: 9px 10px;
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        background: #fffdf8;
+        color: var(--ink);
+      }
 
-  /* preset speed pills */
-  .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
-  .pill{
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:11px;font-weight:700;letter-spacing:.04em;
-    padding:6px 12px;border-radius:20px;
-    border:1px solid var(--line);background:transparent;color:var(--muted);
-  }
-  .pill.sel{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+      /* preset speed pills */
+      .pills {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+      }
+      .pill {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        padding: 6px 12px;
+        border-radius: 20px;
+        border: 1px solid var(--line);
+        background: transparent;
+        color: var(--muted);
+      }
+      .pill.sel {
+        background: var(--ink);
+        color: var(--paper);
+        border-color: var(--ink);
+      }
 
-  .meta{
-    display:flex;flex-wrap:wrap;gap:24px;
-    margin-top:22px;padding-top:18px;
-    border-top:1px solid var(--line);
-    font-family:'Helvetica Neue',Arial,sans-serif;
-  }
-  .metric .label{
-    font-size:10px;text-transform:uppercase;letter-spacing:.18em;
-    color:var(--muted);font-weight:700;
-  }
-  .metric .num{
-    font-family:Georgia,serif;font-size:30px;color:var(--ink);
-    margin-top:2px;font-variant-numeric:tabular-nums;
-  }
-  .metric .num.warn{color:var(--accent);}
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        margin-top: 22px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+      }
+      .metric .label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.18em;
+        color: var(--muted);
+        font-weight: 700;
+      }
+      .metric .num {
+        font-family: Georgia, serif;
+        font-size: 30px;
+        color: var(--ink);
+        margin-top: 2px;
+        font-variant-numeric: tabular-nums;
+      }
+      .metric .num.warn {
+        color: var(--accent);
+      }
 
-  .note{
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:12px;color:var(--muted);
-    margin-top:24px;line-height:1.6;
-  }
-  .note strong{color:var(--ink);}
-  .warnbox{
-    display:none;
-    background:#fbe8e2;border:1px solid #d99;
-    color:#7d2a12;border-radius:3px;
-    padding:12px 14px;margin-top:18px;
-    font-family:'Helvetica Neue',Arial,sans-serif;font-size:13px;
-  }
-  .warnbox.on{display:block;}
+      .note {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 24px;
+        line-height: 1.6;
+      }
+      .note strong {
+        color: var(--ink);
+      }
+      .warnbox {
+        display: none;
+        background: #fbe8e2;
+        border: 1px solid #d99;
+        color: #7d2a12;
+        border-radius: 3px;
+        padding: 12px 14px;
+        margin-top: 18px;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 13px;
+      }
+      .warnbox.on {
+        display: block;
+      }
 
-  /* ===== Pronunciation Check (speech-to-text) ===== */
-  .subhead{
-    font-size:26px;font-weight:400;letter-spacing:-.3px;
-    margin-top:4px;line-height:1.15;
-  }
-  .subhead em{font-style:italic;color:var(--accent);}
+      /* ===== Pronunciation Check (speech-to-text) ===== */
+      .subhead {
+        font-size: 26px;
+        font-weight: 400;
+        letter-spacing: -0.3px;
+        margin-top: 4px;
+        line-height: 1.15;
+      }
+      .subhead em {
+        font-style: italic;
+        color: var(--accent);
+      }
 
-  .rec-status{
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:12px;font-weight:700;letter-spacing:.04em;
-    color:var(--muted);display:inline-flex;align-items:center;gap:7px;
-  }
-  .rec-status .dot{
-    width:10px;height:10px;border-radius:50%;
-    background:var(--accent);display:inline-block;
-  }
-  .rec-status.live .dot{animation:pulse 1s infinite;}
-  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(.65);}}
-  button.btn-rec-on{background:#7d2a12;color:#fff;border-color:#7d2a12;}
+      .rec-status {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: var(--muted);
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .rec-status .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--accent);
+        display: inline-block;
+      }
+      .rec-status.live .dot {
+        animation: pulse 1s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.3;
+          transform: scale(0.65);
+        }
+      }
+      button.btn-rec-on {
+        background: #7d2a12;
+        color: #fff;
+        border-color: #7d2a12;
+      }
 
-  .heard{
-    background:#fffdf8;border:1px solid var(--line);border-radius:3px;
-    padding:16px;min-height:74px;
-    font-family:Georgia,serif;font-size:18px;line-height:1.7;color:var(--ink);
-  }
-  .heard .interim{color:var(--muted);}
-  .heard-placeholder{color:var(--muted);font-style:italic;}
+      .heard {
+        background: #fffdf8;
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: 16px;
+        min-height: 74px;
+        font-family: Georgia, serif;
+        font-size: 18px;
+        line-height: 1.7;
+        color: var(--ink);
+      }
+      .heard .interim {
+        color: var(--muted);
+      }
+      .heard-placeholder {
+        color: var(--muted);
+        font-style: italic;
+      }
 
-  .report-head{display:flex;gap:28px;margin-top:18px;}
-  .diff{
-    background:#fffdf8;border:1px solid var(--line);border-radius:3px;
-    padding:16px;font-family:Georgia,serif;font-size:18px;line-height:1.95;
-  }
-  .diff .w{padding:1px 3px;border-radius:3px;}
-  .diff .w.ok{color:#1f6f3a;}
-  .diff .w.bad{
-    background:#fbe8e2;color:#7d2a12;
-    text-decoration:underline wavy #c0492b;text-underline-offset:3px;
-  }
-  .leg{font-weight:700;}
-  .leg.ok{color:#1f6f3a;}
-  .leg.bad{color:#c0492b;}
+      .report-head {
+        display: flex;
+        gap: 28px;
+        margin-top: 18px;
+      }
+      .diff {
+        background: #fffdf8;
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: 16px;
+        font-family: Georgia, serif;
+        font-size: 18px;
+        line-height: 1.95;
+      }
+      .diff .w {
+        padding: 1px 3px;
+        border-radius: 3px;
+      }
+      .diff .w.ok {
+        color: #1f6f3a;
+      }
+      .diff .w.bad {
+        background: #fbe8e2;
+        color: #7d2a12;
+        text-decoration: underline wavy #c0492b;
+        text-underline-offset: 3px;
+      }
+      .leg {
+        font-weight: 700;
+      }
+      .leg.ok {
+        color: #1f6f3a;
+      }
+      .leg.bad {
+        color: #c0492b;
+      }
 
-  /* ===== Practice Mode (word repeat + phrase popover) ===== */
-  .stage.practice .word{cursor:pointer;}
-  .stage.practice .word:hover{background:var(--accent-soft);}
-  .practice-hint{
-    display:none;
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:12.5px;color:var(--muted);
-    margin-top:12px;line-height:1.55;
-  }
-  .practice-hint strong{color:var(--accent);}
+      /* ===== Practice Mode (word repeat + phrase popover) ===== */
+      .stage.practice .word {
+        cursor: pointer;
+      }
+      .stage.practice .word:hover {
+        background: var(--accent-soft);
+      }
+      .practice-hint {
+        display: none;
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 12.5px;
+        color: var(--muted);
+        margin-top: 12px;
+        line-height: 1.55;
+      }
+      .practice-hint strong {
+        color: var(--accent);
+      }
 
-  .phrase-pop{
-    display:none;position:fixed;z-index:60;
-    background:var(--card);border:1px solid var(--ink);border-radius:6px;
-    box-shadow:0 14px 36px -12px rgba(40,25,10,.55);
-    padding:12px;width:280px;max-width:calc(100vw - 16px);
-    font-family:'Helvetica Neue',Arial,sans-serif;
-  }
-  .phrase-pop .pp-text{
-    font-family:Georgia,serif;font-size:15px;font-style:italic;
-    color:var(--ink);margin-bottom:10px;line-height:1.4;
-  }
-  .phrase-pop .pp-main{
-    width:100%;background:var(--accent);color:#fff;border:1px solid var(--accent);
-    font-size:12px;font-weight:700;letter-spacing:.04em;
-    padding:9px 12px;border-radius:4px;cursor:pointer;
-  }
-  .phrase-pop .pp-main:hover{background:#7d2a12;}
-  .phrase-pop .pp-pills{display:flex;gap:7px;margin-top:8px;}
-  .phrase-pop .pp-pills button{
-    flex:1;background:transparent;border:1px solid var(--line);color:var(--ink);
-    font-size:11px;font-weight:700;letter-spacing:.04em;
-    padding:7px 6px;border-radius:4px;cursor:pointer;
-  }
-  .phrase-pop .pp-pills button:hover{background:var(--accent-soft);}
+      .phrase-pop {
+        display: none;
+        position: fixed;
+        z-index: 60;
+        background: var(--card);
+        border: 1px solid var(--ink);
+        border-radius: 6px;
+        box-shadow: 0 14px 36px -12px rgba(40, 25, 10, 0.55);
+        padding: 12px;
+        width: 280px;
+        max-width: calc(100vw - 16px);
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+      }
+      .phrase-pop .pp-text {
+        font-family: Georgia, serif;
+        font-size: 15px;
+        font-style: italic;
+        color: var(--ink);
+        margin-bottom: 10px;
+        line-height: 1.4;
+      }
+      .phrase-pop .pp-main {
+        width: 100%;
+        background: var(--accent);
+        color: #fff;
+        border: 1px solid var(--accent);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        padding: 9px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .phrase-pop .pp-main:hover {
+        background: #7d2a12;
+      }
+      .phrase-pop .pp-pills {
+        display: flex;
+        gap: 7px;
+        margin-top: 8px;
+      }
+      .phrase-pop .pp-pills button {
+        flex: 1;
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--ink);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        padding: 7px 6px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .phrase-pop .pp-pills button:hover {
+        background: var(--accent-soft);
+      }
 
-  /* ===== License footer ===== */
-  .site-footer{
-    margin-top:30px;padding-top:18px;
-    border-top:1px solid var(--line);
-    font-family:'Helvetica Neue',Arial,sans-serif;
-    font-size:12px;line-height:1.7;color:#555;
-  }
-  .site-footer a{color:var(--accent);text-decoration:none;}
-  .site-footer a:hover{text-decoration:underline;}
-  .site-footer .author{color:var(--ink);font-weight:700;}
-</style>
-</head>
-<body>
-<div class="wrap">
+      /* ===== License footer ===== */
+      .site-footer {
+        margin-top: 30px;
+        padding-top: 18px;
+        border-top: 1px solid var(--line);
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        font-size: 12px;
+        line-height: 1.7;
+        color: #555;
+      }
+      .site-footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .site-footer a:hover {
+        text-decoration: underline;
+      }
+      .site-footer .author {
+        color: var(--ink);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="kicker">Pronunciation Studio</div>
+        <h1>
+          The Reading
+          <em>Coach</em>
+        </h1>
+      </header>
+      <p class="tagline">Paste any English text &mdash; it reads aloud, word by word, at the pace you set.</p>
 
-  <header>
-    <div class="kicker">Pronunciation Studio</div>
-    <h1>The Reading <em>Coach</em></h1>
-  </header>
-  <p class="tagline">Paste any English text &mdash; it reads aloud, word by word, at the pace you set.</p>
-
-  <div class="panel">
-    <label class="fld" for="src">Your text</label>
-    <textarea id="src" placeholder="Paste or type the English text you want to rehearse&hellip;"></textarea>
-
-    <div id="stage" class="stage" aria-live="polite"></div>
-
-    <div class="practice-hint" id="practiceHint">
-      <strong>Practice mode.</strong> Click any word to hear it three times, slowly.
-      Or select a phrase with the mouse to hear it linked at increasing speeds.
-    </div>
-
-    <div class="warnbox" id="warnbox">
-      Your browser reported no English voices. Try Chrome or Edge, where English voices are built in.
-    </div>
-
-    <div class="controls">
-      <button class="btn-primary" id="play">&#9654;&nbsp; Read aloud</button>
-      <button class="btn-ghost" id="practice">&#9995;&nbsp; Practice words</button>
-      <button class="btn-ghost" id="pause" disabled>&#10073;&#10073;&nbsp; Pause</button>
-      <button class="btn-ghost" id="stop" disabled>&#9632;&nbsp; Stop</button>
-      <button class="btn-ghost" id="edit" style="display:none;">&#9998;&nbsp; Edit text</button>
-    </div>
-
-    <div class="sliders">
-      <div class="slider-row">
-        <div class="head"><span>Voice</span></div>
-        <select id="voice"></select>
-      </div>
-      <div class="slider-row">
-        <div class="head"><span>Speed</span><span class="val" id="rateVal">1.00&times;</span></div>
-        <input type="range" id="rate" min="0.5" max="1.5" step="0.05" value="1">
-        <div class="pills">
-          <button class="pill" data-rate="0.7">Slow practice</button>
-          <button class="pill sel" data-rate="1">Natural</button>
-          <button class="pill" data-rate="1.15">Brisk</button>
+      <div class="panel">
+        <div class="picker">
+          <label class="fld" for="passage">Choose a passage</label>
+          <select id="passage" aria-describedby="passageNote"></select>
+          <p class="picker-note" id="passageNote" role="status" aria-live="polite"></p>
         </div>
-      </div>
-      <div class="slider-row">
-        <div class="head"><span>Pitch</span><span class="val" id="pitchVal">1.00</span></div>
-        <input type="range" id="pitch" min="0.6" max="1.4" step="0.05" value="1">
-      </div>
-      <div class="slider-row">
-        <div class="head"><span>Volume</span><span class="val" id="volVal">100%</span></div>
-        <input type="range" id="vol" min="0" max="1" step="0.05" value="1">
-      </div>
-    </div>
 
-    <div class="meta">
-      <div class="metric">
-        <div class="label">Words</div>
-        <div class="num" id="mWords">0</div>
-      </div>
-      <div class="metric">
-        <div class="label">Est. duration</div>
-        <div class="num" id="mEst">0:00</div>
-      </div>
-      <div class="metric">
-        <div class="label">Elapsed</div>
-        <div class="num" id="mElapsed">0:00</div>
-      </div>
-    </div>
+        <label class="fld" for="src">Your text</label>
+        <textarea id="src" placeholder="Paste or type the English text you want to rehearse&hellip;"></textarea>
 
-    <p class="note">
-      <strong>Tip:</strong> rehearse first on <strong>Slow practice</strong>
-      to nail every sound, then switch to <strong>Natural</strong> and watch the elapsed timer.
-      The highlighted word shows you
-      exactly where the voice is, so you can read along out loud and match it.
-    </p>
-  </div>
+        <div id="stage" class="stage" aria-live="polite"></div>
 
-  <div class="panel">
-    <div class="kicker" style="margin-bottom:4px;">Pronunciation Check</div>
-    <h2 class="subhead">Speak it &mdash; <em>hear what the machine understood</em></h2>
-    <p class="tagline" style="margin-top:8px;">
-      Read the text above out loud. The recorder writes down what it actually heard &mdash;
-      so any word that came out wrong is easy to spot and rehearse.
-    </p>
-
-    <div class="warnbox" id="recWarn"></div>
-
-    <div class="controls">
-      <button class="btn-primary" id="rec">&#127908;&nbsp; Speak now</button>
-      <button class="btn-ghost" id="hearBack" disabled>&#128266;&nbsp; Hear it back</button>
-      <button class="btn-ghost" id="recClear" disabled>&#10006;&nbsp; Clear</button>
-      <span class="rec-status" id="recStatus"></span>
-    </div>
-
-    <label class="fld" style="margin-top:20px;">What the machine heard</label>
-    <div class="heard" id="heard" aria-live="polite"><span class="heard-placeholder">Press &ldquo;Speak now&rdquo; and read aloud&hellip;</span></div>
-
-    <div class="report" id="report" style="display:none;">
-      <div class="report-head">
-        <div class="metric">
-          <div class="label">Words matched</div>
-          <div class="num" id="rMatched">0</div>
+        <div class="practice-hint" id="practiceHint">
+          <strong>Practice mode.</strong>
+          Click any word to hear it three times, slowly. Or select a phrase with the mouse to hear it linked at increasing speeds.
         </div>
-        <div class="metric">
-          <div class="label">Accuracy</div>
-          <div class="num" id="rAcc">0%</div>
+
+        <div class="warnbox" id="warnbox">Your browser reported no English voices. Try Chrome or Edge, where English voices are built in.</div>
+
+        <div class="controls">
+          <button class="btn-primary" id="play">&#9654;&nbsp; Read aloud</button>
+          <button class="btn-ghost" id="practice">&#9995;&nbsp; Practice words</button>
+          <button class="btn-ghost" id="pause" disabled>&#10073;&#10073;&nbsp; Pause</button>
+          <button class="btn-ghost" id="stop" disabled>&#9632;&nbsp; Stop</button>
+          <button class="btn-ghost" id="edit" style="display: none">&#9998;&nbsp; Edit text</button>
         </div>
+
+        <div class="sliders">
+          <div class="slider-row">
+            <div class="head"><span>Voice</span></div>
+            <select id="voice"></select>
+          </div>
+          <div class="slider-row">
+            <div class="head">
+              <span>Speed</span>
+              <span class="val" id="rateVal">1.00&times;</span>
+            </div>
+            <input type="range" id="rate" min="0.5" max="1.5" step="0.05" value="1" />
+            <div class="pills">
+              <button class="pill" data-rate="0.7">Slow practice</button>
+              <button class="pill sel" data-rate="1">Natural</button>
+              <button class="pill" data-rate="1.15">Brisk</button>
+            </div>
+          </div>
+          <div class="slider-row">
+            <div class="head">
+              <span>Pitch</span>
+              <span class="val" id="pitchVal">1.00</span>
+            </div>
+            <input type="range" id="pitch" min="0.6" max="1.4" step="0.05" value="1" />
+          </div>
+          <div class="slider-row">
+            <div class="head">
+              <span>Volume</span>
+              <span class="val" id="volVal">100%</span>
+            </div>
+            <input type="range" id="vol" min="0" max="1" step="0.05" value="1" />
+          </div>
+        </div>
+
+        <div class="meta">
+          <div class="metric">
+            <div class="label">Words</div>
+            <div class="num" id="mWords">0</div>
+          </div>
+          <div class="metric">
+            <div class="label">Est. duration</div>
+            <div class="num" id="mEst">0:00</div>
+          </div>
+          <div class="metric">
+            <div class="label">Elapsed</div>
+            <div class="num" id="mElapsed">0:00</div>
+          </div>
+        </div>
+
+        <p class="note">
+          <strong>Tip:</strong>
+          rehearse first on
+          <strong>Slow practice</strong>
+          to nail every sound, then switch to
+          <strong>Natural</strong>
+          and watch the elapsed timer. The highlighted word shows you exactly where the voice is, so you can read along out loud and match it.
+        </p>
       </div>
-      <label class="fld" style="margin-top:18px;">Word-by-word check</label>
-      <div class="diff" id="diff"></div>
-      <p class="note" style="margin-top:14px;">
-        <span class="leg ok">&#9632;</span> heard correctly &nbsp;&nbsp;
-        <span class="leg bad">&#9632;</span> not recognized &mdash; likely a diction slip to rehearse.
-      </p>
+
+      <div class="panel">
+        <div class="kicker" style="margin-bottom: 4px">Pronunciation Check</div>
+        <h2 class="subhead">
+          Speak it &mdash;
+          <em>hear what the machine understood</em>
+        </h2>
+        <p class="tagline" style="margin-top: 8px">
+          Read the text above out loud. The recorder writes down what it actually heard &mdash; so any word that came out wrong is easy to spot and rehearse.
+        </p>
+
+        <div class="warnbox" id="recWarn"></div>
+
+        <div class="controls">
+          <button class="btn-primary" id="rec">&#127908;&nbsp; Speak now</button>
+          <button class="btn-ghost" id="hearBack" disabled>&#128266;&nbsp; Hear it back</button>
+          <button class="btn-ghost" id="recClear" disabled>&#10006;&nbsp; Clear</button>
+          <span class="rec-status" id="recStatus"></span>
+        </div>
+
+        <label class="fld" style="margin-top: 20px">What the machine heard</label>
+        <div class="heard" id="heard" aria-live="polite"><span class="heard-placeholder">Press &ldquo;Speak now&rdquo; and read aloud&hellip;</span></div>
+
+        <div class="report" id="report" style="display: none">
+          <div class="report-head">
+            <div class="metric">
+              <div class="label">Words matched</div>
+              <div class="num" id="rMatched">0</div>
+            </div>
+            <div class="metric">
+              <div class="label">Accuracy</div>
+              <div class="num" id="rAcc">0%</div>
+            </div>
+          </div>
+          <label class="fld" style="margin-top: 18px">Word-by-word check</label>
+          <div class="diff" id="diff"></div>
+          <p class="note" style="margin-top: 14px">
+            <span class="leg ok">&#9632;</span>
+            heard correctly &nbsp;&nbsp;
+            <span class="leg bad">&#9632;</span>
+            not recognized &mdash; likely a diction slip to rehearse.
+          </p>
+        </div>
+
+        <p class="note">
+          <strong>Note:</strong>
+          the microphone needs Chrome, Edge, or Safari, and a page served over
+          <strong>https</strong>
+          (your GitHub Pages site works perfectly). The first time, the browser will ask permission to use the mic &mdash; choose
+          <strong>Allow</strong>
+          .
+        </p>
+      </div>
+
+      <footer class="site-footer">
+        <span class="author">José M. Fernández</span>
+        &mdash; ABE/ASE Math Master Teacher, Harry S. Truman College, City Colleges of Chicago.
+        <br />
+        The Reading Coach &copy; 2026. Licensed under
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="license noopener">CC BY-NC-SA 4.0</a>
+        .
+      </footer>
     </div>
 
-    <p class="note">
-      <strong>Note:</strong> the microphone needs Chrome, Edge, or Safari, and a page served over
-      <strong>https</strong> (your GitHub Pages site works perfectly). The first time, the browser
-      will ask permission to use the mic &mdash; choose <strong>Allow</strong>.
-    </p>
-  </div>
-
-  <footer class="site-footer">
-    <span class="author">José M. Fernández</span> &mdash; ABE/ASE Math Master Teacher,
-    Harry S. Truman College, City Colleges of Chicago.<br>
-    The Reading Coach &copy; 2026. Licensed under
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="license noopener">CC BY-NC-SA 4.0</a>.
-  </footer>
-
-</div>
-
-<div class="phrase-pop" id="phrasePop" role="dialog" aria-label="Phrase practice">
-  <div class="pp-text" id="ppText"></div>
-  <button class="pp-main" id="ppLinked">&#9654;&nbsp; Linked &mdash; slow &rarr; natural</button>
-  <div class="pp-row pp-pills">
-    <button data-r="0.6">Slow</button>
-    <button data-r="0.85">Medium</button>
-    <button data-r="1">Natural</button>
-  </div>
-</div>
-
-<script>
-(function(){
-  "use strict";
-  const synth = window.speechSynthesis;
-
-  const els = {
-    src:document.getElementById('src'),
-    stage:document.getElementById('stage'),
-    play:document.getElementById('play'),
-    pause:document.getElementById('pause'),
-    stop:document.getElementById('stop'),
-    edit:document.getElementById('edit'),
-    voice:document.getElementById('voice'),
-    rate:document.getElementById('rate'),
-    pitch:document.getElementById('pitch'),
-    vol:document.getElementById('vol'),
-    rateVal:document.getElementById('rateVal'),
-    pitchVal:document.getElementById('pitchVal'),
-    volVal:document.getElementById('volVal'),
-    mWords:document.getElementById('mWords'),
-    mEst:document.getElementById('mEst'),
-    mElapsed:document.getElementById('mElapsed'),
-    warnbox:document.getElementById('warnbox'),
-    pills:document.querySelectorAll('.pill'),
-    practice:document.getElementById('practice'),
-    practiceHint:document.getElementById('practiceHint'),
-    pop:document.getElementById('phrasePop'),
-    popText:document.getElementById('ppText'),
-    popLinked:document.getElementById('ppLinked')
-  };
-
-  let voices = [];
-  let wordSpans = [];
-  let timerId = null;
-  let startTime = 0;
-
-  if(!synth){
-    els.warnbox.textContent = "This browser does not support speech synthesis. Try Chrome or Edge.";
-    els.warnbox.classList.add('on');
-    els.play.disabled = true;
-  }
-
-  // ---- Voices ----
-  function loadVoices(){
-    const all = synth.getVoices();
-    voices = all.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
-    els.voice.innerHTML = '';
-    if(voices.length === 0){
-      els.warnbox.classList.add('on');
-      const o = document.createElement('option');
-      o.textContent = 'No English voice found';
-      els.voice.appendChild(o);
-      return;
-    }
-    els.warnbox.classList.remove('on');
-    voices.forEach((v,i)=>{
-      const o = document.createElement('option');
-      o.value = i;
-      o.textContent = v.name + '  (' + v.lang + ')' + (v.default ? '  \u2605' : '');
-      els.voice.appendChild(o);
-    });
-    // Prefer a US English voice by default
-    const us = voices.findIndex(v => v.lang.toLowerCase() === 'en-us');
-    els.voice.value = us >= 0 ? us : 0;
-  }
-  loadVoices();
-  if(synth) synth.onvoiceschanged = loadVoices;
-
-  // ---- Word counting + duration estimate ----
-  function countWords(t){
-    const m = t.trim().match(/\S+/g);
-    return m ? m.length : 0;
-  }
-  function fmt(sec){
-    sec = Math.round(sec);
-    const m = Math.floor(sec/60);
-    const s = sec%60;
-    return m + ':' + String(s).padStart(2,'0');
-  }
-  function refreshMeta(){
-    const w = countWords(els.src.value);
-    els.mWords.textContent = w;
-    // ~150 wpm at rate 1.0, scaled by chosen rate
-    const wpm = 150 * parseFloat(els.rate.value);
-    const est = w > 0 ? (w / wpm) * 60 : 0;
-    els.mEst.textContent = fmt(est);
-    els.mEst.classList.toggle('warn', est > 125); // over ~2 min
-  }
-  els.src.addEventListener('input', refreshMeta);
-
-  // ---- Sliders ----
-  function syncLabels(){
-    els.rateVal.innerHTML = parseFloat(els.rate.value).toFixed(2) + '&times;';
-    els.pitchVal.textContent = parseFloat(els.pitch.value).toFixed(2);
-    els.volVal.textContent = Math.round(parseFloat(els.vol.value)*100) + '%';
-  }
-  els.rate.addEventListener('input', ()=>{ syncLabels(); refreshMeta(); markPill(); });
-  els.pitch.addEventListener('input', syncLabels);
-  els.vol.addEventListener('input', syncLabels);
-
-  function markPill(){
-    els.pills.forEach(p=>{
-      p.classList.toggle('sel', parseFloat(p.dataset.rate) === parseFloat(els.rate.value));
-    });
-  }
-  els.pills.forEach(p=>{
-    p.addEventListener('click', ()=>{
-      els.rate.value = p.dataset.rate;
-      syncLabels(); refreshMeta(); markPill();
-    });
-  });
-
-  // ---- Build the highlightable stage ----
-  function buildStage(text){
-    els.stage.innerHTML = '';
-    wordSpans = [];
-    // Split on whitespace but keep the words; track char offsets
-    const tokens = text.split(/(\s+)/);
-    let offset = 0;
-    tokens.forEach(tok=>{
-      if(/^\s+$/.test(tok) || tok === ''){
-        els.stage.appendChild(document.createTextNode(tok));
-        offset += tok.length;
-      }else{
-        const span = document.createElement('span');
-        span.className = 'word';
-        span.textContent = tok;
-        span.dataset.start = offset;
-        span.dataset.end = offset + tok.length;
-        els.stage.appendChild(span);
-        wordSpans.push(span);
-        offset += tok.length;
-      }
-    });
-  }
-
-  function highlightAt(charIndex){
-    let activeIdx = -1;
-    wordSpans.forEach((s,i)=>{
-      const st = +s.dataset.start, en = +s.dataset.end;
-      if(charIndex >= st && charIndex < en){ activeIdx = i; }
-    });
-    wordSpans.forEach((s,i)=>{
-      s.classList.toggle('active', i === activeIdx);
-      s.classList.toggle('done', activeIdx >= 0 && i < activeIdx);
-    });
-    if(activeIdx >= 0){
-      wordSpans[activeIdx].scrollIntoView({block:'center', behavior:'smooth'});
-    }
-  }
-
-  function clearHighlight(){
-    wordSpans.forEach(s=>s.classList.remove('active','done'));
-  }
-
-  // ---- Elapsed timer ----
-  function startTimer(){
-    startTime = Date.now();
-    timerId = setInterval(()=>{
-      els.mElapsed.textContent = fmt((Date.now()-startTime)/1000);
-    }, 200);
-  }
-  function stopTimer(){
-    if(timerId){ clearInterval(timerId); timerId = null; }
-  }
-
-  // ---- Speech control ----
-  let utter = null;
-
-  function setReadingMode(on){
-    els.stage.classList.toggle('on', on);
-    els.src.style.display = on ? 'none' : '';
-    els.edit.style.display = on ? '' : 'none';
-  }
-
-  function startReading(){
-    const text = els.src.value.trim();
-    if(!text){ els.src.focus(); return; }
-    if(synth.speaking || synth.paused){ synth.cancel(); }
-    clearPractice();
-
-    buildStage(text);
-    setReadingMode(true);
-
-    utter = new SpeechSynthesisUtterance(text);
-    if(voices.length){
-      utter.voice = voices[+els.voice.value] || voices[0];
-    }
-    utter.rate = parseFloat(els.rate.value);
-    utter.pitch = parseFloat(els.pitch.value);
-    utter.volume = parseFloat(els.vol.value);
-    utter.lang = utter.voice ? utter.voice.lang : 'en-US';
-
-    utter.onboundary = function(e){
-      if(e.name === 'word' || e.charIndex != null){
-        highlightAt(e.charIndex);
-      }
-    };
-    utter.onstart = function(){
-      els.play.disabled = true;
-      els.pause.disabled = false;
-      els.stop.disabled = false;
-      els.mElapsed.textContent = '0:00';
-      startTimer();
-    };
-    utter.onend = function(){
-      stopTimer();
-      clearHighlight();
-      els.play.disabled = false;
-      els.pause.disabled = true;
-      els.stop.disabled = true;
-      els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
-    };
-    utter.onerror = utter.onend;
-
-    synth.speak(utter);
-  }
-
-  els.play.addEventListener('click', startReading);
-
-  els.pause.addEventListener('click', ()=>{
-    if(synth.speaking && !synth.paused){
-      synth.pause();
-      stopTimer();
-      els.pause.innerHTML = '&#9654;&nbsp; Resume';
-    }else if(synth.paused){
-      synth.resume();
-      startTime = Date.now() - (parseElapsed())*1000;
-      startTimer();
-      els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
-    }
-  });
-
-  function parseElapsed(){
-    const parts = els.mElapsed.textContent.split(':');
-    return (+parts[0])*60 + (+parts[1]);
-  }
-
-  els.stop.addEventListener('click', ()=>{
-    synth.cancel();
-    stopTimer();
-    clearHighlight();
-    els.play.disabled = false;
-    els.pause.disabled = true;
-    els.stop.disabled = true;
-    els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
-  });
-
-  els.edit.addEventListener('click', ()=>{
-    synth.cancel();
-    stopTimer();
-    clearPractice();
-    setReadingMode(false);
-    els.play.disabled = false;
-    els.pause.disabled = true;
-    els.stop.disabled = true;
-  });
-
-  // ===================================================================
-  //  Practice Mode  —  click a word (3x slow) | select a phrase (linked)
-  // ===================================================================
-  let practiceOn = false;
-
-  function makeUtter(text, rate){
-    const u = new SpeechSynthesisUtterance(text);
-    if(voices.length) u.voice = voices[+els.voice.value] || voices[0];
-    u.rate = rate;
-    u.pitch = parseFloat(els.pitch.value);
-    u.volume = parseFloat(els.vol.value);
-    u.lang = u.voice ? u.voice.lang : 'en-US';
-    return u;
-  }
-
-  function hidePop(){ els.pop.style.display = 'none'; }
-
-  function clearPractice(){
-    practiceOn = false;
-    els.stage.classList.remove('practice');
-    els.practiceHint.style.display = 'none';
-    hidePop();
-    clearHighlight();
-  }
-
-  function enterPractice(){
-    const text = els.src.value.trim();
-    if(!text){ els.src.focus(); return; }
-    if(synth.speaking || synth.paused){ synth.cancel(); }
-    stopTimer();
-
-    buildStage(text);
-    els.stage.classList.add('on', 'practice');
-    els.src.style.display = 'none';
-    els.edit.style.display = '';
-    els.practiceHint.style.display = 'block';
-    practiceOn = true;
-
-    els.play.disabled = false;
-    els.pause.disabled = true;
-    els.stop.disabled = true;
-    els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
-  }
-  els.practice.addEventListener('click', enterPractice);
-
-  // ---- single word: repeat 3x slowly ----
-  function repeatWord(span){
-    synth.cancel();
-    const word = span.textContent;
-    clearHighlight();
-    span.classList.add('active');
-    span.scrollIntoView({block:'center', behavior:'smooth'});
-    let count = 0;
-    function once(){
-      if(!practiceOn || count >= 3){ span.classList.remove('active'); return; }
-      count++;
-      const u = makeUtter(word, 0.6);
-      u.onend = ()=> setTimeout(once, 240);
-      u.onerror = ()=> span.classList.remove('active');
-      synth.speak(u);
-    }
-    setTimeout(once, 80);
-  }
-
-  // ---- phrase: play linked at slow -> medium -> natural ----
-  function playLinked(text){
-    synth.cancel();
-    const speeds = [0.6, 0.85, 1.0];
-    let i = 0;
-    function step(){
-      if(i >= speeds.length) return;
-      const u = makeUtter(text, speeds[i]); i++;
-      u.onend = ()=> setTimeout(step, 220);
-      synth.speak(u);
-    }
-    setTimeout(step, 80);
-  }
-
-  function showPop(text, rect){
-    els.popText.textContent = '\u201C' + text + '\u201D';
-    els.pop.dataset.text = text;
-    els.pop.style.display = 'block';
-    const pw = els.pop.offsetWidth, ph = els.pop.offsetHeight;
-    let left = rect.left + rect.width/2 - pw/2;
-    let top = rect.top - ph - 10;
-    left = Math.max(8, Math.min(left, window.innerWidth - pw - 8));
-    if(top < 8) top = rect.bottom + 10;
-    els.pop.style.left = left + 'px';
-    els.pop.style.top = top + 'px';
-  }
-
-  // Stage interactions (only active in practice mode)
-  els.stage.addEventListener('mousedown', ()=>{ if(practiceOn) hidePop(); });
-
-  els.stage.addEventListener('mouseup', ()=>{
-    if(!practiceOn) return;
-    const sel = window.getSelection();
-    const text = sel ? sel.toString().trim().replace(/\s+/g,' ') : '';
-    // Only treat as a phrase if more than one word was selected
-    if(text && text.indexOf(' ') !== -1 && sel.rangeCount){
-      const rect = sel.getRangeAt(0).getBoundingClientRect();
-      if(rect && rect.width) showPop(text, rect);
-    }
-  });
-
-  els.stage.addEventListener('click', (e)=>{
-    if(!practiceOn) return;
-    const sel = window.getSelection();
-    if(sel && sel.toString().trim().indexOf(' ') !== -1) return; // a phrase selection
-    const span = (e.target && e.target.nodeType === 1) ? e.target.closest('.word') : null;
-    if(span){ hidePop(); repeatWord(span); }
-  });
-
-  els.popLinked.addEventListener('click', ()=> playLinked(els.pop.dataset.text || ''));
-  els.pop.querySelectorAll('.pp-pills button').forEach(b=>{
-    b.addEventListener('click', ()=>{
-      synth.cancel();
-      const txt = els.pop.dataset.text || '';
-      if(txt) setTimeout(()=> synth.speak(makeUtter(txt, parseFloat(b.dataset.r))), 80);
-    });
-  });
-
-  // Dismiss the popover when clicking elsewhere or scrolling
-  document.addEventListener('mousedown', (e)=>{
-    if(els.pop.style.display === 'block' &&
-       !els.pop.contains(e.target) && !els.stage.contains(e.target)){
-      hidePop();
-    }
-  });
-  window.addEventListener('scroll', ()=>{ if(els.pop.style.display==='block') hidePop(); }, true);
-
-  // Chrome bug: long utterances stop after ~15s. Keep alive.
-  setInterval(()=>{
-    if(synth.speaking && !synth.paused){
-      synth.pause(); synth.resume();
-    }
-  }, 12000);
-
-  // ---- Seed with the GED speech so it works out of the box ----
-  els.src.value =
-"Good morning, dear graduates, families, colleagues, and friends.\n\n" +
-"I feel deeply honored to stand before you today, representing the faculty. " +
-"But more than honored, I feel moved \u2014 because what we celebrate today is not just a diploma. " +
-"We celebrate courage. We celebrate perseverance. We celebrate dreams that refused to fade.\n\n" +
-"Over these semesters you strengthened your knowledge \u2014 but you learned something even more important " +
-"than any formula or definition: you learned that you could do it.";
-  syncLabels();
-  refreshMeta();
-
-  // ===================================================================
-  //  Pronunciation Check  —  speech-to-text (the "echo") + comparison
-  // ===================================================================
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const rec = {
-    btn:document.getElementById('rec'),
-    hearBack:document.getElementById('hearBack'),
-    clear:document.getElementById('recClear'),
-    status:document.getElementById('recStatus'),
-    heard:document.getElementById('heard'),
-    warn:document.getElementById('recWarn'),
-    report:document.getElementById('report'),
-    matched:document.getElementById('rMatched'),
-    acc:document.getElementById('rAcc'),
-    diff:document.getElementById('diff')
-  };
-
-  let recognizer = null;
-  let listening = false;
-  let finalText = '';
-
-  if(!SR){
-    rec.warn.textContent = 'This browser cannot listen to speech. Use Chrome, Edge, or Safari for the pronunciation check.';
-    rec.warn.classList.add('on');
-    rec.btn.disabled = true;
-  }
-
-  function recLang(){
-    const v = voices[+els.voice.value];
-    return (v && v.lang && v.lang.toLowerCase().startsWith('en')) ? v.lang : 'en-US';
-  }
-
-  function setListening(on){
-    listening = on;
-    rec.btn.innerHTML = on ? '&#9632;&nbsp; Stop' : '&#127908;&nbsp; Speak now';
-    rec.btn.classList.toggle('btn-rec-on', on);
-    rec.status.classList.toggle('live', on);
-    rec.status.innerHTML = on ? '<span class="dot"></span> Listening&hellip;' : '';
-  }
-
-  function escapeHtml(s){
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function renderHeard(interim){
-    rec.heard.innerHTML = escapeHtml(finalText) +
-      (interim ? '<span class="interim">' + escapeHtml(interim) + '</span>' : '');
-  }
-
-  function startListening(){
-    if(!SR) return;
-    if(synth && synth.speaking){ synth.cancel(); }   // don't transcribe our own voice
-    finalText = '';
-    rec.heard.innerHTML = '';
-    rec.report.style.display = 'none';
-
-    recognizer = new SR();
-    recognizer.lang = recLang();
-    recognizer.continuous = true;
-    recognizer.interimResults = true;
-
-    recognizer.onresult = function(e){
-      let interim = '';
-      for(let i = e.resultIndex; i < e.results.length; i++){
-        const tr = e.results[i][0].transcript;
-        if(e.results[i].isFinal) finalText += tr + ' ';
-        else interim += tr;
-      }
-      renderHeard(interim);
-    };
-    recognizer.onerror = function(e){
-      if(e.error === 'not-allowed' || e.error === 'service-not-allowed'){
-        rec.warn.textContent = 'The microphone is blocked. Allow mic access for this page (and serve it over https or localhost), then try again.';
-        rec.warn.classList.add('on');
-      }
-    };
-    recognizer.onend = function(){
-      setListening(false);
-      finalizeHeard();
-    };
-
-    try{
-      recognizer.start();
-      setListening(true);
-      rec.warn.classList.remove('on');
-    }catch(err){ /* start() called while already running — ignore */ }
-  }
-
-  function stopListening(){
-    if(recognizer){ try{ recognizer.stop(); }catch(e){} }
-    setListening(false);
-  }
-
-  function finalizeHeard(){
-    const heard = finalText.trim();
-    if(!heard){
-      rec.heard.innerHTML = '<span class="heard-placeholder">Nothing was recognized. Press \u201cSpeak now\u201d and read a little closer to the mic.</span>';
-      rec.hearBack.disabled = true;
-      rec.clear.disabled = true;
-      return;
-    }
-    rec.heard.textContent = heard;
-    rec.hearBack.disabled = false;
-    rec.clear.disabled = false;
-    buildReport(heard);
-  }
-
-  rec.btn.addEventListener('click', ()=>{
-    if(listening) stopListening(); else startListening();
-  });
-
-  rec.hearBack.addEventListener('click', ()=>{
-    const txt = rec.heard.textContent.trim();
-    if(!txt || !synth) return;
-    synth.cancel();
-    const u = new SpeechSynthesisUtterance(txt);
-    if(voices.length) u.voice = voices[+els.voice.value] || voices[0];
-    u.rate = parseFloat(els.rate.value);
-    u.pitch = parseFloat(els.pitch.value);
-    u.volume = parseFloat(els.vol.value);
-    u.lang = u.voice ? u.voice.lang : 'en-US';
-    synth.speak(u);
-  });
-
-  rec.clear.addEventListener('click', ()=>{
-    finalText = '';
-    rec.heard.innerHTML = '<span class="heard-placeholder">Press \u201cSpeak now\u201d and read aloud\u2026</span>';
-    rec.report.style.display = 'none';
-    rec.hearBack.disabled = true;
-    rec.clear.disabled = true;
-  });
-
-  // ---- Compare what was spoken against the loaded text ----
-  function norm(w){ return w.toLowerCase().replace(/[^a-z0-9']/g,''); }
-
-  // Longest-common-subsequence alignment: which target words were heard, in order.
-  function lcsMatch(a, b){
-    const n = a.length, m = b.length;
-    const dp = Array.from({length:n+1}, ()=> new Int32Array(m+1));
-    for(let i=1;i<=n;i++)
-      for(let j=1;j<=m;j++)
-        dp[i][j] = a[i-1] === b[j-1] ? dp[i-1][j-1]+1 : Math.max(dp[i-1][j], dp[i][j-1]);
-    const matched = new Array(n).fill(false);
-    let i=n, j=m;
-    while(i>0 && j>0){
-      if(a[i-1] === b[j-1]){ matched[i-1]=true; i--; j--; }
-      else if(dp[i-1][j] >= dp[i][j-1]) i--;
-      else j--;
-    }
-    return matched;
-  }
-
-  function buildReport(heard){
-    const target = els.src.value.trim();
-    if(!target){ rec.report.style.display = 'none'; return; }
-
-    const tEntries = (target.match(/\S+/g) || []).map(o => ({orig:o, n:norm(o)}));
-    const tIdx = [], tNorm = [];
-    tEntries.forEach((e,i)=>{ if(e.n){ tIdx.push(i); tNorm.push(e.n); } });
-    const sNorm = (heard.match(/\S+/g) || []).map(norm).filter(Boolean);
-
-    const matched = lcsMatch(tNorm, sNorm);
-    const flags = new Array(tEntries.length).fill(null);
-    let hit = 0;
-    matched.forEach((m,k)=>{ flags[tIdx[k]] = m; if(m) hit++; });
-
-    rec.diff.innerHTML = '';
-    tEntries.forEach((e,i)=>{
-      const span = document.createElement('span');
-      if(flags[i] === null){ span.textContent = e.orig; }            // punctuation only
-      else { span.className = 'w ' + (flags[i] ? 'ok' : 'bad'); span.textContent = e.orig; }
-      rec.diff.appendChild(span);
-      rec.diff.appendChild(document.createTextNode(' '));
-    });
-
-    const total = tNorm.length;
-    const pct = total ? Math.round(hit/total*100) : 0;
-    rec.matched.textContent = hit + ' / ' + total;
-    rec.acc.textContent = pct + '%';
-    rec.acc.classList.toggle('warn', pct < 80);
-    rec.report.style.display = '';
-  }
-})();
-</script>
-</body>
+    <div class="phrase-pop" id="phrasePop" role="dialog" aria-label="Phrase practice">
+      <div class="pp-text" id="ppText"></div>
+      <button class="pp-main" id="ppLinked">&#9654;&nbsp; Linked &mdash; slow &rarr; natural</button>
+      <div class="pp-row pp-pills">
+        <button data-r="0.6">Slow</button>
+        <button data-r="0.85">Medium</button>
+        <button data-r="1">Natural</button>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        'use strict';
+        const synth = window.speechSynthesis;
+
+        const els = {
+          src: document.getElementById('src'),
+          passage: document.getElementById('passage'),
+          passageNote: document.getElementById('passageNote'),
+          stage: document.getElementById('stage'),
+          play: document.getElementById('play'),
+          pause: document.getElementById('pause'),
+          stop: document.getElementById('stop'),
+          edit: document.getElementById('edit'),
+          voice: document.getElementById('voice'),
+          rate: document.getElementById('rate'),
+          pitch: document.getElementById('pitch'),
+          vol: document.getElementById('vol'),
+          rateVal: document.getElementById('rateVal'),
+          pitchVal: document.getElementById('pitchVal'),
+          volVal: document.getElementById('volVal'),
+          mWords: document.getElementById('mWords'),
+          mEst: document.getElementById('mEst'),
+          mElapsed: document.getElementById('mElapsed'),
+          warnbox: document.getElementById('warnbox'),
+          pills: document.querySelectorAll('.pill'),
+          practice: document.getElementById('practice'),
+          practiceHint: document.getElementById('practiceHint'),
+          pop: document.getElementById('phrasePop'),
+          popText: document.getElementById('ppText'),
+          popLinked: document.getElementById('ppLinked')
+        };
+
+        let voices = [];
+        let wordSpans = [];
+        let timerId = null;
+        let startTime = 0;
+
+        if (!synth) {
+          els.warnbox.textContent = 'This browser does not support speech synthesis. Try Chrome or Edge.';
+          els.warnbox.classList.add('on');
+          els.play.disabled = true;
+        }
+
+        // ---- Voices ----
+        function loadVoices() {
+          const all = synth.getVoices();
+          voices = all.filter(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+          els.voice.innerHTML = '';
+          if (voices.length === 0) {
+            els.warnbox.classList.add('on');
+            const o = document.createElement('option');
+            o.textContent = 'No English voice found';
+            els.voice.appendChild(o);
+            return;
+          }
+          els.warnbox.classList.remove('on');
+          voices.forEach((v, i) => {
+            const o = document.createElement('option');
+            o.value = i;
+            o.textContent = v.name + '  (' + v.lang + ')' + (v.default ? '  \u2605' : '');
+            els.voice.appendChild(o);
+          });
+          // Prefer a US English voice by default
+          const us = voices.findIndex(v => v.lang.toLowerCase() === 'en-us');
+          els.voice.value = us >= 0 ? us : 0;
+        }
+        loadVoices();
+        if (synth) synth.onvoiceschanged = loadVoices;
+
+        // ---- Word counting + duration estimate ----
+        function countWords(t) {
+          const m = t.trim().match(/\S+/g);
+          return m ? m.length : 0;
+        }
+        function fmt(sec) {
+          sec = Math.round(sec);
+          const m = Math.floor(sec / 60);
+          const s = sec % 60;
+          return m + ':' + String(s).padStart(2, '0');
+        }
+        function refreshMeta() {
+          const w = countWords(els.src.value);
+          els.mWords.textContent = w;
+          // ~150 wpm at rate 1.0, scaled by chosen rate
+          const wpm = 150 * parseFloat(els.rate.value);
+          const est = w > 0 ? (w / wpm) * 60 : 0;
+          els.mEst.textContent = fmt(est);
+          els.mEst.classList.toggle('warn', est > 125); // over ~2 min
+        }
+        els.src.addEventListener('input', refreshMeta);
+
+        // ---- Sliders ----
+        function syncLabels() {
+          els.rateVal.innerHTML = parseFloat(els.rate.value).toFixed(2) + '&times;';
+          els.pitchVal.textContent = parseFloat(els.pitch.value).toFixed(2);
+          els.volVal.textContent = Math.round(parseFloat(els.vol.value) * 100) + '%';
+        }
+        els.rate.addEventListener('input', () => {
+          syncLabels();
+          refreshMeta();
+          markPill();
+        });
+        els.pitch.addEventListener('input', syncLabels);
+        els.vol.addEventListener('input', syncLabels);
+
+        function markPill() {
+          els.pills.forEach(p => {
+            p.classList.toggle('sel', parseFloat(p.dataset.rate) === parseFloat(els.rate.value));
+          });
+        }
+        els.pills.forEach(p => {
+          p.addEventListener('click', () => {
+            els.rate.value = p.dataset.rate;
+            syncLabels();
+            refreshMeta();
+            markPill();
+          });
+        });
+
+        // ---- Build the highlightable stage ----
+        function buildStage(text) {
+          els.stage.innerHTML = '';
+          wordSpans = [];
+          // Split on whitespace but keep the words; track char offsets
+          const tokens = text.split(/(\s+)/);
+          let offset = 0;
+          tokens.forEach(tok => {
+            if (/^\s+$/.test(tok) || tok === '') {
+              els.stage.appendChild(document.createTextNode(tok));
+              offset += tok.length;
+            } else {
+              const span = document.createElement('span');
+              span.className = 'word';
+              span.textContent = tok;
+              span.dataset.start = offset;
+              span.dataset.end = offset + tok.length;
+              els.stage.appendChild(span);
+              wordSpans.push(span);
+              offset += tok.length;
+            }
+          });
+        }
+
+        function highlightAt(charIndex) {
+          let activeIdx = -1;
+          wordSpans.forEach((s, i) => {
+            const st = +s.dataset.start,
+              en = +s.dataset.end;
+            if (charIndex >= st && charIndex < en) {
+              activeIdx = i;
+            }
+          });
+          wordSpans.forEach((s, i) => {
+            s.classList.toggle('active', i === activeIdx);
+            s.classList.toggle('done', activeIdx >= 0 && i < activeIdx);
+          });
+          if (activeIdx >= 0) {
+            wordSpans[activeIdx].scrollIntoView({block: 'center', behavior: 'smooth'});
+          }
+        }
+
+        function clearHighlight() {
+          wordSpans.forEach(s => s.classList.remove('active', 'done'));
+        }
+
+        // ---- Elapsed timer ----
+        function startTimer() {
+          startTime = Date.now();
+          timerId = setInterval(() => {
+            els.mElapsed.textContent = fmt((Date.now() - startTime) / 1000);
+          }, 200);
+        }
+        function stopTimer() {
+          if (timerId) {
+            clearInterval(timerId);
+            timerId = null;
+          }
+        }
+
+        // ---- Speech control ----
+        let utter = null;
+
+        function setReadingMode(on) {
+          els.stage.classList.toggle('on', on);
+          els.src.style.display = on ? 'none' : '';
+          els.edit.style.display = on ? '' : 'none';
+        }
+
+        function startReading() {
+          const text = els.src.value.trim();
+          if (!text) {
+            els.src.focus();
+            return;
+          }
+          if (synth.speaking || synth.paused) {
+            synth.cancel();
+          }
+          clearPractice();
+
+          buildStage(text);
+          setReadingMode(true);
+
+          utter = new SpeechSynthesisUtterance(text);
+          if (voices.length) {
+            utter.voice = voices[+els.voice.value] || voices[0];
+          }
+          utter.rate = parseFloat(els.rate.value);
+          utter.pitch = parseFloat(els.pitch.value);
+          utter.volume = parseFloat(els.vol.value);
+          utter.lang = utter.voice ? utter.voice.lang : 'en-US';
+
+          utter.onboundary = function (e) {
+            if (e.name === 'word' || e.charIndex != null) {
+              highlightAt(e.charIndex);
+            }
+          };
+          utter.onstart = function () {
+            els.play.disabled = true;
+            els.pause.disabled = false;
+            els.stop.disabled = false;
+            els.mElapsed.textContent = '0:00';
+            startTimer();
+          };
+          utter.onend = function () {
+            stopTimer();
+            clearHighlight();
+            els.play.disabled = false;
+            els.pause.disabled = true;
+            els.stop.disabled = true;
+            els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
+          };
+          utter.onerror = utter.onend;
+
+          synth.speak(utter);
+        }
+
+        els.play.addEventListener('click', startReading);
+
+        els.pause.addEventListener('click', () => {
+          if (synth.speaking && !synth.paused) {
+            synth.pause();
+            stopTimer();
+            els.pause.innerHTML = '&#9654;&nbsp; Resume';
+          } else if (synth.paused) {
+            synth.resume();
+            startTime = Date.now() - parseElapsed() * 1000;
+            startTimer();
+            els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
+          }
+        });
+
+        function parseElapsed() {
+          const parts = els.mElapsed.textContent.split(':');
+          return +parts[0] * 60 + +parts[1];
+        }
+
+        els.stop.addEventListener('click', () => {
+          synth.cancel();
+          stopTimer();
+          clearHighlight();
+          els.play.disabled = false;
+          els.pause.disabled = true;
+          els.stop.disabled = true;
+          els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
+        });
+
+        els.edit.addEventListener('click', () => {
+          synth.cancel();
+          stopTimer();
+          clearPractice();
+          setReadingMode(false);
+          els.play.disabled = false;
+          els.pause.disabled = true;
+          els.stop.disabled = true;
+        });
+
+        // ===================================================================
+        //  Practice Mode  —  click a word (3x slow) | select a phrase (linked)
+        // ===================================================================
+        let practiceOn = false;
+
+        function makeUtter(text, rate) {
+          const u = new SpeechSynthesisUtterance(text);
+          if (voices.length) u.voice = voices[+els.voice.value] || voices[0];
+          u.rate = rate;
+          u.pitch = parseFloat(els.pitch.value);
+          u.volume = parseFloat(els.vol.value);
+          u.lang = u.voice ? u.voice.lang : 'en-US';
+          return u;
+        }
+
+        function hidePop() {
+          els.pop.style.display = 'none';
+        }
+
+        function clearPractice() {
+          practiceOn = false;
+          els.stage.classList.remove('practice');
+          els.practiceHint.style.display = 'none';
+          hidePop();
+          clearHighlight();
+        }
+
+        function enterPractice() {
+          const text = els.src.value.trim();
+          if (!text) {
+            els.src.focus();
+            return;
+          }
+          if (synth.speaking || synth.paused) {
+            synth.cancel();
+          }
+          stopTimer();
+
+          buildStage(text);
+          els.stage.classList.add('on', 'practice');
+          els.src.style.display = 'none';
+          els.edit.style.display = '';
+          els.practiceHint.style.display = 'block';
+          practiceOn = true;
+
+          els.play.disabled = false;
+          els.pause.disabled = true;
+          els.stop.disabled = true;
+          els.pause.innerHTML = '&#10073;&#10073;&nbsp; Pause';
+        }
+        els.practice.addEventListener('click', enterPractice);
+
+        // ---- single word: repeat 3x slowly ----
+        function repeatWord(span) {
+          synth.cancel();
+          const word = span.textContent;
+          clearHighlight();
+          span.classList.add('active');
+          span.scrollIntoView({block: 'center', behavior: 'smooth'});
+          let count = 0;
+          function once() {
+            if (!practiceOn || count >= 3) {
+              span.classList.remove('active');
+              return;
+            }
+            count++;
+            const u = makeUtter(word, 0.6);
+            u.onend = () => setTimeout(once, 240);
+            u.onerror = () => span.classList.remove('active');
+            synth.speak(u);
+          }
+          setTimeout(once, 80);
+        }
+
+        // ---- phrase: play linked at slow -> medium -> natural ----
+        function playLinked(text) {
+          synth.cancel();
+          const speeds = [0.6, 0.85, 1.0];
+          let i = 0;
+          function step() {
+            if (i >= speeds.length) return;
+            const u = makeUtter(text, speeds[i]);
+            i++;
+            u.onend = () => setTimeout(step, 220);
+            synth.speak(u);
+          }
+          setTimeout(step, 80);
+        }
+
+        function showPop(text, rect) {
+          els.popText.textContent = '\u201C' + text + '\u201D';
+          els.pop.dataset.text = text;
+          els.pop.style.display = 'block';
+          const pw = els.pop.offsetWidth,
+            ph = els.pop.offsetHeight;
+          let left = rect.left + rect.width / 2 - pw / 2;
+          let top = rect.top - ph - 10;
+          left = Math.max(8, Math.min(left, window.innerWidth - pw - 8));
+          if (top < 8) top = rect.bottom + 10;
+          els.pop.style.left = left + 'px';
+          els.pop.style.top = top + 'px';
+        }
+
+        // Stage interactions (only active in practice mode)
+        els.stage.addEventListener('mousedown', () => {
+          if (practiceOn) hidePop();
+        });
+
+        els.stage.addEventListener('mouseup', () => {
+          if (!practiceOn) return;
+          const sel = window.getSelection();
+          const text = sel ? sel.toString().trim().replace(/\s+/g, ' ') : '';
+          // Only treat as a phrase if more than one word was selected
+          if (text && text.indexOf(' ') !== -1 && sel.rangeCount) {
+            const rect = sel.getRangeAt(0).getBoundingClientRect();
+            if (rect && rect.width) showPop(text, rect);
+          }
+        });
+
+        els.stage.addEventListener('click', e => {
+          if (!practiceOn) return;
+          const sel = window.getSelection();
+          if (sel && sel.toString().trim().indexOf(' ') !== -1) return; // a phrase selection
+          const span = e.target && e.target.nodeType === 1 ? e.target.closest('.word') : null;
+          if (span) {
+            hidePop();
+            repeatWord(span);
+          }
+        });
+
+        els.popLinked.addEventListener('click', () => playLinked(els.pop.dataset.text || ''));
+        els.pop.querySelectorAll('.pp-pills button').forEach(b => {
+          b.addEventListener('click', () => {
+            synth.cancel();
+            const txt = els.pop.dataset.text || '';
+            if (txt) setTimeout(() => synth.speak(makeUtter(txt, parseFloat(b.dataset.r))), 80);
+          });
+        });
+
+        // Dismiss the popover when clicking elsewhere or scrolling
+        document.addEventListener('mousedown', e => {
+          if (els.pop.style.display === 'block' && !els.pop.contains(e.target) && !els.stage.contains(e.target)) {
+            hidePop();
+          }
+        });
+        window.addEventListener(
+          'scroll',
+          () => {
+            if (els.pop.style.display === 'block') hidePop();
+          },
+          true
+        );
+
+        // Chrome bug: long utterances stop after ~15s. Keep alive.
+        setInterval(() => {
+          if (synth.speaking && !synth.paused) {
+            synth.pause();
+            synth.resume();
+          }
+        }, 12000);
+
+        // ===================================================================
+        //  Passage library
+        //  Every text here is either original for this app or in the public
+        //  domain, so the file can be shared and adapted freely.
+        //  To add your own: copy one block and change the four fields.
+        // ===================================================================
+        const PASSAGES = [
+          {
+            group: 'Beginner',
+            title: 'At the Bus Stop',
+            note: 'Everyday English. Short sentences, present tense, familiar words.',
+            text:
+              "At the Bus Stop\n\n" +
+              "It is Monday morning. The sky is gray and the air is cold.\n\n" +
+              "Marta waits at the bus stop on the corner. She has a book bag on her shoulder " +
+              "and a warm cup of coffee in her hand.\n\n" +
+              "The bus is late today. Marta looks at her watch. Her class starts at nine, " +
+              "and she does not want to be late again.\n\n" +
+              "A man beside her smiles and says, 'The bus always comes. Just not always on time.'\n\n" +
+              "Marta laughs. Then she sees the bus at the end of the street, and she takes " +
+              "one more sip of her coffee."
+          },
+          {
+            group: 'Beginner',
+            title: 'The North Wind and the Sun \u2014 Aesop',
+            note: 'The classic passage phoneticians use to illustrate the sounds of a language: short, neutral, rich in vowels.',
+            text:
+              "The North Wind and the Sun\n\n" +
+              "The North Wind and the Sun were arguing about which of them was stronger. " +
+              "While they argued, a traveler came down the road, wrapped in a warm coat.\n\n" +
+              "They agreed that the first one who could make the traveler take off that coat " +
+              "should be considered the stronger of the two.\n\n" +
+              "Then the North Wind blew as hard as he could. But the harder he blew, the tighter " +
+              "the traveler pulled the coat around his shoulders. At last the North Wind gave up.\n\n" +
+              "Then the Sun began to shine with a gentle, steady warmth, and in a few moments " +
+              "the traveler took the coat off himself. So the North Wind had to admit " +
+              "that the Sun was the stronger of the two."
+          },
+          {
+            group: 'Intermediate',
+            title: 'The Crow and the Pitcher \u2014 Aesop',
+            note: 'Narrative past tense. Good practice for word endings: reached, dropped, raised.',
+            text:
+              "The Crow and the Pitcher\n\n" +
+              "A thirsty crow found a pitcher with a little water at the bottom. She pushed her " +
+              "beak inside, but the neck was narrow and the water was far too low to reach.\n\n" +
+              "She tried to tip the pitcher over. It was too heavy. She tried to break it. " +
+              "It would not break.\n\n" +
+              "Then the crow had an idea. She picked up a small stone and dropped it into the " +
+              "pitcher. Then another, and another, and another. With every stone the water rose " +
+              "a little higher, until at last it reached the top, and the crow drank as much as " +
+              "she wanted.\n\n" +
+              "Little by little does the trick."
+          },
+          {
+            group: 'Mathematics',
+            title: 'Talking About Numbers',
+            note: 'Arithmetic and algebra vocabulary: numerator, denominator, percent, equation.',
+            text:
+              "Talking About Numbers\n\n" +
+              "Mathematics has a language of its own, and saying it out loud is one of the best " +
+              "ways to make it yours.\n\n" +
+              "When we write three fourths, we are naming a fraction. The number above the line " +
+              "is the numerator, and the number below the line is the denominator. The " +
+              "denominator tells us how many equal parts the whole was divided into.\n\n" +
+              "A percent is a fraction with a hidden denominator of one hundred. Twenty-five " +
+              "percent simply means twenty-five out of every hundred, which is the same as " +
+              "one fourth.\n\n" +
+              "In an equation, the equal sign is a promise. Whatever we do to one side, we must " +
+              "do to the other. If we add, subtract, multiply, or divide on the left, we do " +
+              "exactly the same on the right, and the balance holds."
+          },
+          {
+            group: 'Mathematics',
+            title: 'Reading a Graph',
+            note: 'Data and geometry vocabulary: axis, coordinates, slope, average.',
+            text:
+              "Reading a Graph\n\n" +
+              "Every graph tells a story, and the axes tell you where the story begins.\n\n" +
+              "The horizontal axis usually carries time: days, months, years. The vertical axis " +
+              "carries the quantity we are measuring. Each point has two coordinates, one from " +
+              "each axis, and together they mark a single moment in the story.\n\n" +
+              "When the line climbs from left to right, the quantity is increasing, and we say " +
+              "the slope is positive. When it falls, the slope is negative. When it runs flat, " +
+              "nothing is changing at all.\n\n" +
+              "Before you answer any question about a graph, read the title, read the labels, " +
+              "and check the units. Most mistakes are made there, not in the arithmetic."
+          },
+          {
+            group: 'Advanced',
+            title: 'The Gettysburg Address \u2014 Abraham Lincoln',
+            note: 'Formal register and long phrasing. Public domain, 1863.',
+            text:
+              "The Gettysburg Address\n\n" +
+              "Four score and seven years ago our fathers brought forth on this continent a new " +
+              "nation, conceived in liberty, and dedicated to the proposition that all men are " +
+              "created equal.\n\n" +
+              "Now we are engaged in a great civil war, testing whether that nation, or any " +
+              "nation so conceived and so dedicated, can long endure. We are met on a great " +
+              "battlefield of that war. We have come to dedicate a portion of that field as a " +
+              "final resting place for those who here gave their lives that that nation might " +
+              "live. It is altogether fitting and proper that we should do this.\n\n" +
+              "It is for us the living to be dedicated to the great task remaining before us, " +
+              "that this nation, under God, shall have a new birth of freedom, and that " +
+              "government of the people, by the people, for the people, shall not perish " +
+              "from the earth."
+          },
+          {
+            group: 'Advanced',
+            title: 'A Tale of Two Cities \u2014 Charles Dickens',
+            note: 'Rhythm and parallel structure. Public domain, 1859.',
+            text:
+              "A Tale of Two Cities \u2014 opening lines\n\n" +
+              "It was the best of times, it was the worst of times, it was the age of wisdom, " +
+              "it was the age of foolishness, it was the epoch of belief, it was the epoch of " +
+              "incredulity, it was the season of Light, it was the season of Darkness, it was " +
+              "the spring of hope, it was the winter of despair.\n\n" +
+              "We had everything before us, we had nothing before us, we were all going direct " +
+              "to Heaven, we were all going direct the other way."
+          }
+        ];
+
+        const CUSTOM_NOTE =
+          'Paste or type anything you like in the box below. Nothing you write here leaves your computer.';
+
+        // Build the menu, grouped by level
+        (function buildPassageMenu() {
+          const custom = document.createElement('option');
+          custom.value = 'custom';
+          custom.textContent = '\u270e  My own text';
+          els.passage.appendChild(custom);
+
+          const groups = {};
+          PASSAGES.forEach((p, i) => {
+            if (!groups[p.group]) {
+              groups[p.group] = document.createElement('optgroup');
+              groups[p.group].label = p.group;
+              els.passage.appendChild(groups[p.group]);
+            }
+            const o = document.createElement('option');
+            o.value = String(i);
+            o.textContent = p.title;
+            groups[p.group].appendChild(o);
+          });
+        })();
+
+        // Remembers what was loaded, so we only warn when the user actually edited it
+        let loadedText = '';
+
+        function loadPassage(idx, ask) {
+          if (idx === 'custom') {
+            els.passageNote.innerHTML = CUSTOM_NOTE;
+            loadedText = els.src.value;
+            return;
+          }
+          const p = PASSAGES[+idx];
+          if (!p) return;
+          const edited = els.src.value.trim() !== '' && els.src.value !== loadedText;
+          if (ask && edited && !confirm('Replace the text in the box with "' + p.title + '"?')) {
+            return false; // the user said no: the box stays exactly as it is
+          }
+          if (synth.speaking || synth.paused) synth.cancel();
+          clearPractice();
+          setReadingMode(false);
+          els.src.value = p.text;
+          loadedText = p.text;
+          els.passageNote.innerHTML = '<strong>' + p.group + '.</strong> ' + p.note;
+          refreshMeta();
+          els.src.scrollTop = 0;
+          return true;
+        }
+
+        els.passage.addEventListener('change', () => {
+          if (loadPassage(els.passage.value, true) === false) {
+            els.passage.value = 'custom';
+            els.passageNote.innerHTML = CUSTOM_NOTE;
+          }
+        });
+
+        // Typing in the box switches the menu to "My own text"
+        els.src.addEventListener('input', () => {
+          if (els.passage.value !== 'custom' && els.src.value !== loadedText) {
+            els.passage.value = 'custom';
+            els.passageNote.innerHTML = CUSTOM_NOTE;
+          }
+        });
+
+        // ---- Seed so the app works out of the box ----
+        els.passage.value = '1'; // The North Wind and the Sun
+        loadPassage('1', false);
+        syncLabels();
+        refreshMeta();
+
+        // ===================================================================
+        //  Pronunciation Check  —  speech-to-text (the "echo") + comparison
+        // ===================================================================
+        const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const rec = {
+          btn: document.getElementById('rec'),
+          hearBack: document.getElementById('hearBack'),
+          clear: document.getElementById('recClear'),
+          status: document.getElementById('recStatus'),
+          heard: document.getElementById('heard'),
+          warn: document.getElementById('recWarn'),
+          report: document.getElementById('report'),
+          matched: document.getElementById('rMatched'),
+          acc: document.getElementById('rAcc'),
+          diff: document.getElementById('diff')
+        };
+
+        let recognizer = null;
+        let listening = false;
+        let finalText = '';
+
+        if (!SR) {
+          rec.warn.textContent = 'This browser cannot listen to speech. Use Chrome, Edge, or Safari for the pronunciation check.';
+          rec.warn.classList.add('on');
+          rec.btn.disabled = true;
+        }
+
+        function recLang() {
+          const v = voices[+els.voice.value];
+          return v && v.lang && v.lang.toLowerCase().startsWith('en') ? v.lang : 'en-US';
+        }
+
+        function setListening(on) {
+          listening = on;
+          rec.btn.innerHTML = on ? '&#9632;&nbsp; Stop' : '&#127908;&nbsp; Speak now';
+          rec.btn.classList.toggle('btn-rec-on', on);
+          rec.status.classList.toggle('live', on);
+          rec.status.innerHTML = on ? '<span class="dot"></span> Listening&hellip;' : '';
+        }
+
+        function escapeHtml(s) {
+          return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function renderHeard(interim) {
+          rec.heard.innerHTML = escapeHtml(finalText) + (interim ? '<span class="interim">' + escapeHtml(interim) + '</span>' : '');
+        }
+
+        function startListening() {
+          if (!SR) return;
+          if (synth && synth.speaking) {
+            synth.cancel();
+          } // don't transcribe our own voice
+          finalText = '';
+          rec.heard.innerHTML = '';
+          rec.report.style.display = 'none';
+
+          recognizer = new SR();
+          recognizer.lang = recLang();
+          recognizer.continuous = true;
+          recognizer.interimResults = true;
+
+          recognizer.onresult = function (e) {
+            let interim = '';
+            for (let i = e.resultIndex; i < e.results.length; i++) {
+              const tr = e.results[i][0].transcript;
+              if (e.results[i].isFinal) finalText += tr + ' ';
+              else interim += tr;
+            }
+            renderHeard(interim);
+          };
+          recognizer.onerror = function (e) {
+            if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+              rec.warn.textContent = 'The microphone is blocked. Allow mic access for this page (and serve it over https or localhost), then try again.';
+              rec.warn.classList.add('on');
+            }
+          };
+          recognizer.onend = function () {
+            setListening(false);
+            finalizeHeard();
+          };
+
+          try {
+            recognizer.start();
+            setListening(true);
+            rec.warn.classList.remove('on');
+          } catch (err) {
+            /* start() called while already running — ignore */
+          }
+        }
+
+        function stopListening() {
+          if (recognizer) {
+            try {
+              recognizer.stop();
+            } catch (e) {}
+          }
+          setListening(false);
+        }
+
+        function finalizeHeard() {
+          const heard = finalText.trim();
+          if (!heard) {
+            rec.heard.innerHTML = '<span class="heard-placeholder">Nothing was recognized. Press \u201cSpeak now\u201d and read a little closer to the mic.</span>';
+            rec.hearBack.disabled = true;
+            rec.clear.disabled = true;
+            return;
+          }
+          rec.heard.textContent = heard;
+          rec.hearBack.disabled = false;
+          rec.clear.disabled = false;
+          buildReport(heard);
+        }
+
+        rec.btn.addEventListener('click', () => {
+          if (listening) stopListening();
+          else startListening();
+        });
+
+        rec.hearBack.addEventListener('click', () => {
+          const txt = rec.heard.textContent.trim();
+          if (!txt || !synth) return;
+          synth.cancel();
+          const u = new SpeechSynthesisUtterance(txt);
+          if (voices.length) u.voice = voices[+els.voice.value] || voices[0];
+          u.rate = parseFloat(els.rate.value);
+          u.pitch = parseFloat(els.pitch.value);
+          u.volume = parseFloat(els.vol.value);
+          u.lang = u.voice ? u.voice.lang : 'en-US';
+          synth.speak(u);
+        });
+
+        rec.clear.addEventListener('click', () => {
+          finalText = '';
+          rec.heard.innerHTML = '<span class="heard-placeholder">Press \u201cSpeak now\u201d and read aloud\u2026</span>';
+          rec.report.style.display = 'none';
+          rec.hearBack.disabled = true;
+          rec.clear.disabled = true;
+        });
+
+        // ---- Compare what was spoken against the loaded text ----
+        function norm(w) {
+          return w.toLowerCase().replace(/[^a-z0-9']/g, '');
+        }
+
+        // Longest-common-subsequence alignment: which target words were heard, in order.
+        function lcsMatch(a, b) {
+          const n = a.length,
+            m = b.length;
+          const dp = Array.from({length: n + 1}, () => new Int32Array(m + 1));
+          for (let i = 1; i <= n; i++) for (let j = 1; j <= m; j++) dp[i][j] = a[i - 1] === b[j - 1] ? dp[i - 1][j - 1] + 1 : Math.max(dp[i - 1][j], dp[i][j - 1]);
+          const matched = new Array(n).fill(false);
+          let i = n,
+            j = m;
+          while (i > 0 && j > 0) {
+            if (a[i - 1] === b[j - 1]) {
+              matched[i - 1] = true;
+              i--;
+              j--;
+            } else if (dp[i - 1][j] >= dp[i][j - 1]) i--;
+            else j--;
+          }
+          return matched;
+        }
+
+        function buildReport(heard) {
+          const target = els.src.value.trim();
+          if (!target) {
+            rec.report.style.display = 'none';
+            return;
+          }
+
+          const tEntries = (target.match(/\S+/g) || []).map(o => ({orig: o, n: norm(o)}));
+          const tIdx = [],
+            tNorm = [];
+          tEntries.forEach((e, i) => {
+            if (e.n) {
+              tIdx.push(i);
+              tNorm.push(e.n);
+            }
+          });
+          const sNorm = (heard.match(/\S+/g) || []).map(norm).filter(Boolean);
+
+          const matched = lcsMatch(tNorm, sNorm);
+          const flags = new Array(tEntries.length).fill(null);
+          let hit = 0;
+          matched.forEach((m, k) => {
+            flags[tIdx[k]] = m;
+            if (m) hit++;
+          });
+
+          rec.diff.innerHTML = '';
+          tEntries.forEach((e, i) => {
+            const span = document.createElement('span');
+            if (flags[i] === null) {
+              span.textContent = e.orig;
+            } // punctuation only
+            else {
+              span.className = 'w ' + (flags[i] ? 'ok' : 'bad');
+              span.textContent = e.orig;
+            }
+            rec.diff.appendChild(span);
+            rec.diff.appendChild(document.createTextNode(' '));
+          });
+
+          const total = tNorm.length;
+          const pct = total ? Math.round((hit / total) * 100) : 0;
+          rec.matched.textContent = hit + ' / ' + total;
+          rec.acc.textContent = pct + '%';
+          rec.acc.classList.toggle('warn', pct < 80);
+          rec.report.style.display = '';
+        }
+      })();
+    </script>
+  </body>
 </html>
