@@ -14,6 +14,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profe GED Amigable - Tu Tutor Personal</title>
+    <meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago" />
+    <meta name="license" content="CC BY-NC-SA 4.0" />
+    <meta name="copyright" content="© 2026 José M. Fernández. CC BY-NC-SA 4.0" />
+    <link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" />
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/nunito@5.0.0/400.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/nunito@5.0.0/600.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/@fontsource/nunito@5.0.0/700.css" rel="stylesheet" />
@@ -255,7 +259,7 @@
 
       .chat-header-info span {
         font-size: 0.8rem;
-        color: var(--success);
+        color: #22543d; /* verde oscuro: contraste AA sobre blanco */
         display: flex;
         align-items: center;
         gap: 4px;
@@ -802,6 +806,177 @@
           opacity: 1;
         }
       }
+
+      /* ================= Clave personal de IA (Groq) ================= */
+      .chat-header-info span.ai-off { color: #4a5568; }
+      .chat-header-info span.ai-off::before { background: #a0aec0; }
+      .chat-header-info span.ai-checking { color: #5c3900; }
+      .chat-header-info span.ai-checking::before { background: var(--accent); }
+      .chat-header-info span.ai-error { color: #9b2c2c; }
+      .chat-header-info span.ai-error::before { background: #c53030; }
+
+      .header-btn.key-needed {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(245, 166, 35, 0.35);
+      }
+
+      .sidebar-license {
+        padding: 8px 20px 14px;
+        font-size: 0.72rem;
+        color: #4a5568;
+        line-height: 1.4;
+      }
+      .sidebar-license a { color: var(--primary-dark); }
+
+      .ai-notice {
+        margin-top: 24px;
+        max-width: 620px;
+        background: #fffaf0;
+        border: 1px solid var(--accent-light);
+        border-left: 5px solid var(--accent);
+        border-radius: var(--radius-sm);
+        padding: 14px 18px;
+        text-align: left;
+        font-size: 0.92rem;
+        color: var(--gray-900);
+        line-height: 1.5;
+      }
+      .ai-notice[hidden] { display: none; }
+
+      .inline-key-btn,
+      .key-btn {
+        font-family: inherit;
+        font-size: 0.92rem;
+        font-weight: 700;
+        border-radius: var(--radius-sm);
+        padding: 10px 16px;
+        cursor: pointer;
+        border: 2px solid var(--primary);
+        background: var(--white);
+        color: var(--primary-dark);
+        min-height: 44px;
+      }
+      .inline-key-btn,
+      .key-btn.primary {
+        background: var(--primary);
+        color: var(--white);
+      }
+      .ai-notice .inline-key-btn { margin-top: 10px; }
+      .inline-key-btn:hover,
+      .key-btn.primary:hover { background: var(--primary-dark); }
+      .key-btn:hover { background: var(--gray-100); }
+      .key-btn:disabled { opacity: 0.6; cursor: wait; }
+      .inline-key-btn:focus-visible,
+      .key-btn:focus-visible,
+      .key-input-row button:focus-visible,
+      .header-btn:focus-visible {
+        outline: 3px solid var(--primary-dark);
+        outline-offset: 2px;
+      }
+
+      .key-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 300;
+        align-items: center;
+        justify-content: center;
+        padding: 12px;
+        animation: fadeIn 0.2s;
+      }
+      .key-overlay.visible { display: flex; }
+
+      .key-modal {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: 28px;
+        max-width: 560px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: var(--shadow-lg);
+        animation: fadeInUp 0.3s ease;
+        line-height: 1.55;
+      }
+      .key-modal h3 { font-size: 1.2rem; color: var(--primary-dark); margin-bottom: 10px; }
+      .key-modal p { margin-bottom: 12px; font-size: 0.95rem; }
+      .key-modal a { color: var(--primary-dark); font-weight: 700; }
+      .key-modal code {
+        background: var(--gray-200);
+        padding: 1px 6px;
+        border-radius: 4px;
+        font-size: 0.9em;
+      }
+
+      .key-steps {
+        background: var(--gray-100);
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius-sm);
+        padding: 12px 16px;
+        margin-bottom: 16px;
+      }
+      .key-steps summary {
+        cursor: pointer;
+        font-weight: 700;
+        color: var(--primary-dark);
+        min-height: 32px;
+      }
+      .key-steps ol { margin: 10px 0 4px 22px; font-size: 0.93rem; }
+      .key-steps li { margin-bottom: 8px; }
+
+      .key-field-title { font-weight: 700; margin-bottom: 6px; }
+      .key-input-row { display: flex; gap: 8px; margin-bottom: 10px; }
+      .key-input-row input {
+        flex: 1;
+        min-width: 0;
+        font-family: monospace;
+        font-size: 1rem;
+        padding: 10px 12px;
+        border: 2px solid var(--gray-300);
+        border-radius: var(--radius-sm);
+        min-height: 44px;
+      }
+      .key-input-row input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(43, 90, 161, 0.25); }
+      .key-input-row button {
+        min-width: 48px;
+        min-height: 44px;
+        border: 2px solid var(--gray-300);
+        border-radius: var(--radius-sm);
+        background: var(--white);
+        cursor: pointer;
+        font-size: 1.1rem;
+      }
+
+      .key-remember {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+        cursor: pointer;
+      }
+      .key-remember input { width: 20px; height: 20px; margin-top: 2px; flex-shrink: 0; cursor: pointer; }
+
+      .key-status {
+        min-height: 1.5em;
+        font-size: 0.93rem;
+        border-radius: var(--radius-sm);
+        margin-bottom: 12px;
+      }
+      .key-status.info,
+      .key-status.ok,
+      .key-status.error { padding: 10px 12px; }
+      .key-status.info { background: #ebf4ff; color: #1a365d; }
+      .key-status.ok { background: #f0fff4; color: #22543d; border: 1px solid #9ae6b4; }
+      .key-status.error { background: #fff5f5; color: #822727; border: 1px solid #feb2b2; }
+
+      .key-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+      .key-privacy { font-size: 0.85rem !important; color: #4a5568; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .key-overlay, .key-modal { animation: none; }
+      }
     </style>
   </head>
   <body>
@@ -866,6 +1041,10 @@
           Listo para ayudarte
         </div>
       </div>
+      <div class="sidebar-license">
+        José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago.
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.es" target="_blank" rel="license noopener noreferrer">Licencia CC BY-NC-SA 4.0</a>
+      </div>
     </aside>
 
     <main class="chat-main">
@@ -875,10 +1054,11 @@
           <div class="profe-avatar" aria-hidden="true">👨‍🏫</div>
           <div class="chat-header-info">
             <h2>Profe GED</h2>
-            <span>tu amigo para estudiar en línea</span>
+            <span id="aiStatus" class="ai-off" aria-live="polite">modo básico: sin inteligencia artificial</span>
           </div>
         </div>
         <div class="chat-header-actions">
+          <button class="header-btn" id="headerKeyBtn" title="Activar o configurar la inteligencia artificial" aria-label="Activar o configurar la inteligencia artificial (clave personal)">🔑</button>
           <button class="header-btn" id="headerTipsBtn" title="Consejos" aria-label="Ver consejos de estudio">💡</button>
           <button class="header-btn" id="headerClearBtn" title="Nuevo chat" aria-label="Iniciar nuevo chat">🔄</button>
         </div>
@@ -921,6 +1101,13 @@
               <span class="qt-desc">Pasos para el RLA</span>
             </button>
           </div>
+          <div class="ai-notice" id="aiNotice">
+            <strong><span aria-hidden="true">💡</span> Estás en modo básico.</strong>
+            Ahora respondo preguntas sobre temas ya preparados. Para que resuelva problemas paso a paso y te cree ejercicios nuevos,
+            activa la inteligencia artificial gratuita con tu propia clave. Toma unos 3 minutos.
+            <br />
+            <button type="button" class="inline-key-btn" data-open-key><span aria-hidden="true">🔑</span> Activar la IA (gratis)</button>
+          </div>
         </div>
 
         <div class="typing-indicator" id="typingIndicator" aria-live="polite">
@@ -952,6 +1139,51 @@
         </div>
       </div>
     </main>
+
+    <div class="key-overlay" id="keyOverlay" role="dialog" aria-modal="true" aria-labelledby="keyTitle" aria-describedby="keyIntro">
+      <div class="key-modal">
+        <h3 id="keyTitle"><span aria-hidden="true">🔑</span> Activa la inteligencia artificial del Profe GED</h3>
+        <p id="keyIntro">
+          Para resolver problemas y crear ejercicios nuevos, el Profe GED usa <strong>Groq</strong>, un servicio de inteligencia artificial
+          <strong>gratuito</strong>. Solo necesitas tu propia clave (en inglés, <em>API key</em>). No se pide tarjeta de crédito.
+        </p>
+
+        <details class="key-steps" open>
+          <summary>Cómo obtener tu clave gratuita (5 pasos)</summary>
+          <ol>
+            <li>Abre <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">console.groq.com/keys</a> (se abre en una pestaña nueva).</li>
+            <li>Crea tu cuenta gratuita. Puedes entrar con tu cuenta de Google o con tu correo electrónico.</li>
+            <li>Pulsa el botón <strong>Create API Key</strong> (crear clave) y escribe un nombre para reconocerla; por ejemplo: <em>Profe GED</em>.</li>
+            <li>Pulsa <strong>Copy</strong> (copiar). La clave empieza con <code>gsk_</code>. <strong>Importante:</strong> Groq la muestra una sola vez; si la pierdes, simplemente crea otra.</li>
+            <li>Regresa a esta página, pega la clave en el cuadro de abajo y pulsa <strong>Guardar y probar</strong>. El Profe buscará por sí solo un modelo de IA que funcione.</li>
+          </ol>
+        </details>
+
+        <div class="key-field-title" id="keyFieldTitle">Pega aquí tu clave:</div>
+        <div class="key-input-row">
+          <input type="password" id="keyInput" aria-labelledby="keyFieldTitle" placeholder="gsk_..." autocomplete="off" autocapitalize="off" spellcheck="false" />
+          <button type="button" id="keyToggleBtn" aria-pressed="false" aria-label="Mostrar la clave">👁️</button>
+        </div>
+
+        <div class="key-remember" id="keyRememberRow">
+          <input type="checkbox" id="keyRemember" checked aria-labelledby="keyRememberText" />
+          <span id="keyRememberText">Recordar la clave en este equipo. Desmárcalo si usas una computadora pública o compartida (biblioteca, escuela, trabajo).</span>
+        </div>
+
+        <div class="key-status" id="keyStatus" role="status" aria-live="polite"></div>
+
+        <div class="key-actions">
+          <button type="button" class="key-btn primary" id="keySaveBtn">Guardar y probar</button>
+          <button type="button" class="key-btn" id="keyDeleteBtn">Borrar clave</button>
+          <button type="button" class="key-btn" id="keyCloseBtn">Cerrar</button>
+        </div>
+
+        <p class="key-privacy">
+          <span aria-hidden="true">🔒</span> Tu clave se guarda solo en este navegador y se envía únicamente a Groq. No la compartas con nadie.
+          Sin clave, el Profe GED sigue funcionando en modo básico, con explicaciones de temas ya preparadas.
+        </p>
+      </div>
+    </div>
 
     <div class="tips-overlay" id="tipsOverlay" role="dialog" aria-modal="true" aria-labelledby="tipsTitle">
       <div class="tips-modal">
@@ -1002,16 +1234,57 @@
 
       (function () {
         // ═══════════════════════════════════════════════════════════════════
-        //  ⚙️ CONFIGURACIÓN — CAMBIA ESTO TRAS DESPLEGAR TU BACKEND EN RENDER
+        //  ⚙️ CONFIGURACIÓN DE LA IA — CLAVE PERSONAL DE GROQ
         // ═══════════════════════════════════════════════════════════════════
-        //
-        // Pega aquí la URL de tu servicio de Render. Ejemplo:
-        //   const BACKEND_URL = 'https://profe-ged-backend.onrender.com';
-        //
-        // Mientras esté en blanco o sea localhost, el chatbot funcionará
-        // solo con las respuestas pre-programadas (sin resolver problemas).
-        //
-        const BACKEND_URL = 'https://profe-ged-backend.onrender.com';
+        //  Cada estudiante usa su propia clave gratuita de Groq, guardada solo
+        //  en su navegador. El Profe consulta la lista de modelos disponibles
+        //  y elige automáticamente uno que funcione. Si Groq retira un modelo,
+        //  pasa solo al siguiente de la lista, sin intervención del docente.
+        // ═══════════════════════════════════════════════════════════════════
+        const GROQ_CHAT_URL = 'https://api.groq.com/openai/v1/chat/completions';
+        const GROQ_MODELS_URL = 'https://api.groq.com/openai/v1/models';
+        const STORE_KEY = 'profeGED_groqKey';
+        const STORE_MODEL = 'profeGED_groqModel';
+
+        // Orden de preferencia. Si ninguno existe ya, se usa el mejor disponible.
+        const PREFERRED_MODELS = [
+          'llama-3.3-70b-versatile',
+          'openai/gpt-oss-120b',
+          'moonshotai/kimi-k2-instruct-0905',
+          'moonshotai/kimi-k2-instruct',
+          'meta-llama/llama-4-maverick-17b-128e-instruct',
+          'qwen/qwen3-32b',
+          'openai/gpt-oss-20b',
+          'meta-llama/llama-4-scout-17b-16e-instruct',
+          'llama-3.1-8b-instant'
+        ];
+        // Modelos que no sirven para conversar (audio, moderación, etc.)
+        const EXCLUDED_MODELS = /whisper|tts|guard|playai|orpheus|distil|embed|compound|allam|safeguard/i;
+
+        const SYSTEM_PROMPT = `Eres el "Profe GED", tutor en español para personas adultas hispanas que se preparan para el examen GED en Estados Unidos (Matemáticas, Artes del Lenguaje, Estudios Sociales y Ciencias).
+
+ESTILO
+- Español claro y neutro, oraciones cortas, tono cálido y respetuoso. Trata al estudiante de "tú".
+- Evita regionalismos, jerga y expresiones coloquiales.
+- Explica con ejemplos de la vida diaria de una persona adulta (compras, trabajo, recetas, facturas, salud).
+- Usa como máximo uno o dos emojis por respuesta.
+- Termina con una pregunta breve para comprobar la comprensión o con la propuesta de un ejercicio parecido.
+
+MATEMÁTICAS
+- Resuelve paso a paso: un paso por renglón, explicando brevemente por qué se hace cada paso.
+- Antes de dar la respuesta final, compruébala (sustituyendo o con la operación inversa) y destácala en negrita.
+- Notación sencilla: x<sup>2</sup> para exponentes, × para multiplicar, ÷ para dividir, fracciones como 3/4.
+- Si el estudiante pide un ejercicio o práctica, propón uno de nivel GED, pídele que lo intente y NO des la solución hasta que responda o la pida.
+- Si el estudiante envía una respuesta, dile con claridad si es correcta; si no lo es, señala el paso con el error y da una pista.
+
+FORMATO DE SALIDA (OBLIGATORIO)
+- Responde SOLO con un fragmento HTML sencillo. Nada de Markdown, nada de \`\`\`, nada de <html>, <head> o <body>.
+- Etiquetas permitidas: <p>, <strong>, <em>, <ul>, <ol>, <li>, <br>, <sup>, <sub> y <div class="example-box"> para ejemplos o para el desarrollo de un problema.
+- No uses tablas. Extensión aproximada: 250 palabras como máximo, salvo que el problema necesite más pasos.
+
+LÍMITES
+- Si la pregunta no se relaciona con el estudio o con el GED, reconduce la conversación con amabilidad.
+- No inventes datos. Si no estás seguro de algo, dilo.`;
         // ═══════════════════════════════════════════════════════════════════
 
         const messagesContainer = document.getElementById('messagesContainer');
@@ -1269,17 +1542,21 @@ Tus calificaciones del semestre fueron: <strong>80, 90, 70, 100</strong><br><br>
 </div>
 <p>¿Quieres profundizar en alguna época? ¡Cada paso cuenta! 🌟</p>`,
 
-          default_sin_backend: `¡Buena pregunta! Déjame explicarte de forma sencilla. 😊
-<p>Para el examen GED, lo más importante es <strong>entender el concepto</strong>, no solo memorizarlo.</p>
-<p>Te sugiero que me preguntes sobre temas específicos como:</p>
+          default_sin_backend: `¡Buena pregunta! 😊 Para contestarla necesito la inteligencia artificial, y todavía no está activada en este equipo.
+<p>Activarla es <strong>gratis</strong> y toma unos 3 minutos: solo necesitas tu propia clave de Groq.</p>
+<p><button type="button" class="inline-key-btn" data-open-key>🔑 Activar la IA ahora</button></p>
+<p>Mientras tanto, puedo explicarte estos temas ya preparados:</p>
 <ul>
-<li>🔢 <strong>Matemáticas:</strong> porcentajes, fracciones, álgebra, geometría, promedio</li>
-<li>📖 <strong>Lenguaje:</strong> idea principal, gramática, cómo escribir el ensayo</li>
-<li>🏛️ <strong>Sociales:</strong> gobierno, Constitución, historia</li>
-<li>🔬 <strong>Ciencias:</strong> célula, fotosíntesis, gravedad</li>
-</ul>
-<p>Puedes preguntarme cualquier cosa específica y te la explico con ejemplos de la vida diaria. ¡No hay preguntas tontas!</p>
-<p>¿Sobre qué tema te gustaría aprender? ¡Estoy aquí para ayudarte! 💪</p>`,
+<li>🔢 <strong>Matemáticas:</strong> porcentajes, fracciones, variables, área del triángulo, promedio</li>
+<li>📖 <strong>Lenguaje:</strong> idea principal, sustantivos y verbos, cómo escribir el ensayo</li>
+<li>🏛️ <strong>Sociales:</strong> separación de poderes, la Constitución, historia de EE. UU.</li>
+<li>🔬 <strong>Ciencias:</strong> la célula, la fotosíntesis, la gravedad</li>
+</ul>`,
+
+          necesita_ia: `Para resolver problemas y crear ejercicios nuevos necesito la inteligencia artificial, y todavía no está activada en este equipo. 😊
+<p>Activarla es <strong>gratis</strong> y toma unos 3 minutos: solo necesitas tu propia clave de Groq.</p>
+<p><button type="button" class="inline-key-btn" data-open-key>🔑 Activar la IA ahora</button></p>
+<p>Mientras tanto, puedo explicarte temas ya preparados, como porcentajes, fracciones, la célula o la Constitución.</p>`,
 
           default_error: `¡Ay, mi estudiante! 😅 Tuvimos un problemita técnico para conectar con el Profe.
 <p>Pero no te preocupes, puedes:</p>
@@ -1377,53 +1654,350 @@ Piensa en cuando aprendiste algo nuevo (conducir, cocinar, usar el teléfono). A
           return solveVerbs.test(t) || hasAlgebra.test(rawText) || hasArithmetic.test(rawText) || hasNumericProblem.test(rawText);
         }
 
-        /** ¿Está configurado el backend? */
-        function backendConfigured() {
-          return typeof BACKEND_URL === 'string' && BACKEND_URL.length > 0 && /^https?:\/\//i.test(BACKEND_URL);
+        /** Pide un ejercicio, práctica o problema nuevo: siempre va a la IA. */
+        function wantsExercise(rawText) {
+          return /\b(ejercicios?|practic(a|ar|ame)|problemas?|preguntame|pregúntame|examiname|examíname|ponme|dame\s+(un|una|otro|otra|unos|unas)|crea(me)?|genera(me)?|inventa(me)?)\b/i.test(rawText);
         }
 
         // ===================================================================
-        //  Llamada al backend (Groq vía Render)
+        //  IA con clave personal (Groq, directo desde el navegador)
         // ===================================================================
-        async function callBackendAPI(userMessage) {
-          if (!backendConfigured()) return null;
+        const AI = {key: '', model: '', models: []};
+        const memoryStore = {};
 
+        function storeGet(k) {
           try {
-            // Historial corto (últimos 6 turnos) para mantener contexto
-            const recentHistory = conversationHistory.slice(-6);
+            return localStorage.getItem(k) || sessionStorage.getItem(k) || '';
+          } catch (e) {
+            return memoryStore[k] || '';
+          }
+        }
+        function storeIsPersistent(k) {
+          try {
+            return !!localStorage.getItem(k);
+          } catch (e) {
+            return false;
+          }
+        }
+        function storeSet(k, v, remember) {
+          try {
+            localStorage.removeItem(k);
+            sessionStorage.removeItem(k);
+            (remember ? localStorage : sessionStorage).setItem(k, v);
+          } catch (e) {
+            memoryStore[k] = v;
+          }
+        }
+        function storeDel(k) {
+          try {
+            localStorage.removeItem(k);
+            sessionStorage.removeItem(k);
+          } catch (e) {}
+          delete memoryStore[k];
+        }
 
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 45000); // 45s (cold start)
+        function aiReady() {
+          return !!AI.key;
+        }
 
-            const response = await fetch(BACKEND_URL.replace(/\/$/, '') + '/chat', {
-              method: 'POST',
-              headers: {'Content-Type': 'application/json'},
-              body: JSON.stringify({message: userMessage, history: recentHistory}),
-              signal: controller.signal
-            });
-            clearTimeout(timeoutId);
-
-            const data = await response.json().catch(() => ({}));
-
-            if (!response.ok) {
-              // Si el backend devolvió un mensaje de error útil, úsalo.
-              if (data && data.reply) return data.reply;
-              throw new Error('HTTP ' + response.status);
-            }
-
-            return (data && data.reply) || null;
-          } catch (error) {
-            console.error('Error al llamar al backend:', error);
-            return null;
+        class AIError extends Error {
+          constructor(kind, userMessage) {
+            super(kind);
+            this.kind = kind;
+            this.userMessage = userMessage;
           }
         }
 
-        // ===================================================================
-        //  Calentar el backend al cargar la página (Render free duerme tras 15 min)
-        // ===================================================================
-        function warmUpBackend() {
-          if (!backendConfigured()) return;
-          fetch(BACKEND_URL.replace(/\/$/, '') + '/health').catch(() => {});
+        const AI_MSG = {
+          auth: `Groq no reconoce tu clave. 🔑 Puede que se haya copiado incompleta o que la hayas borrado en tu cuenta.
+<p>Solución: crea una clave nueva en Groq y pégala otra vez.</p>
+<p><button type="button" class="inline-key-btn" data-open-key>🔑 Revisar mi clave</button></p>`,
+          network: `No pude comunicarme con el servicio de inteligencia artificial. 📶
+<p>Revisa tu conexión a internet e inténtalo de nuevo en un momento.</p>`,
+          rate: secs => `Hiciste muchas preguntas seguidas y Groq pide una pausa breve. ⏳
+<p>Espera ${secs ? 'unos ' + secs + ' segundos' : 'un minuto'} y vuelve a enviar tu pregunta. Aprovecha para repasar lo que ya vimos.</p>`,
+          nomodel: `En este momento ningún modelo de inteligencia artificial respondió. 🤔
+<p>Inténtalo de nuevo en unos minutos. Mientras tanto, puedo explicarte temas ya preparados.</p>`
+        };
+
+        async function fetchWithTimeout(url, options, ms) {
+          const controller = new AbortController();
+          const t = setTimeout(() => controller.abort(), ms);
+          try {
+            return await fetch(url, Object.assign({}, options, {signal: controller.signal}));
+          } finally {
+            clearTimeout(t);
+          }
+        }
+
+        /** Ordena los modelos: primero los preferidos, luego los más grandes. */
+        function rankModels(ids) {
+          const size = id => {
+            const m = id.match(/(\d+)b\b/i);
+            return m ? parseInt(m[1], 10) : 0;
+          };
+          return ids.slice().sort((a, b) => {
+            const ia = PREFERRED_MODELS.indexOf(a);
+            const ib = PREFERRED_MODELS.indexOf(b);
+            if (ia !== -1 || ib !== -1) return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+            return size(b) - size(a);
+          });
+        }
+
+        /** Pide a Groq la lista de modelos activos para esta clave. */
+        async function detectModels(key) {
+          let res;
+          try {
+            res = await fetchWithTimeout(GROQ_MODELS_URL, {headers: {Authorization: 'Bearer ' + key}}, 20000);
+          } catch (e) {
+            throw new AIError('network', 'No hay conexión con Groq. Revisa tu internet e inténtalo de nuevo.');
+          }
+          if (res.status === 401 || res.status === 403) {
+            throw new AIError('auth', '❌ Groq no reconoce esta clave. Revisa que la copiaste completa o crea una nueva en console.groq.com/keys.');
+          }
+          if (!res.ok) {
+            throw new AIError('http', 'Groq no respondió bien (error ' + res.status + '). Inténtalo de nuevo en un momento.');
+          }
+          const data = await res.json().catch(() => ({}));
+          const ids = (data.data || [])
+            .filter(m => m && m.id && m.active !== false && !EXCLUDED_MODELS.test(m.id))
+            .map(m => m.id);
+          return rankModels(ids);
+        }
+
+        async function callGroq(key, model, messages, maxTokens) {
+          const res = await fetchWithTimeout(
+            GROQ_CHAT_URL,
+            {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + key},
+              body: JSON.stringify({model: model, messages: messages, temperature: 0.3, max_tokens: maxTokens})
+            },
+            45000
+          );
+          const data = await res.json().catch(() => ({}));
+          return {res, data};
+        }
+
+        /** ¿El error indica que el modelo ya no existe o no está disponible? */
+        function isModelError(res, data) {
+          const err = (data && data.error) || {};
+          const text = (err.code || '') + ' ' + (err.message || '');
+          return (res.status === 400 || res.status === 404 || res.status === 403) &&
+            /decommission|not.?found|does not exist|not supported|not active|terms|no longer/i.test(text);
+        }
+
+        function waitSeconds(data) {
+          const msg = (data && data.error && data.error.message) || '';
+          const m = msg.match(/try again in\s+(?:(\d+)m)?\s*([\d.]+)?s?/i);
+          if (!m) return 0;
+          return Math.ceil((parseInt(m[1] || '0', 10) * 60) + parseFloat(m[2] || '0'));
+        }
+
+        /** Prueba los modelos en orden hasta encontrar uno que responda. */
+        async function findWorkingModel(key, models, onTry) {
+          for (const model of models.slice(0, 6)) {
+            if (onTry) onTry(model);
+            let r;
+            try {
+              r = await callGroq(key, model, [{role: 'user', content: 'Responde solamente: OK'}], 20);
+            } catch (e) {
+              throw new AIError('network', 'No hay conexión con Groq. Revisa tu internet e inténtalo de nuevo.');
+            }
+            if (r.res.ok) return model;
+            if (r.res.status === 401) {
+              throw new AIError('auth', '❌ Groq no reconoce esta clave. Revisa que la copiaste completa o crea una nueva.');
+            }
+            if (r.res.status === 429) return model; // la clave es válida; solo hay que esperar
+          }
+          throw new AIError('nomodel', 'No encontré ningún modelo disponible en este momento. Tu clave se guardó; inténtalo de nuevo más tarde.');
+        }
+
+        /** Limpia la respuesta del modelo y la convierte en HTML seguro. */
+        function cleanReply(text) {
+          return String(text)
+            .replace(/<think>[\s\S]*?<\/think>/gi, '')
+            .replace(/^```(?:html)?\s*/i, '')
+            .replace(/```\s*$/i, '')
+            .trim();
+        }
+
+        /** Si el modelo respondió en Markdown, lo pasa a HTML sencillo. */
+        function markdownToHTML(md) {
+          const inline = t =>
+            escapeHTML(t)
+              .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+              .replace(/(^|[^*])\*(?!\s)(.+?)\*/g, '$1<em>$2</em>')
+              .replace(/\^(\d+)/g, '<sup>$1</sup>');
+          const lines = md.split(/\r?\n/);
+          let html = '';
+          let list = null;
+          const closeList = () => {
+            if (list) {
+              html += '</' + list + '>';
+              list = null;
+            }
+          };
+          lines.forEach(line => {
+            const ul = line.match(/^\s*[-*•]\s+(.*)/);
+            const ol = line.match(/^\s*\d+[.)]\s+(.*)/);
+            if (ul || ol) {
+              const type = ul ? 'ul' : 'ol';
+              if (list !== type) {
+                closeList();
+                html += '<' + type + '>';
+                list = type;
+              }
+              html += '<li>' + inline((ul || ol)[1]) + '</li>';
+            } else if (line.trim() === '') {
+              closeList();
+            } else {
+              closeList();
+              html += '<p>' + inline(line.replace(/^#+\s*/, '')) + '</p>';
+            }
+          });
+          closeList();
+          return html;
+        }
+
+        const ALLOWED_TAGS = new Set(['P', 'STRONG', 'B', 'EM', 'I', 'UL', 'OL', 'LI', 'BR', 'SUP', 'SUB', 'DIV', 'SPAN', 'CODE', 'H3', 'H4', 'BLOCKQUOTE', 'HR']);
+        const DROP_TAGS = new Set(['SCRIPT', 'STYLE', 'IFRAME', 'OBJECT', 'EMBED', 'LINK', 'META', 'FORM', 'INPUT', 'BUTTON', 'TEXTAREA', 'SELECT', 'IMG', 'SVG', 'MATH']);
+
+        /** Deja pasar solo etiquetas sencillas y quita todo atributo peligroso. */
+        function sanitizeHTML(html) {
+          const tpl = document.createElement('template');
+          tpl.innerHTML = html;
+          (function walk(node) {
+            Array.from(node.childNodes).forEach(ch => {
+              if (ch.nodeType === 8) {
+                ch.remove();
+                return;
+              }
+              if (ch.nodeType !== 1) return;
+              if (DROP_TAGS.has(ch.tagName)) {
+                ch.remove();
+                return;
+              }
+              walk(ch);
+              if (!ALLOWED_TAGS.has(ch.tagName)) {
+                ch.replaceWith(...Array.from(ch.childNodes));
+                return;
+              }
+              Array.from(ch.attributes).forEach(a => {
+                const keep = a.name === 'class' && a.value === 'example-box';
+                if (!keep) ch.removeAttribute(a.name);
+              });
+            });
+          })(tpl.content);
+          return tpl.innerHTML;
+        }
+
+        function formatReply(text) {
+          const looksHTML = /<(p|ul|ol|li|strong|div|br)\b/i.test(text);
+          return sanitizeHTML(looksHTML ? text : markdownToHTML(text));
+        }
+
+        function saveModel(model) {
+          AI.model = model;
+          try {
+            localStorage.setItem(STORE_MODEL, model);
+          } catch (e) {}
+        }
+
+        /** Envía la conversación a la IA, cambiando de modelo si alguno falla. */
+        async function askAI() {
+          if (!AI.models.length) {
+            try {
+              AI.models = await detectModels(AI.key);
+            } catch (err) {
+              if (err.kind === 'auth') {
+                updateAIStatus('error');
+                return AI_MSG.auth;
+              }
+              if (!AI.model) return AI_MSG.network;
+            }
+          }
+
+          const order = [AI.model].concat(AI.models.filter(m => m !== AI.model)).filter(Boolean).slice(0, 4);
+          if (!order.length) return AI_MSG.nomodel;
+
+          const messages = [{role: 'system', content: SYSTEM_PROMPT}].concat(conversationHistory.slice(-7));
+
+          for (const model of order) {
+            let r;
+            try {
+              r = await callGroq(AI.key, model, messages, 1500);
+            } catch (e) {
+              return AI_MSG.network;
+            }
+
+            if (r.res.ok) {
+              const text = cleanReply((r.data.choices && r.data.choices[0] && r.data.choices[0].message && r.data.choices[0].message.content) || '');
+              if (!text) continue;
+              if (model !== AI.model) {
+                saveModel(model);
+                updateAIStatus('on');
+              }
+              return formatReply(text);
+            }
+
+            if (r.res.status === 401) {
+              updateAIStatus('error');
+              return AI_MSG.auth;
+            }
+            if (r.res.status === 429) {
+              return AI_MSG.rate(waitSeconds(r.data));
+            }
+            if (isModelError(r.res, r.data)) {
+              // Modelo retirado o no disponible: se descarta y se prueba el siguiente
+              AI.models = AI.models.filter(m => m !== model);
+              continue;
+            }
+            console.error('Groq respondió con error', r.res.status, r.data);
+          }
+          return AI_MSG.nomodel;
+        }
+
+        /** Al abrir la página: carga la clave guardada y comprueba los modelos. */
+        async function initAI() {
+          AI.key = storeGet(STORE_KEY);
+          try {
+            AI.model = localStorage.getItem(STORE_MODEL) || '';
+          } catch (e) {}
+
+          if (!AI.key) {
+            updateAIStatus('off');
+            return;
+          }
+          updateAIStatus('checking');
+          try {
+            AI.models = await detectModels(AI.key);
+            if (!AI.models.includes(AI.model)) saveModel(AI.models[0] || '');
+            updateAIStatus(AI.model ? 'on' : 'error');
+          } catch (err) {
+            updateAIStatus(err.kind === 'auth' ? 'error' : AI.model ? 'on' : 'error');
+          }
+        }
+
+        function shortModelName(id) {
+          return String(id || '').split('/').pop();
+        }
+
+        /** Actualiza el indicador del encabezado y el aviso de bienvenida. */
+        function updateAIStatus(state) {
+          const statusEl = document.getElementById('aiStatus');
+          const notice = document.getElementById('aiNotice');
+          const keyBtn = document.getElementById('headerKeyBtn');
+          const texts = {
+            off: 'modo básico: sin inteligencia artificial',
+            checking: 'conectando con la inteligencia artificial…',
+            on: 'IA activa · ' + shortModelName(AI.model),
+            error: 'IA sin conexión: revisa tu clave 🔑'
+          };
+          statusEl.textContent = texts[state] || texts.off;
+          statusEl.className = state === 'on' ? '' : 'ai-' + state;
+          notice.hidden = state === 'on' || state === 'checking';
+          keyBtn.classList.toggle('key-needed', state === 'off' || state === 'error');
         }
 
         // ===================================================================
@@ -1471,26 +2045,25 @@ Piensa en cuando aprendiste algo nuevo (conducir, cocinar, usar el teléfono). A
             }
           }
 
-          // 2) Si parece un problema a resolver/calcular → directo al backend
-          if (looksLikeProblem(userMessage)) {
-            const apiReply = await callBackendAPI(userMessage);
-            if (apiReply) return apiReply;
-            // Si el backend falla, caemos al flujo normal
+          const isProblem = looksLikeProblem(userMessage) || wantsExercise(userMessage);
+
+          // 2) Problemas y ejercicios → siempre a la IA (si está activada)
+          if (isProblem && aiReady()) {
+            return await askAI();
           }
 
-          // 3) Probar respuestas pre-programadas conceptuales (saltamos las 3 primeras)
+          // 3) Respuestas pre-programadas conceptuales (saltamos las 3 primeras)
           for (let i = 3; i < intents.length; i++) {
             if (hasAnyWord(msg, intents[i].keywords)) {
               return intents[i].response;
             }
           }
 
-          // 4) Sin match → backend
-          const apiReply = await callBackendAPI(userMessage);
-          if (apiReply) return apiReply;
-
-          // 5) Último recurso
-          return backendConfigured() ? responseDatabase['default_error'] : responseDatabase['default_sin_backend'];
+          // 4) Sin coincidencia → IA, o invitación a activarla
+          if (aiReady()) {
+            return await askAI();
+          }
+          return isProblem ? responseDatabase['necesita_ia'] : responseDatabase['default_sin_backend'];
         }
 
         // ===================================================================
@@ -1565,7 +2138,7 @@ Piensa en cuando aprendiste algo nuevo (conducir, cocinar, usar el teléfono). A
           conversationHistory.push({role: 'user', content: text});
 
           // Si va a llamar al backend, muestra hint de "pensando un poquito más" tras 4s
-          const mightUseAPI = backendConfigured() && (looksLikeProblem(text) || !intents.some(it => hasAnyWord(normalize(text), it.keywords)));
+          const mightUseAPI = aiReady() && (looksLikeProblem(text) || wantsExercise(text) || !intents.some(it => hasAnyWord(normalize(text), it.keywords)));
 
           showTyping(mightUseAPI);
           sendBtn.disabled = true;
@@ -1713,8 +2286,146 @@ Piensa en cuando aprendiste algo nuevo (conducir, cocinar, usar el teléfono). A
           el.addEventListener('click', () => askQuestion(el.dataset.question));
         });
 
-        // Calienta el backend al abrir la página
-        warmUpBackend();
+        // ===================================================================
+        //  Ventana de la clave personal
+        // ===================================================================
+        const keyOverlay = document.getElementById('keyOverlay');
+        const keyInput = document.getElementById('keyInput');
+        const keyRemember = document.getElementById('keyRemember');
+        const keyStatus = document.getElementById('keyStatus');
+        const keySaveBtn = document.getElementById('keySaveBtn');
+        const keyToggleBtn = document.getElementById('keyToggleBtn');
+        let keyLastFocus = null;
+
+        function setKeyStatus(kind, html) {
+          keyStatus.className = 'key-status' + (kind ? ' ' + kind : '');
+          keyStatus.innerHTML = html || '';
+        }
+
+        function openKeyModal(opener) {
+          keyLastFocus = opener || document.activeElement;
+          keyInput.value = AI.key || '';
+          keyRemember.checked = AI.key ? storeIsPersistent(STORE_KEY) : true;
+          if (AI.key && AI.model) {
+            setKeyStatus('ok', '✅ Ya tienes una clave guardada. Modelo en uso: <strong>' + escapeHTML(shortModelName(AI.model)) + '</strong>.');
+          } else if (AI.key) {
+            setKeyStatus('error', 'Hay una clave guardada, pero no funcionó. Revísala o crea una nueva.');
+          } else {
+            setKeyStatus('', '');
+          }
+          keyOverlay.classList.add('visible');
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('visible');
+          }
+          setTimeout(() => keyInput.focus(), 50);
+        }
+
+        function closeKeyModal() {
+          keyOverlay.classList.remove('visible');
+          keyInput.type = 'password';
+          keyToggleBtn.setAttribute('aria-pressed', 'false');
+          keyToggleBtn.setAttribute('aria-label', 'Mostrar la clave');
+          keyToggleBtn.textContent = '👁️';
+          if (keyLastFocus && document.body.contains(keyLastFocus)) keyLastFocus.focus();
+          else msgInput.focus();
+        }
+
+        async function saveKey() {
+          const key = keyInput.value.trim().replace(/\s+/g, '');
+          if (!key) {
+            setKeyStatus('error', 'Primero pega tu clave en el cuadro.');
+            keyInput.focus();
+            return;
+          }
+          if (!/^gsk_/.test(key)) {
+            setKeyStatus('error', 'Las claves de Groq empiezan con <code>gsk_</code>. Revisa que la copiaste completa.');
+            keyInput.focus();
+            return;
+          }
+
+          keySaveBtn.disabled = true;
+          setKeyStatus('info', '⏳ Probando tu clave y buscando un modelo de IA que funcione…');
+          try {
+            const models = await detectModels(key);
+            if (!models.length) throw new AIError('nomodel', 'Tu clave funciona, pero Groq no ofrece modelos de conversación en este momento.');
+            const model = await findWorkingModel(key, models, m =>
+              setKeyStatus('info', '⏳ Probando el modelo <strong>' + escapeHTML(shortModelName(m)) + '</strong>…')
+            );
+            AI.key = key;
+            AI.models = models;
+            saveModel(model);
+            storeSet(STORE_KEY, key, keyRemember.checked);
+            updateAIStatus('on');
+            setKeyStatus('ok', '✅ ¡Listo! Tu clave funciona. Modelo elegido: <strong>' + escapeHTML(shortModelName(model)) +
+              '</strong>. Ya puedes pedirme problemas paso a paso y ejercicios de práctica.');
+          } catch (err) {
+            setKeyStatus('error', escapeHTML(err.userMessage || 'Algo salió mal. Inténtalo de nuevo.'));
+          } finally {
+            keySaveBtn.disabled = false;
+          }
+        }
+
+        function deleteKey() {
+          storeDel(STORE_KEY);
+          AI.key = '';
+          AI.models = [];
+          keyInput.value = '';
+          updateAIStatus('off');
+          setKeyStatus('ok', '🗑️ La clave se borró de este equipo. El Profe GED sigue disponible en modo básico.');
+          keyInput.focus();
+        }
+
+        document.getElementById('headerKeyBtn').addEventListener('click', e => openKeyModal(e.currentTarget));
+        document.getElementById('keyCloseBtn').addEventListener('click', closeKeyModal);
+        document.getElementById('keyDeleteBtn').addEventListener('click', deleteKey);
+        keySaveBtn.addEventListener('click', saveKey);
+        keyInput.addEventListener('keydown', e => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            saveKey();
+          }
+        });
+        keyToggleBtn.addEventListener('click', () => {
+          const show = keyInput.type === 'password';
+          keyInput.type = show ? 'text' : 'password';
+          keyToggleBtn.setAttribute('aria-pressed', String(show));
+          keyToggleBtn.setAttribute('aria-label', show ? 'Ocultar la clave' : 'Mostrar la clave');
+          keyToggleBtn.textContent = show ? '🙈' : '👁️';
+        });
+        document.getElementById('keyRememberText').addEventListener('click', () => {
+          keyRemember.checked = !keyRemember.checked;
+        });
+        keyOverlay.addEventListener('click', e => {
+          if (e.target === keyOverlay) closeKeyModal();
+        });
+        // Mantener el foco dentro de la ventana (teclado)
+        keyOverlay.addEventListener('keydown', e => {
+          if (e.key === 'Escape') {
+            closeKeyModal();
+            return;
+          }
+          if (e.key !== 'Tab') return;
+          const f = Array.from(keyOverlay.querySelectorAll('a[href], button:not([disabled]), input, summary')).filter(el => el.offsetParent !== null);
+          if (!f.length) return;
+          const first = f[0];
+          const last = f[f.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        });
+        // Botones "Activar la IA" dentro del chat y del aviso de bienvenida
+        messagesContainer.addEventListener('click', e => {
+          const btn = e.target.closest('[data-open-key]');
+          if (btn) openKeyModal(btn);
+        });
+
+        // Carga la clave guardada y elige el modelo al abrir la página
+        initAI();
 
         // Foco inicial
         msgInput.focus();
