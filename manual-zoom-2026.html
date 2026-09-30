@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de Zoom Workplace 2026 para dar clases</title>
+<style>
+  :root {
+    --fondo: #ffffff;
+    --texto: #1a1a1a;
+    --suave: #4a4a4a;
+    --azul: #0b4f8a;
+    --azul-claro: #e8f1fa;
+    --verde: #1e6b3a;
+    --verde-claro: #e7f5ec;
+    --ambar: #7a4a00;
+    --ambar-claro: #fff4dc;
+    --borde: #c9d3dd;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Verdana, Arial, sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+  .contenedor { max-width: 920px; margin: 0 auto; padding: 0 16px 64px; }
+  header {
+    background: var(--azul);
+    color: #fff;
+    padding: 28px 16px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 1.9rem; }
+  header p { margin: 0; font-size: 1rem; opacity: .95; }
+  a { color: var(--azul); }
+  a:focus, button:focus { outline: 3px solid #f0a500; outline-offset: 2px; }
+  .saltar {
+    position: absolute; left: -999px; top: 8px;
+    background: #fff; color: var(--azul); padding: 8px 12px; z-index: 10;
+  }
+  .saltar:focus { left: 8px; }
+  nav.indice {
+    background: var(--azul-claro);
+    border: 2px solid var(--azul);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 24px 0;
+  }
+  nav.indice h2 { margin: 0 0 8px; font-size: 1.3rem; color: var(--azul); border: none; padding: 0; }
+  nav.indice ol { margin: 0; padding-left: 1.4rem; }
+  nav.indice li { margin: 6px 0; }
+  nav.indice a { font-weight: 600; text-decoration: none; }
+  nav.indice a:hover { text-decoration: underline; }
+  section { scroll-margin-top: 16px; }
+  h2 {
+    font-size: 1.55rem;
+    color: var(--azul);
+    border-bottom: 3px solid var(--azul);
+    padding-bottom: 4px;
+    margin-top: 48px;
+  }
+  h3 { font-size: 1.2rem; margin-top: 28px; }
+  .caja {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-left: 8px solid;
+  }
+  .clave { background: var(--verde-claro); border-color: var(--verde); }
+  .aviso { background: var(--ambar-claro); border-color: var(--ambar); }
+  .caja strong:first-child { display: block; margin-bottom: 4px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 1rem; }
+  th, td { border: 1px solid var(--borde); padding: 10px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--azul); color: #fff; }
+  tr:nth-child(even) td { background: #f5f8fb; }
+  .tabla-scroll { overflow-x: auto; }
+  ol.pasos li, ul li { margin: 8px 0; }
+  kbd {
+    background: #eee; border: 1px solid #aaa; border-bottom-width: 3px;
+    border-radius: 5px; padding: 1px 7px; font-family: inherit; font-size: .95em;
+  }
+  .en { color: var(--suave); font-weight: normal; }
+  .subir {
+    display: inline-block; margin-top: 16px; font-size: 1rem;
+    text-decoration: none; font-weight: 600;
+  }
+  .check { list-style: none; padding-left: 0; }
+  .check li::before { content: "☐  "; font-size: 1.2em; }
+  footer { margin-top: 48px; font-size: .95rem; color: var(--suave); border-top: 1px solid var(--borde); padding-top: 16px; }
+  @media print {
+    header { background: none; color: #000; }
+    .subir, .saltar { display: none; }
+    th { background: #ddd; color: #000; }
+  }
+
+  /* ===== Acordeón ===== */
+  .controles { display:flex; gap:12px; flex-wrap:wrap; margin: 0 0 16px; }
+  .controles button {
+    font: inherit; font-size: 1rem; font-weight: 600;
+    background: #fff; color: var(--azul);
+    border: 2px solid var(--azul); border-radius: 8px;
+    padding: 8px 16px; cursor: pointer;
+  }
+  .controles button:hover { background: var(--azul-claro); }
+  details.acordeon {
+    border: 2px solid var(--borde); border-radius: 10px;
+    margin: 12px 0; scroll-margin-top: 16px; background: #fff;
+  }
+  details.acordeon[open] { border-color: var(--azul); }
+  details.acordeon > summary {
+    list-style: none; cursor: pointer;
+    padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+    background: var(--azul-claro); border-radius: 8px;
+  }
+  details.acordeon > summary::-webkit-details-marker { display: none; }
+  details.acordeon > summary:focus { outline: 3px solid #f0a500; outline-offset: 2px; }
+  details.acordeon > summary::before {
+    content: "+"; flex: 0 0 32px; height: 32px; line-height: 30px;
+    text-align: center; font-size: 1.5rem; font-weight: 700;
+    color: #fff; background: var(--azul); border-radius: 50%;
+  }
+  details.acordeon[open] > summary::before { content: "\2212"; }
+  details.acordeon[open] > summary { border-radius: 8px 8px 0 0; }
+  details.acordeon > summary h2 {
+    margin: 0; border: none; padding: 0; font-size: 1.35rem;
+  }
+  details.acordeon > summary:hover h2 { text-decoration: underline; }
+  details.acordeon .cuerpo { padding: 4px 20px 18px; }
+  @media print {
+    details.acordeon { border: none; }
+    details.acordeon > summary::before, .controles { display: none; }
+  }
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header>
+  <h1>Manual de Zoom Workplace 2026 para dar clases</h1>
+  <p>Aplicación de escritorio para Windows · versiones 7.0 a 7.2 · actualizado el 30 de septiembre de 2026</p>
+</header>
+
+<main class="contenedor" id="contenido">
+
+<nav class="indice" id="indice" aria-label="Índice">
+  <h2>Índice</h2>
+  <ol>
+    <li><a href="#como-usar">Cómo usar este manual</a></li>
+    <li><a href="#que-cambio">Qué cambió en Zoom</a></li>
+    <li><a href="#espejo">La pantalla dentro de otra pantalla</a></li>
+    <li><a href="#receta">Receta: compartir con dos monitores</a></li>
+    <li><a href="#selector">El nuevo selector de Compartir</a></li>
+    <li><a href="#anotar">Anotar y la Pizarra</a></li>
+    <li><a href="#barra">Barra de herramientas, configuración y vista propia</a></li>
+    <li><a href="#anfitrion">Herramientas del anfitrión</a></li>
+    <li><a href="#novedades">Otras novedades útiles para la clase</a></li>
+    <li><a href="#verificacion">Lista de verificación y problemas frecuentes</a></li>
+    <li><a href="#fuentes">Fuentes</a></li>
+  </ol>
+</nav>
+
+<div class="controles">
+  <button type="button" id="abrir-todo">Abrir todas las secciones</button>
+  <button type="button" id="cerrar-todo">Cerrar todas las secciones</button>
+</div>
+
+<!-- ============ 1 ============ -->
+<details class="acordeon" id="como-usar" open>
+  <summary><h2>1. Cómo usar este manual</h2></summary>
+  <div class="cuerpo">
+  <div class="caja clave">
+    <strong>¿Tiene solo 5 minutos antes de clase?</strong>
+    Lea <a href="#espejo">La pantalla dentro de otra pantalla</a> y siga la <a href="#receta">Receta con dos monitores</a>. El resto es para consultar.
+  </div>
+  <p>Zoom se actualiza cada mes, así que algún nombre puede variar un poco en su pantalla.</p>
+  <p><strong>Convención:</strong> los botones van en <strong>negrita</strong> con su nombre en inglés entre paréntesis, porque muchas instituciones instalan Zoom en inglés. Ejemplo: <strong>Compartir <span class="en">(Share)</span></strong>.</p>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- ============ 2 ============ -->
+<details class="acordeon" id="que-cambio">
+  <summary><h2>2. Qué cambió en Zoom</h2></summary>
+  <div class="cuerpo">
+  <p>Zoom no quitó funciones: las <strong>cambió de lugar y de aspecto</strong>. Lo que más afecta a quien da clase llegó con la versión 7.2 (18 de septiembre de 2026).</p>
+  <p>Para ver su versión: foto de perfil → <strong>Ayuda <span class="en">(Help)</span></strong> → <strong>Acerca de Zoom <span class="en">(About Zoom)</span></strong>.</p>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Fecha</th><th scope="col">Versión</th><th scope="col">Qué cambió (lo que usted nota)</th></tr></thead>
+    <tbody>
+      <tr><td>Sep. 2026</td><td>7.2</td><td>Nuevo <strong>selector de Compartir</strong> en una sola página; las ventanas de Zoom ya aparecen como opción para compartir.</td></tr>
+      <tr><td>Sep. 2026</td><td>7.2</td><td><strong>Vista propia flotante</strong>: su video puede flotar sobre la galería.</td></tr>
+      <tr><td>Sep. 2026</td><td>7.2</td><td><strong>Herramientas del anfitrión</strong> reorganizadas: «¿Quién puede compartir?» está a la vista.</td></tr>
+      <tr><td>Sep. 2026</td><td>7.2</td><td>Al salir, el botón rojo es <strong>Salir de la reunión</strong>; <strong>Finalizar para todos</strong> queda en segundo plano.</td></tr>
+      <tr><td>Sep. 2026</td><td>7.2</td><td>Modo claro/oscuro en toda la reunión, avatares redondos, mosaicos de video renovados.</td></tr>
+      <tr><td>Mar. 2026</td><td>7.0</td><td>Pestaña de IA; subtítulos y transcripción separados; compartir <strong>una sola pestaña</strong> de Chrome o Edge.</td></tr>
+      <tr><td>Dic. 2025</td><td>6.7</td><td>Barra de herramientas simplificada, menú <strong>Más <span class="en">(More)</span></strong>, configuración en un panel a la derecha.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- ============ 3 ============ -->
+<details class="acordeon" id="espejo">
+  <summary><h2>3. La pantalla dentro de otra pantalla</h2></summary>
+  <div class="cuerpo">
+  <div class="caja clave">
+    <strong>En pocas palabras</strong>
+    Ocurre porque <strong>Zoom se está filmando a sí mismo</strong>: usted comparte el mismo monitor donde tiene abierta la reunión, como dos espejos enfrentados.<br>
+    <strong>Solución:</strong> comparta el monitor donde <u>no</u> está Zoom, o comparta solo una ventana.
+  </div>
+  <p>Revise estas causas en orden; la primera que coincida suele ser la suya.</p>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Qué ve usted</th><th scope="col">Causa probable</th><th scope="col">Solución</th></tr></thead>
+    <tbody>
+      <tr><td>La ventana de Zoom repetida en túnel, cada vez más pequeña</td><td>Compartió la <strong>pantalla completa</strong> del monitor donde está la reunión</td><td>Comparta el <strong>otro</strong> monitor o una <strong>ventana</strong> concreta. Ver la <a href="#receta">receta</a>.</td></tr>
+      <tr><td>Lo mismo, aunque antes no le pasaba</td><td>La opción de mostrar las ventanas de Zoom está activada</td><td><strong>Configuración <span class="en">(Settings)</span></strong> → <strong>Compartir pantalla <span class="en">(Share Screen)</span></strong> → desmarque <strong>Mostrar mis ventanas de Zoom a otros participantes <span class="en">(Show my Zoom windows to other participants…)</span></strong>. Reinicie Zoom.</td></tr>
+      <tr><td>Sus dos monitores muestran exactamente lo mismo</td><td>Windows está en modo <strong>Duplicar</strong></td><td>Pulse <kbd>Windows</kbd> + <kbd>P</kbd> y elija <strong>Extender <span class="en">(Extend)</span></strong>.</td></tr>
+      <tr><td>Ve su propia clase en pequeño dentro de otra ventana</td><td>Tiene la reunión abierta dos veces (navegador u otro equipo)</td><td>Mueva esa segunda ventana al monitor que no comparte, o ciérrela.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Si nada coincide, haga una captura con <kbd>Windows</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd> durante la clase y compártala con soporte técnico o conmigo.</p>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- ============ 4 ============ -->
+<details class="acordeon" id="receta">
+  <summary><h2>4. Receta: compartir pantalla con dos monitores</h2></summary>
+  <div class="cuerpo">
+  <div class="caja clave">
+    <strong>Regla de oro</strong>
+    Un monitor para <strong>enseñar</strong>, otro para <strong>Zoom</strong>. Así nunca hay efecto espejo y usted ve a sus estudiantes y el chat mientras explica.
+  </div>
+
+  <h3>Antes de la clase (una sola vez)</h3>
+  <ol class="pasos">
+    <li>Pulse <kbd>Windows</kbd> + <kbd>P</kbd> y confirme que está en <strong>Extender</strong>.</li>
+    <li>Decida cuál es su <strong>monitor de enseñar</strong> (por ejemplo, el derecho) y cuál el <strong>monitor de Zoom</strong> (el izquierdo).</li>
+  </ol>
+
+  <h3>En cada clase</h3>
+  <ol class="pasos">
+    <li>Abra lo que va a mostrar (Brightspace, MyOpenMath, PowerPoint, GeoGebra) y arrástrelo al <strong>monitor de enseñar</strong>.</li>
+    <li>Entre a la reunión y deje Zoom en el <strong>monitor de Zoom</strong>. Abra ahí <strong>Participantes</strong> y <strong>Chat</strong>.</li>
+    <li>Pulse <strong>Compartir <span class="en">(Share)</span></strong> en la barra de abajo.</li>
+    <li>Elija la miniatura <strong>Pantalla 2 <span class="en">(Screen 2)</span></strong> o la del monitor de enseñar. Zoom muestra un número grande en cada monitor para identificarlo.</li>
+    <li>Si va a poner un video, marque <strong>Compartir sonido <span class="en">(Share sound)</span></strong> y <strong>Optimizar para video <span class="en">(Optimize for video clip)</span></strong>.</li>
+    <li>Pulse <strong>Compartir</strong>. Un borde verde marca lo que ven los alumnos.</li>
+    <li>Trabaje en el monitor de enseñar; mire a sus alumnos en el monitor de Zoom.</li>
+    <li>Para cambiar de contenido: <strong>Nueva compartición <span class="en">(New Share)</span></strong>. Para terminar: <strong>Dejar de compartir <span class="en">(Stop Share)</span></strong>.</li>
+  </ol>
+
+  <div class="caja aviso">
+    <strong>Opción más segura</strong>
+    Comparta solo una <strong>ventana</strong> (en el paso 4 elija la miniatura del programa). Así nadie ve sus correos ni notificaciones. Para una sola pestaña de Chrome o Edge, búsquela en la sección <strong>Otros <span class="en">(Other)</span></strong>.
+  </div>
+  <p><strong>Con PowerPoint:</strong> en <strong>Presentación con diapositivas → Configurar presentación</strong>, elija <strong>Examinada por una persona (ventana)</strong>. Así la presentación queda en una ventana que puede compartir sola.</p>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- ============ 5 ============ -->
+<details class="acordeon" id="selector">
+  <summary><h2>5. El nuevo selector de Compartir</h2></summary>
+  <div class="cuerpo">
+  <p>Desde la versión 7.2, al pulsar <strong>Compartir</strong> se abre <strong>una sola página que se desplaza hacia abajo</strong>, en lugar de pestañas. Arriba hay enlaces para saltar a cada sección.</p>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Sección</th><th scope="col">Qué contiene</th><th scope="col">Cuándo usarla</th></tr></thead>
+    <tbody>
+      <tr><td>Pantallas</td><td>Cada monitor completo</td><td>Clase normal con dos monitores</td></tr>
+      <tr><td>Ventanas</td><td>Cada programa abierto, <strong>incluidas las ventanas de Zoom</strong></td><td>Mostrar solo PowerPoint, Chrome o MyOpenMath</td></tr>
+      <tr><td>Archivos</td><td>Archivos de Zoom y de la nube, con buscador</td><td>Poco uso en clase</td></tr>
+      <tr><td>Otros <span class="en">(Other)</span></td><td>Pizarra, cámara, parte de la pantalla, pestaña del navegador</td><td>Pizarra para ejercicios; cámara de documentos</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="caja aviso">
+    <strong>Cuidado</strong>
+    Si elige por error la ventana de la reunión de Zoom, los alumnos verán la propia reunión y aparecerá el efecto espejo.
+  </div>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- ============ ANOTAR ============ -->
+<details class="acordeon" id="anotar">
+  <summary><h2>6. Anotar y la Pizarra</h2></summary>
+  <div class="cuerpo">
+  <div class="caja clave">
+    <strong>En pocas palabras</strong>
+    La herramienta para <strong>seleccionar y mover</strong> lo escrito sigue existiendo: es la <strong>flecha</strong>, el <strong>primer ícono</strong> de la barra de anotación. Lo nuevo es que el botón <strong>Anotar</strong> puede estar escondido en <strong>Más</strong>.
+  </div>
+
+  <h3 id="anotar-pantalla">A. Escribir sobre la pantalla compartida</h3>
+  <ol class="pasos">
+    <li>Comparta su pantalla o una ventana (vea la <a href="#receta">receta</a>).</li>
+    <li>En la barra flotante de arriba, pulse <strong>Anotar <span class="en">(Annotate)</span></strong>, el ícono del lápiz. Si no lo ve, ábralo desde <strong>Más <span class="en">(More)</span></strong>, los tres puntos.</li>
+    <li>Aparece la barra de anotación. Elija <strong>Texto</strong> o <strong>Dibujar</strong> y escriba.</li>
+    <li>Para mover lo escrito, pulse la <strong>flecha: Seleccionar <span class="en">(Select)</span></strong>. Haga clic sobre lo escrito (o trace un recuadro alrededor de varias cosas) y arrástrelo.</li>
+    <li>Al terminar, cierre la barra de anotación. Si deja de compartir, las anotaciones se borran, así que guárdelas antes si las necesita.</li>
+  </ol>
+
+  <h3 id="barra-anotacion">B. La barra de anotación, ícono por ícono</h3>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Herramienta</th><th scope="col">Para qué sirve</th><th scope="col">Idea para la clase de matemáticas</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Seleccionar <span class="en">(Select)</span></strong> (flecha)</td><td>Elegir, mover o cambiar de tamaño lo escrito</td><td>Mover un paso de la solución para dejar espacio</td></tr>
+      <tr><td><strong>Texto <span class="en">(Text)</span></strong></td><td>Escribir con el teclado</td><td>Poner la respuesta en limpio: <em>x = 4</em></td></tr>
+      <tr><td><strong>Dibujar <span class="en">(Draw)</span></strong></td><td>Trazo libre, líneas, flechas, rectángulos, círculos</td><td>Encerrar el término semejante; dibujar una recta numérica</td></tr>
+      <tr><td><strong>Sello <span class="en">(Stamp)</span></strong></td><td>Marcas: ✓, ✗, estrella, corazón</td><td>Marcar respuestas correctas de los alumnos</td></tr>
+      <tr><td><strong>Foco <span class="en">(Spotlight)</span></strong></td><td>Puntero o flecha que señala</td><td>Señalar dónde mirar sin dejar marca</td></tr>
+      <tr><td><strong>Borrador <span class="en">(Eraser)</span></strong></td><td>Borrar trazos uno por uno</td><td>Corregir un signo</td></tr>
+      <tr><td><strong>Formato / Color <span class="en">(Format)</span></strong></td><td>Color, grosor de línea y tamaño de letra</td><td>Un color por paso; letra grande para accesibilidad</td></tr>
+      <tr><td><strong>Deshacer / Rehacer <span class="en">(Undo / Redo)</span></strong></td><td>Anular o repetir la última acción</td><td>Arreglar un trazo equivocado</td></tr>
+      <tr><td><strong>Borrar <span class="en">(Clear)</span></strong></td><td>Borrar todo: mis dibujos, los de otros o todos</td><td>Limpiar antes del siguiente ejercicio</td></tr>
+      <tr><td><strong>Guardar <span class="en">(Save)</span></strong></td><td>Guardar como imagen (PNG) o PDF</td><td>Subir la solución a Brightspace</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>El orden o el aspecto de los íconos puede variar un poco según su versión de Zoom.</p>
+
+  <h3 id="alumnos-anotan">C. Que los alumnos escriban también</h3>
+  <ul>
+    <li><strong>Herramientas del anfitrión → Permitir a todos → Anotar</strong> para activarlo o desactivarlo (vea <a href="#anfitrion">Herramientas del anfitrión</a>).</li>
+    <li>En la barra flotante, <strong>Más → Mostrar nombres de quienes anotan <span class="en">(Show Names of Annotators)</span></strong> muestra quién escribió cada cosa.</li>
+    <li>Si no aparece la opción Anotar en ningún lado, puede estar desactivada en la cuenta de la institución. Consulte a soporte técnico de City Colleges.</li>
+  </ul>
+
+  <h3 id="pizarra">D. La Pizarra <span class="en">(Whiteboard)</span></h3>
+  <ol class="pasos">
+    <li>Pulse <strong>Compartir</strong> y, en la sección <strong>Otros <span class="en">(Other)</span></strong>, elija <strong>Pizarra <span class="en">(Whiteboard)</span></strong>.</li>
+    <li>En la pizarra nueva, la barra de herramientas está en el <strong>lado izquierdo</strong>. Se puede arrastrar a otro lugar de la pantalla.</li>
+    <li>La <strong>flecha para seleccionar y mover</strong> también es el primer ícono de esa barra.</li>
+  </ol>
+  <p>La pizarra nueva trae herramientas que ayudan en matemáticas:</p>
+  <ul>
+    <li><strong>Ecuación <span class="en">(Equation)</span>:</strong> escribe fórmulas con buen formato (fracciones, exponentes, raíces).</li>
+    <li><strong>Texto y dibujo:</strong> las mismas funciones que la anotación, con más formas.</li>
+    <li><strong>Subir <span class="en">(Upload)</span>:</strong> pone una imagen o un PDF en la pizarra para escribir encima (por ejemplo, un ejercicio del GED).</li>
+    <li><strong>Copiar y pegar, notas adhesivas y plantillas.</strong></li>
+    <li><strong>Convertir escritura a mano:</strong> transforma lo escrito con el ratón o lápiz en texto y figuras limpias, con vista previa antes de aceptar.</li>
+  </ul>
+  <div class="caja aviso">
+    <strong>Diferencia importante</strong>
+    Lo escrito en la <strong>pantalla compartida</strong> se pierde al dejar de compartir. Lo escrito en la <strong>Pizarra</strong> se guarda en su cuenta de Zoom y puede abrirlo en otra clase.
+  </div>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- ============ 6 ============ -->
+<details class="acordeon" id="barra">
+  <summary><h2>7. Barra de herramientas, configuración y vista propia</h2></summary>
+  <div class="cuerpo">
+  <h3>Barra de herramientas más corta</h3>
+  <p>Abajo solo quedan los botones esenciales. El resto está en <strong>Más <span class="en">(More)</span></strong> (los tres puntos). Para dejar fijo un botón que usa siempre, como <strong>Salas para grupos</strong> o <strong>Grabar</strong>: ábralo en Más, clic derecho → <strong>Fijar <span class="en">(Pin)</span></strong>. También puede arrastrar los botones para cambiar su orden.</p>
+
+  <h3>Configuración en un solo panel</h3>
+  <p>Los ajustes se abren en un <strong>panel a la derecha</strong>. La flechita <strong>^</strong> junto a cada botón lleva directo al ajuste de ese botón.</p>
+
+  <h3>Vista propia flotante (nuevo)</h3>
+  <p>Su video tiene un botón con dos opciones:</p>
+  <ul>
+    <li><strong>Flotar sobre la galería <span class="en">(Float over gallery)</span>:</strong> su video se vuelve un recuadro pequeño que puede mover.</li>
+    <li><strong>Mostrar en la galería <span class="en">(Show in gallery)</span>:</strong> su video vuelve a su lugar entre los demás.</li>
+  </ul>
+  <p>Si le estorba, elija <strong>Mostrar en la galería</strong> u <strong>Ocultar vista propia <span class="en">(Hide self view)</span></strong>. El valor predeterminado se cambia en <strong>Configuración → Reuniones y seminarios web → Vista propia predeterminada <span class="en">(Self view defaults)</span></strong>.</p>
+
+  <h3>Modo claro u oscuro</h3>
+  <p>Toda la reunión sigue ahora su preferencia de apariencia: <strong>Configuración → General → Apariencia</strong>.</p>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- ============ 7 ============ -->
+<details class="acordeon" id="anfitrion">
+  <summary><h2>8. Herramientas del anfitrión</h2></summary>
+  <div class="cuerpo">
+  <p>El botón <strong>Herramientas del anfitrión <span class="en">(Host tools)</span></strong> abre un panel a la derecha con todo a la vista, ordenado en secciones.</p>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Sección</th><th scope="col">Qué controla</th><th scope="col">Uso en clase</th></tr></thead>
+    <tbody>
+      <tr><td>Controles de la reunión</td><td><strong>¿Quién puede compartir?</strong>, bloquear reunión, sala de espera</td><td>Dejar que un alumno presente</td></tr>
+      <tr><td>Permitir a todos</td><td>Chat, cambiar nombre, audio, video, reacciones, <strong>anotar</strong>, grabar</td><td>Que los alumnos escriban en la pizarra</td></tr>
+      <tr><td>Grabación</td><td>Permisos de grabación</td><td>Grabar la clase para Brightspace</td></tr>
+      <tr><td>IA y aplicaciones</td><td>Resumen y funciones de IA</td><td>Opcional</td></tr>
+      <tr><td>Suspender actividades</td><td>Botón de emergencia: detiene todo</td><td>Si alguien interrumpe la clase</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="caja aviso">
+    <strong>Al salir</strong>
+    El botón rojo principal es ahora <strong>Salir de la reunión <span class="en">(Leave Meeting)</span></strong>. <strong>Finalizar para todos <span class="en">(End Meeting for All)</span></strong> es la opción secundaria y pide confirmación.
+  </div>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- ============ 8 ============ -->
+<details class="acordeon" id="novedades">
+  <summary><h2>9. Otras novedades útiles para la clase</h2></summary>
+  <div class="cuerpo">
+  <p>Estas funciones encajan bien con el DUA, sobre todo con estudiantes hispanohablantes:</p>
+  <ul>
+    <li><strong>Traducción del chat:</strong> cada participante puede ver el chat traducido a su idioma.</li>
+    <li><strong>Traductor de voz:</strong> los participantes escuchan la clase traducida en audio (español, inglés, francés, chino, japonés, árabe, alemán, italiano, portugués). Puede depender del plan de su institución.</li>
+    <li><strong>Fijar un mensaje en el chat:</strong> el anfitrión fija, por ejemplo, el enlace de MyOpenMath y queda arriba del chat, incluso para quien llega tarde.</li>
+    <li><strong>Subtítulos y transcripción separados:</strong> puede activar subtítulos sin generar transcripción, o al revés.</li>
+    <li><strong>Aviso de llegada temprana:</strong> Zoom le avisa cuando el primer alumno entra antes de la hora.</li>
+    <li><strong>Salas para grupos:</strong> quien espera en la sala de espera puede pasar directo a su sala asignada.</li>
+  </ul>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- ============ 9 ============ -->
+<details class="acordeon" id="verificacion">
+  <summary><h2>10. Lista de verificación y problemas frecuentes</h2></summary>
+  <div class="cuerpo">
+  <h3>Antes de cada clase (2 minutos)</h3>
+  <ul class="check">
+    <li><kbd>Windows</kbd> + <kbd>P</kbd> está en <strong>Extender</strong>.</li>
+    <li>Materiales abiertos en el <strong>monitor de enseñar</strong>.</li>
+    <li>Zoom, chat y participantes en el <strong>monitor de Zoom</strong>.</li>
+    <li>Notificaciones silenciadas (Windows: <strong>No molestar</strong>).</li>
+    <li>Zoom actualizado: foto de perfil → <strong>Buscar actualizaciones</strong>.</li>
+  </ul>
+
+  <h3>Problemas frecuentes</h3>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Problema</th><th scope="col">Solución rápida</th></tr></thead>
+    <tbody>
+      <tr><td>Efecto espejo o túnel</td><td>Comparta el otro monitor o una sola ventana (<a href="#espejo">sección 3</a>).</td></tr>
+      <tr><td>No encuentro la flecha para mover lo escrito</td><td><strong>Anotar</strong> (en la barra flotante o en <strong>Más</strong>) → primer ícono, <strong>Seleccionar</strong> (<a href="#anotar">sección 6</a>).</td></tr>
+      <tr><td>No encuentro un botón</td><td>Búsquelo en <strong>Más</strong>; fíjelo con clic derecho.</td></tr>
+      <tr><td>Mi video tapa el contenido</td><td>Botón de la vista propia → <strong>Mostrar en la galería</strong> u <strong>Ocultar</strong>.</td></tr>
+      <tr><td>Los alumnos no oyen el video</td><td><strong>Nueva compartición</strong> y marque <strong>Compartir sonido</strong>.</td></tr>
+      <tr><td>Un alumno no puede compartir</td><td><strong>Herramientas del anfitrión → ¿Quién puede compartir?</strong> → Todos.</td></tr>
+      <tr><td>Todo se ve distinto a este manual</td><td>Compruebe su versión en <strong>Ayuda → Acerca de Zoom</strong>.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Para practicar sin alumnos: <a href="https://zoom.us/test" target="_blank" rel="noopener">zoom.us/test</a>.</p>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- ============ 10 ============ -->
+<details class="acordeon" id="fuentes">
+  <summary><h2>11. Fuentes</h2></summary>
+  <div class="cuerpo">
+  <ul>
+    <li><a href="https://www.zoom.com/en/blog/zoom-workplace-simplicity-ui-updates/" target="_blank" rel="noopener">Zoom Workplace reimagined</a>: blog oficial de Zoom</li>
+    <li><a href="https://releasebot.io/updates/zoom/zoom-workplace" target="_blank" rel="noopener">Notas de versión de Zoom Workplace, sept. 2026</a></li>
+    <li><a href="https://www.zoom.com/en/products/whats-new/" target="_blank" rel="noopener">What's New at Zoom</a></li>
+    <li><a href="https://it.umn.edu/services-technologies/how-tos/zoom-share-your-screen" target="_blank" rel="noopener">Zoom: Share Your Screen</a>, Universidad de Minnesota</li>
+    <li><a href="https://utk.teamdynamix.com/TDClient/2277/OIT-Portal/KB/Article/160890/Zoom-Annotation-Tools-for-Share-Screen-and-New-Whiteboard" target="_blank" rel="noopener">Zoom: Annotation Tools for Share Screen and New Whiteboard</a>, Universidad de Tennessee</li>
+    <li><a href="https://utk.teamdynamix.com/TDClient/2277/OIT-Portal/KB/Article/132637/Zoom-Annotation-Tools" target="_blank" rel="noopener">Zoom: Annotation Tools</a>, Universidad de Tennessee</li>
+    <li><a href="https://www.bu.edu/sph/files/2020/08/Using-Zoom-with-Two-Displays.pdf" target="_blank" rel="noopener">Using Zoom with Two Displays</a>, Universidad de Boston</li>
+  </ul>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<footer>Preparado para José M. Fernández (Zhema) · 30 de septiembre de 2026</footer>
+</main>
+<script>
+  var todos = function () { return document.querySelectorAll('details.acordeon'); };
+
+  // Abre la sección a la que apunta un enlace interno (#ancla)
+  function abrirSeccion(id) {
+    var d = document.getElementById(id);
+    if (d && d.tagName === 'DETAILS') {
+      d.open = true;
+      d.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      d.querySelector('summary').focus({ preventScroll: true });
+    }
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var id = a.getAttribute('href').slice(1);
+      setTimeout(function () { abrirSeccion(id); }, 0);
+    });
+  });
+  if (location.hash) abrirSeccion(decodeURIComponent(location.hash.slice(1)));
+
+  // Botones Abrir todo / Cerrar todo
+  document.getElementById('abrir-todo').onclick = function () { todos().forEach(function (d) { d.open = true; }); };
+  document.getElementById('cerrar-todo').onclick = function () { todos().forEach(function (d) { d.open = false; }); };
+
+  // Al imprimir, se abren todas las secciones
+  window.addEventListener('beforeprint', function () { todos().forEach(function (d) { d.open = true; }); });
+</script>
+</body>
+</html>
