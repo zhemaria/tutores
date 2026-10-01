@@ -141,7 +141,7 @@
 
 <header>
   <h1>Manual de Zoom Workplace 2026 para dar clases</h1>
-  <p>Aplicación de escritorio para Windows · versiones 7.0 a 7.2 · actualizado el 30 de septiembre de 2026</p>
+  <p>Aplicación de escritorio para Windows · versiones 7.0 a 7.2 · actualizado el 1 de octubre de 2026</p>
 </header>
 
 <main class="contenedor" id="contenido">
@@ -158,6 +158,7 @@
     <li><a href="#barra">Barra de herramientas, configuración y vista propia</a></li>
     <li><a href="#anfitrion">Herramientas del anfitrión</a></li>
     <li><a href="#novedades">Otras novedades útiles para la clase</a></li>
+    <li><a href="#reportes">Reportes de asistencia</a></li>
     <li><a href="#verificacion">Lista de verificación y problemas frecuentes</a></li>
     <li><a href="#fuentes">Fuentes</a></li>
   </ol>
@@ -425,9 +426,86 @@
   </div>
 </details>
 
+<!-- ============ REPORTES ============ -->
+<details class="acordeon" id="reportes">
+  <summary><h2>10. Reportes de asistencia</h2></summary>
+  <div class="cuerpo">
+  <div class="caja clave">
+    <strong>En pocas palabras</strong>
+    En CCC la asistencia de las clases en línea se toma con el <strong>reporte de participantes de Zoom</strong>. Se descarga del portal web de Zoom como <strong>CSV</strong>, se guarda como <strong>Excel (.xlsx)</strong> y se sube a la <strong>carpeta de asistencia en SharePoint</strong> (Teachers → su nombre).
+  </div>
+  <p>El reporte <strong>no</strong> se saca desde la aplicación de escritorio, sino desde el <strong>portal web</strong>: <a href="https://zoom.us/signin" target="_blank" rel="noopener">zoom.us</a>. Entre con su cuenta de CCC. Espere unos minutos después de terminar la clase; el reporte no siempre aparece al instante.</p>
+
+  <h3 id="reporte-abrir">A. Llegar a los reportes (portal web nuevo)</h3>
+  <p>El portal web de Zoom también cambió de diseño en 2026. Ahora el menú de la izquierda ya no está a la vista desde el inicio.</p>
+  <ol class="pasos">
+    <li>Entre a <strong>zoom.us</strong> e inicie sesión con su cuenta de CCC.</li>
+    <li>Haga clic en su <strong>foto o iniciales</strong>, arriba a la derecha. Se abre el <strong>menú de perfil</strong>.</li>
+    <li>Elija <strong>Mi cuenta <span class="en">(My Account)</span></strong>.</li>
+    <li>En el menú de la izquierda, pulse <strong>Reportes <span class="en">(Reports)</span></strong>.</li>
+    <li>En la pestaña <strong>Reportes de uso <span class="en">(Usage Reports)</span></strong>, elija <strong>Uso <span class="en">(Usage)</span></strong>.</li>
+  </ol>
+  <div class="caja aviso">
+    <strong>Atajo</strong>
+    Guarde en favoritos la página de Reportes una vez que llegue a ella. Así la próxima vez entra directo, sin pasar por los menús.
+  </div>
+
+  <h3 id="reporte-buscar">B. Buscar la clase y descargar los participantes</h3>
+  <ol class="pasos">
+    <li>Escriba las fechas <strong>Desde <span class="en">(From)</span></strong> y <strong>Hasta <span class="en">(To)</span></strong> y pulse <strong>Buscar <span class="en">(Search)</span></strong>. El rango máximo de cada búsqueda es <strong>un mes</strong>. También puede buscar por el <strong>ID de la reunión</strong>.</li>
+    <li>Busque la fila de su clase (tema, fecha y hora).</li>
+    <li>En la columna <strong>Participantes <span class="en">(Participants)</span></strong>, haga clic en el <strong>número</strong>. Se abre una ventana con la lista: nombre, correo, hora de entrada, hora de salida y minutos.</li>
+    <li>Marque las casillas:
+      <ul>
+        <li><strong>Exportar con datos de la reunión <span class="en">(Export with meeting data)</span></strong>: agrega el tema, la fecha y el ID de la clase arriba de la lista. Así el archivo se identifica solo.</li>
+        <li><strong>Mostrar usuarios únicos <span class="en">(Show unique users)</span></strong>: junta en una sola fila al alumno que se desconectó y volvió a entrar, y suma sus minutos.</li>
+      </ul>
+    </li>
+    <li>Pulse <strong>Exportar <span class="en">(Export)</span></strong>. Se descarga un archivo <strong>.csv</strong> en su carpeta de Descargas.</li>
+  </ol>
+
+  <h3 id="reporte-excel">C. Convertir el CSV en Excel</h3>
+  <ol class="pasos">
+    <li>Abra el archivo <strong>.csv</strong> con <strong>Excel</strong> (doble clic, o clic derecho → <strong>Abrir con → Excel</strong>).</li>
+    <li>Revise que los nombres con tilde o ñ se vean bien (José, Muñoz). Si salen símbolos raros, vea el aviso de abajo.</li>
+    <li>Opcional: ajuste el ancho de las columnas (doble clic en la línea entre las letras de columna) y ordene por nombre.</li>
+    <li>Pulse <strong>Archivo → Guardar como</strong>. En <strong>Tipo</strong>, elija <strong>Libro de Excel (*.xlsx)</strong>.</li>
+    <li>Póngale un nombre claro, por ejemplo: <strong>Asistencia_MATH-ABE-01_2026-10-01.xlsx</strong> (grupo y fecha).</li>
+  </ol>
+  <div class="caja aviso">
+    <strong>Si los acentos salen como símbolos raros</strong>
+    En un libro de Excel en blanco, vaya a <strong>Datos → Desde el texto/CSV</strong>, elija el archivo y, en <strong>Origen del archivo</strong>, seleccione <strong>65001: Unicode (UTF-8)</strong>. Pulse <strong>Cargar</strong> y luego guarde como .xlsx.
+  </div>
+
+  <h3 id="reporte-subir">D. Subir el Excel a SharePoint</h3>
+  <p>La carpeta de asistencia está en <strong>SharePoint → Teachers → su nombre</strong>.</p>
+  <ol class="pasos">
+    <li>Abra el navegador y entre a <strong>office.com</strong> (o al portal de Microsoft 365 de CCC) con su cuenta institucional <strong>@ccc.edu</strong>.</li>
+    <li>Abra <strong>SharePoint</strong> desde el menú de aplicaciones (los nueve puntos, arriba a la izquierda).</li>
+    <li>Entre al sitio o la biblioteca <strong>Teachers</strong>.</li>
+    <li>Abra la carpeta con <strong>su nombre</strong>. Si dentro hay una subcarpeta por grupo, abra la del grupo de esa clase.</li>
+    <li>Pulse <strong>Cargar <span class="en">(Upload)</span> → Archivos <span class="en">(Files)</span></strong> y elija el .xlsx de su carpeta de Descargas. También puede <strong>arrastrar</strong> el archivo directamente a la ventana.</li>
+    <li>Compruebe que el archivo aparece en la lista con el nombre y la fecha correctos.</li>
+  </ol>
+  <div class="caja aviso">
+    <strong>Atajo</strong>
+    Cuando esté dentro de la carpeta con su nombre, guárdela en <strong>favoritos</strong> del navegador. La próxima vez llega en un clic, sin pasar por office.com ni por Teachers.
+  </div>
+
+  <h3 id="reporte-consejos">E. Consejos para que el reporte salga limpio</h3>
+  <ul>
+    <li>Pida a los alumnos que entren con su <strong>nombre real</strong> y, si es posible, con su cuenta. Un «iPhone de María» complica la asistencia. Puede cambiarles el nombre desde <strong>Participantes → Más → Cambiar nombre</strong>.</li>
+    <li>Use siempre <strong>el mismo enlace o ID de reunión</strong> para cada grupo; así lo encuentra fácil en el reporte.</li>
+    <li>La columna <strong>Duración (minutos)</strong> sirve para ver quién llegó tarde o salió temprano.</li>
+    <li>Si no aparece la opción <strong>Reportes</strong>, su cuenta puede no tener permiso. Consulte a soporte técnico de City Colleges.</li>
+  </ul>
+  <a class="subir" href="#indice">↑ Volver al índice</a>
+  </div>
+</details>
+
 <!-- ============ 9 ============ -->
 <details class="acordeon" id="verificacion">
-  <summary><h2>10. Lista de verificación y problemas frecuentes</h2></summary>
+  <summary><h2>11. Lista de verificación y problemas frecuentes</h2></summary>
   <div class="cuerpo">
   <h3>Antes de cada clase (2 minutos)</h3>
   <ul class="check">
@@ -436,6 +514,13 @@
     <li>Zoom, chat y participantes en el <strong>monitor de Zoom</strong>.</li>
     <li>Notificaciones silenciadas (Windows: <strong>No molestar</strong>).</li>
     <li>Zoom actualizado: foto de perfil → <strong>Buscar actualizaciones</strong>.</li>
+  </ul>
+
+  <h3>Después de cada clase</h3>
+  <ul class="check">
+    <li>Descargar el reporte de participantes (<a href="#reportes">sección 10</a>).</li>
+    <li>Guardarlo como Excel con el nombre del grupo y la fecha.</li>
+    <li>Subirlo a SharePoint → Teachers → su carpeta.</li>
   </ul>
 
   <h3>Problemas frecuentes</h3>
@@ -449,6 +534,7 @@
       <tr><td>Mi video tapa el contenido</td><td>Botón de la vista propia → <strong>Mostrar en la galería</strong> u <strong>Ocultar</strong>.</td></tr>
       <tr><td>Los alumnos no oyen el video</td><td><strong>Nueva compartición</strong> y marque <strong>Compartir sonido</strong>.</td></tr>
       <tr><td>Un alumno no puede compartir</td><td><strong>Herramientas del anfitrión → ¿Quién puede compartir?</strong> → Todos.</td></tr>
+      <tr><td>No encuentro los reportes</td><td>Portal web zoom.us → foto de perfil → <strong>Mi cuenta → Reportes → Uso</strong> (<a href="#reportes">sección 10</a>).</td></tr>
       <tr><td>Todo se ve distinto a este manual</td><td>Compruebe su versión en <strong>Ayuda → Acerca de Zoom</strong>.</td></tr>
     </tbody>
   </table>
@@ -460,7 +546,7 @@
 
 <!-- ============ 10 ============ -->
 <details class="acordeon" id="fuentes">
-  <summary><h2>11. Fuentes</h2></summary>
+  <summary><h2>12. Fuentes</h2></summary>
   <div class="cuerpo">
   <ul>
     <li><a href="https://www.zoom.com/en/blog/zoom-workplace-simplicity-ui-updates/" target="_blank" rel="noopener">Zoom Workplace reimagined</a>: blog oficial de Zoom</li>
@@ -469,13 +555,15 @@
     <li><a href="https://it.umn.edu/services-technologies/how-tos/zoom-share-your-screen" target="_blank" rel="noopener">Zoom: Share Your Screen</a>, Universidad de Minnesota</li>
     <li><a href="https://utk.teamdynamix.com/TDClient/2277/OIT-Portal/KB/Article/160890/Zoom-Annotation-Tools-for-Share-Screen-and-New-Whiteboard" target="_blank" rel="noopener">Zoom: Annotation Tools for Share Screen and New Whiteboard</a>, Universidad de Tennessee</li>
     <li><a href="https://utk.teamdynamix.com/TDClient/2277/OIT-Portal/KB/Article/132637/Zoom-Annotation-Tools" target="_blank" rel="noopener">Zoom: Annotation Tools</a>, Universidad de Tennessee</li>
+    <li><a href="https://employees.brooklyn.edu/base/guide-exporting-zoom-meeting-attendance-reports-licensed-users/" target="_blank" rel="noopener">Exporting Zoom Meeting Attendance Reports</a>, Brooklyn College (CUNY)</li>
+    <li><a href="https://oit.colorado.edu/news/new-zoom-web-experience-arrives-september-30" target="_blank" rel="noopener">New Zoom Web Experience</a>, Universidad de Colorado</li>
     <li><a href="https://www.bu.edu/sph/files/2020/08/Using-Zoom-with-Two-Displays.pdf" target="_blank" rel="noopener">Using Zoom with Two Displays</a>, Universidad de Boston</li>
   </ul>
   <a class="subir" href="#indice">↑ Volver al índice</a>
   </div>
 </details>
 
-<footer>José M. Fernández (Zhema) · 30 de septiembre de 2026</footer>
+<footer>Preparado para José M. Fernández (Zhema) · 30 de septiembre de 2026</footer>
 </main>
 <script>
   var todos = function () { return document.querySelectorAll('details.acordeon'); };
