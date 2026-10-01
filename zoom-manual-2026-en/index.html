@@ -1,1 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zoom Workplace 2026 Manual for Teaching</title>
+<style>
+  :root {
+    --fondo: #ffffff;
+    --texto: #1a1a1a;
+    --suave: #4a4a4a;
+    --azul: #0b4f8a;
+    --azul-claro: #e8f1fa;
+    --verde: #1e6b3a;
+    --verde-claro: #e7f5ec;
+    --ambar: #7a4a00;
+    --ambar-claro: #fff4dc;
+    --borde: #c9d3dd;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Verdana, Arial, sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+  .contenedor { max-width: 920px; margin: 0 auto; padding: 0 16px 64px; }
+  header {
+    background: var(--azul);
+    color: #fff;
+    padding: 28px 16px;
+    text-align: center;
+  }
+  header h1 { margin: 0 0 6px; font-size: 1.9rem; }
+  header p { margin: 0; font-size: 1rem; opacity: .95; }
+  a { color: var(--azul); }
+  a:focus, button:focus { outline: 3px solid #f0a500; outline-offset: 2px; }
+  .saltar {
+    position: absolute; left: -999px; top: 8px;
+    background: #fff; color: var(--azul); padding: 8px 12px; z-index: 10;
+  }
+  .saltar:focus { left: 8px; }
+  nav.indice {
+    background: var(--azul-claro);
+    border: 2px solid var(--azul);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 24px 0;
+  }
+  nav.indice h2 { margin: 0 0 8px; font-size: 1.3rem; color: var(--azul); border: none; padding: 0; }
+  nav.indice ol { margin: 0; padding-left: 1.4rem; }
+  nav.indice li { margin: 6px 0; }
+  nav.indice a { font-weight: 600; text-decoration: none; }
+  nav.indice a:hover { text-decoration: underline; }
+  section { scroll-margin-top: 16px; }
+  h2 {
+    font-size: 1.55rem;
+    color: var(--azul);
+    border-bottom: 3px solid var(--azul);
+    padding-bottom: 4px;
+    margin-top: 48px;
+  }
+  h3 { font-size: 1.2rem; margin-top: 28px; }
+  .caja {
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin: 18px 0;
+    border-left: 8px solid;
+  }
+  .clave { background: var(--verde-claro); border-color: var(--verde); }
+  .aviso { background: var(--ambar-claro); border-color: var(--ambar); }
+  .caja strong:first-child { display: block; margin-bottom: 4px; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 1rem; }
+  th, td { border: 1px solid var(--borde); padding: 10px 12px; text-align: left; vertical-align: top; }
+  th { background: var(--azul); color: #fff; }
+  tr:nth-child(even) td { background: #f5f8fb; }
+  .tabla-scroll { overflow-x: auto; }
+  ol.pasos li, ul li { margin: 8px 0; }
+  kbd {
+    background: #eee; border: 1px solid #aaa; border-bottom-width: 3px;
+    border-radius: 5px; padding: 1px 7px; font-family: inherit; font-size: .95em;
+  }
+  .en { color: var(--suave); font-weight: normal; }
+  .subir {
+    display: inline-block; margin-top: 16px; font-size: 1rem;
+    text-decoration: none; font-weight: 600;
+  }
+  .check { list-style: none; padding-left: 0; }
+  .check li::before { content: "☐  "; font-size: 1.2em; }
+  footer { margin-top: 48px; font-size: .95rem; color: var(--suave); border-top: 1px solid var(--borde); padding-top: 16px; }
+  @media print {
+    header { background: none; color: #000; }
+    .subir, .saltar { display: none; }
+    th { background: #ddd; color: #000; }
+  }
 
+  /* ===== Acordeón ===== */
+  .controles { display:flex; gap:12px; flex-wrap:wrap; margin: 0 0 16px; }
+  .controles button {
+    font: inherit; font-size: 1rem; font-weight: 600;
+    background: #fff; color: var(--azul);
+    border: 2px solid var(--azul); border-radius: 8px;
+    padding: 8px 16px; cursor: pointer;
+  }
+  .controles button:hover { background: var(--azul-claro); }
+  details.acordeon {
+    border: 2px solid var(--borde); border-radius: 10px;
+    margin: 12px 0; scroll-margin-top: 16px; background: #fff;
+  }
+  details.acordeon[open] { border-color: var(--azul); }
+  details.acordeon > summary {
+    list-style: none; cursor: pointer;
+    padding: 14px 18px; display: flex; align-items: center; gap: 12px;
+    background: var(--azul-claro); border-radius: 8px;
+  }
+  details.acordeon > summary::-webkit-details-marker { display: none; }
+  details.acordeon > summary:focus { outline: 3px solid #f0a500; outline-offset: 2px; }
+  details.acordeon > summary::before {
+    content: "+"; flex: 0 0 32px; height: 32px; line-height: 30px;
+    text-align: center; font-size: 1.5rem; font-weight: 700;
+    color: #fff; background: var(--azul); border-radius: 50%;
+  }
+  details.acordeon[open] > summary::before { content: "\2212"; }
+  details.acordeon[open] > summary { border-radius: 8px 8px 0 0; }
+  details.acordeon > summary h2 {
+    margin: 0; border: none; padding: 0; font-size: 1.35rem;
+  }
+  details.acordeon > summary:hover h2 { text-decoration: underline; }
+  details.acordeon .cuerpo { padding: 4px 20px 18px; }
+  @media print {
+    details.acordeon { border: none; }
+    details.acordeon > summary::before, .controles { display: none; }
+  }
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Skip to content</a>
+
+<header>
+  <h1>Zoom Workplace 2026 Manual for Teaching</h1>
+  <p>Windows desktop app · versions 7.0 to 7.2 · updated October 1, 2026</p>
+</header>
+
+<main class="contenedor" id="contenido">
+
+<nav class="indice" id="indice" aria-label="Table of contents">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#como-usar">How to use this manual</a></li>
+    <li><a href="#que-cambio">What changed in Zoom</a></li>
+    <li><a href="#espejo">The screen inside a screen</a></li>
+    <li><a href="#receta">Recipe: sharing with two monitors</a></li>
+    <li><a href="#selector">The new Share picker</a></li>
+    <li><a href="#anotar">Annotate and the Whiteboard</a></li>
+    <li><a href="#barra">Toolbar, settings and self view</a></li>
+    <li><a href="#anfitrion">Host tools</a></li>
+    <li><a href="#novedades">Other new features useful for class</a></li>
+    <li><a href="#reportes">Attendance reports</a></li>
+    <li><a href="#verificacion">Checklist and common problems</a></li>
+    <li><a href="#fuentes">Sources</a></li>
+  </ol>
+</nav>
+
+<div class="controles">
+  <button type="button" id="abrir-todo">Open all sections</button>
+  <button type="button" id="cerrar-todo">Close all sections</button>
+</div>
+
+<!-- ============ 1 ============ -->
+<details class="acordeon" id="como-usar" open>
+  <summary><h2>1. How to use this manual</h2></summary>
+  <div class="cuerpo">
+  <div class="caja clave">
+    <strong>Only have 5 minutes before class?</strong>
+    Read <a href="#espejo">The screen inside a screen</a> and follow the <a href="#receta">Two-monitor recipe</a>. The rest is for reference.
+  </div>
+  <p>Zoom updates every month, so some names may look slightly different on your screen.</p>
+  <p><strong>Convention:</strong> button names appear in <strong>bold</strong>, exactly as Zoom shows them in English. Example: <strong>Share</strong>.</p>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ 2 ============ -->
+<details class="acordeon" id="que-cambio">
+  <summary><h2>2. What changed in Zoom</h2></summary>
+  <div class="cuerpo">
+  <p>Zoom did not remove features: it <strong>moved them and changed how they look</strong>. The changes that matter most for teaching arrived with version 7.2 (September 18, 2026).</p>
+  <p>To check your version: profile picture → <strong>Help</strong> → <strong>About Zoom</strong>.</p>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Date</th><th scope="col">Version</th><th scope="col">What changed (what you will notice)</th></tr></thead>
+    <tbody>
+      <tr><td>Sep. 2026</td><td>7.2</td><td>New <strong>Share picker</strong> on a single page; Zoom windows now appear as options to share.</td></tr>
+      <tr><td>Sep. 2026</td><td>7.2</td><td><strong>Floating self view</strong>: your video can float over the gallery.</td></tr>
+      <tr><td>Sep. 2026</td><td>7.2</td><td><strong>Host tools</strong> reorganized: “Who can share?” is now visible right away.</td></tr>
+      <tr><td>Sep. 2026</td><td>7.2</td><td>When leaving, the red button is <strong>Leave Meeting</strong>; <strong>End Meeting for All</strong> is secondary.</td></tr>
+      <tr><td>Sep. 2026</td><td>7.2</td><td>Light/dark mode across the meeting, round avatars, redesigned video tiles.</td></tr>
+      <tr><td>Mar. 2026</td><td>7.0</td><td>AI tab; captions and transcripts separated; share <strong>a single tab</strong> in Chrome or Edge.</td></tr>
+      <tr><td>Dec. 2025</td><td>6.7</td><td>Simplified toolbar, <strong>More</strong> menu, settings in a panel on the right.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ 3 ============ -->
+<details class="acordeon" id="espejo">
+  <summary><h2>3. The screen inside a screen</h2></summary>
+  <div class="cuerpo">
+  <div class="caja clave">
+    <strong>In a nutshell</strong>
+    It happens because <strong>Zoom is capturing itself</strong>: you are sharing the same monitor where the meeting is open, like two mirrors facing each other.<br>
+    <strong>Fix:</strong> share the monitor where Zoom is <u>not</u>, or share a single window.
+  </div>
+  <p>Check these causes in order; the first one that matches is usually yours.</p>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">What you see</th><th scope="col">Likely cause</th><th scope="col">Fix</th></tr></thead>
+    <tbody>
+      <tr><td>The Zoom window repeated in a tunnel, smaller and smaller</td><td>You shared the <strong>entire screen</strong> of the monitor where the meeting is open</td><td>Share the <strong>other</strong> monitor or a specific <strong>window</strong>. See the <a href="#receta">recipe</a>.</td></tr>
+      <tr><td>The same thing, even though it never happened before</td><td>The option to show your Zoom windows is turned on</td><td><strong>Settings</strong> → <strong>Share Screen</strong> → uncheck <strong>Show my Zoom windows to other participants when I am screen sharing</strong>. Restart Zoom.</td></tr>
+      <tr><td>Both monitors show exactly the same thing</td><td>Windows is set to <strong>Duplicate</strong></td><td>Press <kbd>Windows</kbd> + <kbd>P</kbd> and choose <strong>Extend</strong>.</td></tr>
+      <tr><td>You see your own class, small, inside another window</td><td>The meeting is open twice (browser or another device)</td><td>Move that second window to the monitor you are not sharing, or close it.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>If nothing matches, take a screenshot with <kbd>Windows</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd> during class and send it to tech support.</p>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ 4 ============ -->
+<details class="acordeon" id="receta">
+  <summary><h2>4. Recipe: screen sharing with two monitors</h2></summary>
+  <div class="cuerpo">
+  <div class="caja clave">
+    <strong>Golden rule</strong>
+    One monitor for <strong>teaching</strong>, the other for <strong>Zoom</strong>. That way there is never a mirror effect, and you can see your students and the chat while you explain.
+  </div>
+
+  <h3>Before class (one time only)</h3>
+  <ol class="pasos">
+    <li>Press <kbd>Windows</kbd> + <kbd>P</kbd> and make sure it is set to <strong>Extend</strong>.</li>
+    <li>Decide which one is your <strong>teaching monitor</strong> (for example, the right one) and which one is your <strong>Zoom monitor</strong> (the left one).</li>
+  </ol>
+
+  <h3>Every class</h3>
+  <ol class="pasos">
+    <li>Open what you will show (Brightspace, MyOpenMath, PowerPoint, GeoGebra) and drag it to the <strong>teaching monitor</strong>.</li>
+    <li>Join the meeting and keep Zoom on the <strong>Zoom monitor</strong>. Open <strong>Participants</strong> and <strong>Chat</strong> there.</li>
+    <li>Click <strong>Share</strong> on the bottom toolbar.</li>
+    <li>Choose the <strong>Screen 2</strong> thumbnail, or whichever matches your teaching monitor. Zoom shows a large number on each monitor to identify it.</li>
+    <li>If you will play a video, check <strong>Share sound</strong> and <strong>Optimize for video clip</strong>.</li>
+    <li>Click <strong>Share</strong>. A green border shows what students can see.</li>
+    <li>Work on the teaching monitor; watch your students on the Zoom monitor.</li>
+    <li>To switch content: <strong>New Share</strong>. To finish: <strong>Stop Share</strong>.</li>
+  </ol>
+
+  <div class="caja aviso">
+    <strong>Safer option</strong>
+    Share only a <strong>window</strong> (in step 4, choose the program's thumbnail). That way nobody sees your email or notifications. To share a single Chrome or Edge tab, look in the <strong>Other</strong> section.
+  </div>
+  <p><strong>With PowerPoint:</strong> go to <strong>Slide Show → Set Up Slide Show</strong> and choose <strong>Browsed by an individual (window)</strong>. The presentation then stays in a window you can share on its own.</p>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ 5 ============ -->
+<details class="acordeon" id="selector">
+  <summary><h2>5. The new Share picker</h2></summary>
+  <div class="cuerpo">
+  <p>Since version 7.2, clicking <strong>Share</strong> opens <strong>a single page that scrolls down</strong> instead of tabs. Links at the top jump to each section.</p>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Section</th><th scope="col">What it contains</th><th scope="col">When to use it</th></tr></thead>
+    <tbody>
+      <tr><td>Screens</td><td>Each full monitor</td><td>Regular class with two monitors</td></tr>
+      <tr><td>Windows</td><td>Each open program, <strong>now including Zoom windows</strong></td><td>Show only PowerPoint, Chrome or MyOpenMath</td></tr>
+      <tr><td>Files</td><td>Zoom and cloud files, with search</td><td>Rarely used in class</td></tr>
+      <tr><td>Other</td><td>Whiteboard, camera, portion of screen, browser tab</td><td>Whiteboard for exercises; document camera</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="caja aviso">
+    <strong>Careful</strong>
+    If you pick the Zoom meeting window by mistake, students will see the meeting itself and the mirror effect will appear.
+  </div>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ 6 ============ -->
+<details class="acordeon" id="anotar">
+  <summary><h2>6. Annotate and the Whiteboard</h2></summary>
+  <div class="cuerpo">
+  <div class="caja clave">
+    <strong>In a nutshell</strong>
+    The tool to <strong>select and move</strong> what you wrote still exists: it is the <strong>arrow</strong>, the <strong>first icon</strong> on the annotation toolbar. What is new is that the <strong>Annotate</strong> button may be hidden under <strong>More</strong>.
+  </div>
+
+  <h3 id="anotar-pantalla">A. Writing on your shared screen</h3>
+  <ol class="pasos">
+    <li>Share your screen or a window (see the <a href="#receta">recipe</a>).</li>
+    <li>On the floating toolbar at the top, click <strong>Annotate</strong> (the pencil icon). If you don't see it, open it from <strong>More</strong> (the three dots).</li>
+    <li>The annotation toolbar appears. Choose <strong>Text</strong> or <strong>Draw</strong> and write.</li>
+    <li>To move what you wrote, click the <strong>arrow: Select</strong>. Click on what you wrote (or drag a box around several items) and drag it.</li>
+    <li>When you finish, close the annotation toolbar. Annotations are erased when you stop sharing, so save them first if you need them.</li>
+  </ol>
+
+  <h3 id="barra-anotacion">B. The annotation toolbar, icon by icon</h3>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Tool</th><th scope="col">What it does</th><th scope="col">Idea for math class</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Select</strong> (arrow)</td><td>Pick, move or resize what you wrote</td><td>Move a solution step to make room</td></tr>
+      <tr><td><strong>Text</strong></td><td>Type with the keyboard</td><td>Write the final answer neatly: <em>x = 4</em></td></tr>
+      <tr><td><strong>Draw</strong></td><td>Freehand, lines, arrows, rectangles, circles</td><td>Circle like terms; draw a number line</td></tr>
+      <tr><td><strong>Stamp</strong></td><td>Marks: ✓, ✗, star, heart</td><td>Mark students' correct answers</td></tr>
+      <tr><td><strong>Spotlight</strong></td><td>Pointer or arrow that points</td><td>Show where to look without leaving a mark</td></tr>
+      <tr><td><strong>Eraser</strong></td><td>Erase strokes one by one</td><td>Fix a sign</td></tr>
+      <tr><td><strong>Format</strong></td><td>Color, line width and font size</td><td>One color per step; large font for accessibility</td></tr>
+      <tr><td><strong>Undo / Redo</strong></td><td>Undo or repeat the last action</td><td>Fix a wrong stroke</td></tr>
+      <tr><td><strong>Clear</strong></td><td>Erase everything: my drawings, others', or all</td><td>Clean up before the next exercise</td></tr>
+      <tr><td><strong>Save</strong></td><td>Save as an image (PNG) or PDF</td><td>Upload the solution to Brightspace</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The order or look of the icons may vary slightly depending on your Zoom version.</p>
+
+  <h3 id="alumnos-anotan">C. Letting students write too</h3>
+  <ul>
+    <li>Go to <strong>Host tools → Allow all participants to → Annotate</strong> to turn it on or off (see <a href="#anfitrion">Host tools</a>).</li>
+    <li>On the floating toolbar, <strong>More → Show Names of Annotators</strong> shows who wrote each thing.</li>
+    <li>If the Annotate option does not appear anywhere, it may be turned off in your institution's account. Check with City Colleges tech support.</li>
+  </ul>
+
+  <h3 id="pizarra">D. The Whiteboard</h3>
+  <ol class="pasos">
+    <li>Click <strong>Share</strong> and, in the <strong>Other</strong> section, choose <strong>Whiteboard</strong>.</li>
+    <li>In the new whiteboard, the toolbar is on the <strong>left side</strong>. You can drag it elsewhere on the screen.</li>
+    <li>The <strong>arrow to select and move</strong> is also the first icon on that toolbar.</li>
+  </ol>
+  <p>The new whiteboard includes tools that help in math:</p>
+  <ul>
+    <li><strong>Equation:</strong> writes nicely formatted formulas (fractions, exponents, roots).</li>
+    <li><strong>Text and drawing:</strong> the same functions as annotation, with more shapes.</li>
+    <li><strong>Upload:</strong> places an image or PDF on the whiteboard so you can write on top of it (for example, a GED exercise).</li>
+    <li><strong>Copy and paste, sticky notes and templates.</strong></li>
+    <li><strong>Handwriting conversion:</strong> turns what you wrote with the mouse or pen into clean text and shapes, with a preview before you accept.</li>
+  </ul>
+  <div class="caja aviso">
+    <strong>Important difference</strong>
+    What you write on the <strong>shared screen</strong> disappears when you stop sharing. What you write on the <strong>Whiteboard</strong> is saved in your Zoom account, and you can open it in another class.
+  </div>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ 7 ============ -->
+<details class="acordeon" id="barra">
+  <summary><h2>7. Toolbar, settings and self view</h2></summary>
+  <div class="cuerpo">
+  <h3>A shorter toolbar</h3>
+  <p>Only the essential buttons remain at the bottom. Everything else is under <strong>More</strong> (the three dots). To pin a button you always use, such as <strong>Breakout Rooms</strong> or <strong>Record</strong>: open it under More, right-click → <strong>Pin</strong>. You can also drag buttons to reorder them.</p>
+
+  <h3>Settings in a single panel</h3>
+  <p>Settings open in a <strong>panel on the right</strong>. The small arrow <strong>^</strong> next to each button takes you straight to that button's settings.</p>
+
+  <h3>Floating self view (new)</h3>
+  <p>Your video has a button with two options:</p>
+  <ul>
+    <li><strong>Float over gallery:</strong> your video becomes a small box you can move around.</li>
+    <li><strong>Show in gallery:</strong> your video goes back to its place among the others.</li>
+  </ul>
+  <p>If it gets in the way, choose <strong>Show in gallery</strong> or <strong>Hide self view</strong>. To change the default, go to <strong>Settings → Meetings &amp; webinars → Self view defaults</strong>.</p>
+
+  <h3>Light or dark mode</h3>
+  <p>The whole meeting now follows your appearance preference: <strong>Settings → General → Appearance</strong>.</p>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ 8 ============ -->
+<details class="acordeon" id="anfitrion">
+  <summary><h2>8. Host tools</h2></summary>
+  <div class="cuerpo">
+  <p>The <strong>Host tools</strong> button opens a panel on the right with everything in view, organized into sections.</p>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Section</th><th scope="col">What it controls</th><th scope="col">Use in class</th></tr></thead>
+    <tbody>
+      <tr><td>Meeting controls</td><td><strong>Who can share?</strong>, lock meeting, waiting room</td><td>Let a student present</td></tr>
+      <tr><td>Allow all participants to</td><td>Chat, rename, audio, video, reactions, <strong>annotate</strong>, record</td><td>Let students write on the whiteboard</td></tr>
+      <tr><td>Recording</td><td>Recording permissions</td><td>Record class for Brightspace</td></tr>
+      <tr><td>AI and Apps</td><td>Summary and AI features</td><td>Optional</td></tr>
+      <tr><td>Suspend participant activities</td><td>Emergency button: stops everything</td><td>If someone disrupts the class</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="caja aviso">
+    <strong>When leaving</strong>
+    The main red button is now <strong>Leave Meeting</strong>. <strong>End Meeting for All</strong> is the secondary option and asks for confirmation.
+  </div>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ 9 ============ -->
+<details class="acordeon" id="novedades">
+  <summary><h2>9. Other new features useful for class</h2></summary>
+  <div class="cuerpo">
+  <p>These features fit Universal Design for Learning (UDL) well, especially with multilingual students:</p>
+  <ul>
+    <li><strong>Chat translation:</strong> each participant can see the chat translated into their language.</li>
+    <li><strong>Voice translator:</strong> participants hear the class translated as audio (Spanish, English, French, Chinese, Japanese, Arabic, German, Italian, Portuguese). May depend on your institution's plan.</li>
+    <li><strong>Pin a chat message:</strong> the host pins, for example, the MyOpenMath link, and it stays at the top of the chat, even for latecomers.</li>
+    <li><strong>Captions and transcripts separated:</strong> you can turn on captions without creating a transcript, or the other way around.</li>
+    <li><strong>Early-join notice:</strong> Zoom lets you know when the first student joins before class time.</li>
+    <li><strong>Breakout rooms:</strong> students in the waiting room can go straight to their assigned room.</li>
+  </ul>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ REPORTS ============ -->
+<details class="acordeon" id="reportes">
+  <summary><h2>10. Attendance reports</h2></summary>
+  <div class="cuerpo">
+  <div class="caja clave">
+    <strong>In a nutshell</strong>
+    At CCC, attendance for online classes is taken with the <strong>Zoom participant report</strong>. You download it from the Zoom web portal as a <strong>CSV</strong>, save it as <strong>Excel (.xlsx)</strong>, and upload it to the <strong>attendance folder in SharePoint</strong> (Teachers → your name).
+  </div>
+  <p>The report is <strong>not</strong> taken from the desktop app but from the <strong>web portal</strong>: <a href="https://zoom.us/signin" target="_blank" rel="noopener">zoom.us</a>. Sign in with your CCC account. Wait a few minutes after class ends; the report does not always appear right away.</p>
+
+  <h3 id="reporte-abrir">A. Getting to the reports (new web portal)</h3>
+  <p>The Zoom web portal was also redesigned in 2026. The left-hand menu is no longer visible from the home page.</p>
+  <ol class="pasos">
+    <li>Go to <strong>zoom.us</strong> and sign in with your CCC account.</li>
+    <li>Click your <strong>picture or initials</strong> at the top right. The <strong>profile menu</strong> opens.</li>
+    <li>Choose <strong>My Account</strong>.</li>
+    <li>In the left-hand menu, click <strong>Reports</strong>.</li>
+    <li>On the <strong>Usage Reports</strong> tab, choose <strong>Usage</strong>.</li>
+  </ol>
+  <div class="caja aviso">
+    <strong>Shortcut</strong>
+    Bookmark the Reports page once you reach it. Next time you go straight there, without the menus.
+  </div>
+
+  <h3 id="reporte-buscar">B. Finding the class and downloading participants</h3>
+  <ol class="pasos">
+    <li>Enter the <strong>From</strong> and <strong>To</strong> dates and click <strong>Search</strong>. Each search covers <strong>one month</strong> at most. You can also search by <strong>meeting ID</strong>.</li>
+    <li>Find the row for your class (topic, date and time).</li>
+    <li>In the <strong>Participants</strong> column, click the <strong>number</strong>. A window opens with the list: name, email, join time, leave time and minutes.</li>
+    <li>Check the boxes:
+      <ul>
+        <li><strong>Export with meeting data</strong>: adds the class topic, date and ID above the list, so the file identifies itself.</li>
+        <li><strong>Show unique users</strong>: combines a student who disconnected and rejoined into a single row and adds up their minutes.</li>
+      </ul>
+    </li>
+    <li>Click <strong>Export</strong>. A <strong>.csv</strong> file downloads to your Downloads folder.</li>
+  </ol>
+
+  <h3 id="reporte-excel">C. Converting the CSV to Excel</h3>
+  <ol class="pasos">
+    <li>Open the <strong>.csv</strong> file with <strong>Excel</strong> (double-click, or right-click → <strong>Open with → Excel</strong>).</li>
+    <li>Check that names with accents or ñ display correctly (José, Muñoz). If you see strange symbols, see the note below.</li>
+    <li>Optional: adjust column widths (double-click the line between column letters) and sort by name.</li>
+    <li>Click <strong>File → Save As</strong>. Under <strong>Save as type</strong>, choose <strong>Excel Workbook (*.xlsx)</strong>.</li>
+    <li>Give it a clear name, for example: <strong>Attendance_MATH-ABE-01_2026-10-01.xlsx</strong> (group and date).</li>
+  </ol>
+  <div class="caja aviso">
+    <strong>If accents show up as strange symbols</strong>
+    In a blank Excel workbook, go to <strong>Data → From Text/CSV</strong>, choose the file and, under <strong>File Origin</strong>, select <strong>65001: Unicode (UTF-8)</strong>. Click <strong>Load</strong>, then save as .xlsx.
+  </div>
+
+  <h3 id="reporte-subir">D. Uploading the Excel file to SharePoint</h3>
+  <p>The attendance folder is in <strong>SharePoint → Teachers → your name</strong>.</p>
+  <ol class="pasos">
+    <li>Open your browser and go to <strong>office.com</strong> (or CCC's Microsoft 365 portal) with your <strong>@ccc.edu</strong> account.</li>
+    <li>Open <strong>SharePoint</strong> from the app launcher (the nine dots, top left).</li>
+    <li>Go to the <strong>Teachers</strong> site or library.</li>
+    <li>Open the folder with <strong>your name</strong>. If there is a subfolder for each group, open the one for that class.</li>
+    <li>Click <strong>Upload → Files</strong> and choose the .xlsx from your Downloads folder. You can also <strong>drag</strong> the file straight into the window.</li>
+    <li>Check that the file appears in the list with the correct name and date.</li>
+  </ol>
+  <div class="caja aviso">
+    <strong>Shortcut</strong>
+    Once you are inside the folder with your name, add it to your browser's <strong>bookmarks</strong>. Next time you get there in one click, without going through office.com or Teachers.
+  </div>
+
+  <h3 id="reporte-consejos">E. Tips for a clean report</h3>
+  <ul>
+    <li>Ask students to join with their <strong>real name</strong> and, if possible, their account. “María's iPhone” makes attendance harder. You can rename them from <strong>Participants → More → Rename</strong>.</li>
+    <li>Always use <strong>the same link or meeting ID</strong> for each group, so it is easy to find in the report.</li>
+    <li>The <strong>Duration (minutes)</strong> column shows who arrived late or left early.</li>
+    <li>If the <strong>Reports</strong> option does not appear, your account may not have permission. Check with City Colleges tech support.</li>
+  </ul>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ 11 ============ -->
+<details class="acordeon" id="verificacion">
+  <summary><h2>11. Checklist and common problems</h2></summary>
+  <div class="cuerpo">
+  <h3>Before every class (2 minutes)</h3>
+  <ul class="check">
+    <li><kbd>Windows</kbd> + <kbd>P</kbd> is set to <strong>Extend</strong>.</li>
+    <li>Materials open on the <strong>teaching monitor</strong>.</li>
+    <li>Zoom, chat and participants on the <strong>Zoom monitor</strong>.</li>
+    <li>Notifications silenced (Windows: <strong>Do not disturb</strong>).</li>
+    <li>Zoom up to date: profile picture → <strong>Check for updates</strong>.</li>
+  </ul>
+
+  <h3>After every class</h3>
+  <ul class="check">
+    <li>Download the participant report (<a href="#reportes">section 10</a>).</li>
+    <li>Save it as Excel with the group name and date.</li>
+    <li>Upload it to SharePoint → Teachers → your folder.</li>
+  </ul>
+
+  <h3>Common problems</h3>
+  <div class="tabla-scroll">
+  <table>
+    <thead><tr><th scope="col">Problem</th><th scope="col">Quick fix</th></tr></thead>
+    <tbody>
+      <tr><td>Mirror or tunnel effect</td><td>Share the other monitor or a single window (<a href="#espejo">section 3</a>).</td></tr>
+      <tr><td>I can't find the arrow to move what I wrote</td><td><strong>Annotate</strong> (on the floating toolbar or under <strong>More</strong>) → first icon, <strong>Select</strong> (<a href="#anotar">section 6</a>).</td></tr>
+      <tr><td>I can't find a button</td><td>Look under <strong>More</strong>; pin it with a right-click.</td></tr>
+      <tr><td>My video covers the content</td><td>Self view button → <strong>Show in gallery</strong> or <strong>Hide self view</strong>.</td></tr>
+      <tr><td>Students can't hear the video</td><td><strong>New Share</strong> and check <strong>Share sound</strong>.</td></tr>
+      <tr><td>A student can't share</td><td><strong>Host tools → Who can share?</strong> → All participants.</td></tr>
+      <tr><td>I can't find the reports</td><td>Web portal zoom.us → profile picture → <strong>My Account → Reports → Usage</strong> (<a href="#reportes">section 10</a>).</td></tr>
+      <tr><td>Everything looks different from this manual</td><td>Check your version under <strong>Help → About Zoom</strong>.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>To practice without students: <a href="https://zoom.us/test" target="_blank" rel="noopener">zoom.us/test</a>.</p>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<!-- ============ 12 ============ -->
+<details class="acordeon" id="fuentes">
+  <summary><h2>12. Sources</h2></summary>
+  <div class="cuerpo">
+  <ul>
+    <li><a href="https://www.zoom.com/en/blog/zoom-workplace-simplicity-ui-updates/" target="_blank" rel="noopener">Zoom Workplace reimagined</a>: official Zoom blog</li>
+    <li><a href="https://releasebot.io/updates/zoom/zoom-workplace" target="_blank" rel="noopener">Zoom Workplace release notes, Sept. 2026</a></li>
+    <li><a href="https://www.zoom.com/en/products/whats-new/" target="_blank" rel="noopener">What's New at Zoom</a></li>
+    <li><a href="https://it.umn.edu/services-technologies/how-tos/zoom-share-your-screen" target="_blank" rel="noopener">Zoom: Share Your Screen</a>, University of Minnesota</li>
+    <li><a href="https://utk.teamdynamix.com/TDClient/2277/OIT-Portal/KB/Article/160890/Zoom-Annotation-Tools-for-Share-Screen-and-New-Whiteboard" target="_blank" rel="noopener">Zoom: Annotation Tools for Share Screen and New Whiteboard</a>, University of Tennessee</li>
+    <li><a href="https://utk.teamdynamix.com/TDClient/2277/OIT-Portal/KB/Article/132637/Zoom-Annotation-Tools" target="_blank" rel="noopener">Zoom: Annotation Tools</a>, University of Tennessee</li>
+    <li><a href="https://employees.brooklyn.edu/base/guide-exporting-zoom-meeting-attendance-reports-licensed-users/" target="_blank" rel="noopener">Exporting Zoom Meeting Attendance Reports</a>, Brooklyn College (CUNY)</li>
+    <li><a href="https://oit.colorado.edu/news/new-zoom-web-experience-arrives-september-30" target="_blank" rel="noopener">New Zoom Web Experience</a>, University of Colorado</li>
+    <li><a href="https://www.bu.edu/sph/files/2020/08/Using-Zoom-with-Two-Displays.pdf" target="_blank" rel="noopener">Using Zoom with Two Displays</a>, Boston University</li>
+  </ul>
+  <a class="subir" href="#indice">↑ Back to contents</a>
+  </div>
+</details>
+
+<footer>Prepared by José M. Fernández (Zhema) · Harry S. Truman College · October 1, 2026</footer>
+</main>
+<script>
+  var todos = function () { return document.querySelectorAll('details.acordeon'); };
+
+  // Abre la sección a la que apunta un enlace interno (#ancla)
+  function abrirSeccion(id) {
+    var d = document.getElementById(id);
+    if (d && d.tagName === 'DETAILS') {
+      d.open = true;
+      d.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      d.querySelector('summary').focus({ preventScroll: true });
+    }
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var id = a.getAttribute('href').slice(1);
+      setTimeout(function () { abrirSeccion(id); }, 0);
+    });
+  });
+  if (location.hash) abrirSeccion(decodeURIComponent(location.hash.slice(1)));
+
+  // Botones Abrir todo / Cerrar todo
+  document.getElementById('abrir-todo').onclick = function () { todos().forEach(function (d) { d.open = true; }); };
+  document.getElementById('cerrar-todo').onclick = function () { todos().forEach(function (d) { d.open = false; }); };
+
+  // Al imprimir, se abren todas las secciones
+  window.addEventListener('beforeprint', function () { todos().forEach(function (d) { d.open = true; }); });
+</script>
+</body>
+</html>
