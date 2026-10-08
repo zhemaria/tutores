@@ -81,7 +81,7 @@ details.acc>summary:hover{background:var(--brand-soft)}
 .sit>summary .thumb{width:104px;flex:none;border-radius:8px;overflow:hidden;line-height:0}
 .sit>summary .thumb svg{width:100%;height:auto}
 .sit>summary .t{font-weight:700;font-size:1.05rem}
-.sit>summary .s{color:var(--muted);font-size:.9rem;display:block;font-weight:400}
+.acc>summary .s{color:var(--muted);font-size:.9rem;display:block;font-weight:400}
 .num{display:inline-grid;place-items:center;min-width:1.8rem;height:1.8rem;border-radius:50%;background:var(--brand-soft);color:var(--brand);font-weight:700;font-size:.85rem;flex:none}
 .phase{margin:.5rem 0;border-radius:12px}
 .phase>summary{font-weight:700}
@@ -213,7 +213,7 @@ footer{color:var(--muted);font-size:.85rem;padding:2rem 0}
     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></span>
     <span><span class="t"><b>Voices and speed</b></span><span class="s" id="voice-sum">Checking the voices on this device…</span></span></summary>
   <div class="acc-body">
-    <p class="status">The voices come from your device or browser, so they work without internet. We use <b>American English</b> voices. If a voice is British (or another accent), the page says so next to the speaker’s name. Men’s lines use a male voice and women’s lines use a female voice.</p>
+    <p class="status">The voices come from your device or browser (most of them work without internet). We use <b>American English</b> voices. If a voice is British (or another accent), the page says so next to the speaker’s name. Men’s lines use a male voice and women’s lines use a female voice.</p>
     <div class="vgrid">
       <label for="v-f">Female voice</label><select id="v-f"></select>
       <label for="v-m">Male voice</label><select id="v-m"></select>
@@ -222,6 +222,15 @@ footer{color:var(--muted);font-size:.85rem;padding:2rem 0}
     </div>
     <p><button class="btn small" id="v-test">Test the voices</button></p>
     <p class="status" id="voice-status" role="status"></p>
+    <div id="voice-help" class="twist" hidden>
+      <p style="margin:0 0 .4rem"><b>This device has no American English <span id="voice-missing">male</span> voice.</b> The page uses another voice and tells you its accent. To get American voices for free:</p>
+      <ul style="margin:0;padding-left:1.2rem">
+        <li><b>Easiest:</b> open this page in <b>Microsoft Edge</b>. Edge has many natural American voices (for example Andrew, Brian, Guy, Christopher, Eric and Roger for men; Aria, Ava, Jenny and Emma for women). You need internet for these voices.</li>
+        <li><b>Windows:</b> Settings → Time &amp; language → Speech → <i>Add voices</i> → English (United States). Then restart the browser. This adds David and Mark (male) and Zira (female).</li>
+        <li><b>Mac / iPhone / iPad:</b> Settings → Accessibility → Spoken Content → System Voice → Manage Voices → English (US), and download a male voice (for example Evan, Nathan or Tom). Then use Safari.</li>
+        <li><b>Android:</b> Settings → Text-to-speech → Google speech engine → Install voice data → English (United States).</li>
+      </ul>
+    </div>
   </div>
 </details>
 
@@ -281,13 +290,19 @@ $("#fs-down").onclick=()=>{fs=Math.max(14,fs-2);applyFs();};
 
 /* ---------- Voices ---------- */
 const synth = window.speechSynthesis || null;
-const FEMALE_RE = /female|woman|samantha|victoria|karen|moira|tessa|fiona|allison|\bava\b|susan|zira|jenny|aria|michelle|emma|nancy|joanna|kendra|kimberly|salli|ivy|serena|\bkate\b|libby|sonia|hazel|nicky|catherine|martha|\bamy\b|olivia|ashley|cora|elizabeth|\bjane\b|monica|ana\b|sara\b|heather|linda|julie|zoe|kathy|princess|vicki|shelley|sandy|flo\b|grandma|natasha|clara|maisie|mia\b|google us english$/i;
-const MALE_RE = /\bmale\b|\bman\b|david|\bmark\b|\bguy\b|andrew|brian|christopher|\beric\b|roger|steffan|\balex\b|\bfred\b|aaron|daniel|arthur|oliver|\bryan\b|thomas|\btom\b|james|george|rishi|evan|joey|justin|matthew|davis|\btony\b|jason|reed|rocko|grandpa|eddy|ralph|albert|junior|william|liam|noah|ethan|lee\b|gordon|bruce|steve|richard|paul\b/i;
+const FEMALE_NAMES = "female woman samantha victoria karen moira tessa fiona allison ava susan zira jenny aria michelle emma nancy joanna kendra kimberly salli ivy serena kate libby sonia hazel nicky catherine martha amy olivia ashley cora elizabeth jane monica ana sara heather linda julie zoe kathy princess vicki shelley sandy flo grandma natasha clara maisie mia jessa jenna nova shimmer veena isha neerja molly emily leah luna elsa hayley abbie bella ada sonia aoife hollie".split(" ");
+const MALE_NAMES = "male man david mark guy andrew brian christopher eric roger steffan alex fred aaron daniel arthur oliver ryan thomas tom james george rishi evan joey justin matthew davis tony jason reed rocko grandpa eddy ralph albert junior william liam noah ethan lee gordon bruce steve richard paul ken prabhat connor duncan mitchell luke sean prakash ravi kai jacob ollie elliot noel alfie nathan".split(" ");
+function nameWords(n){
+  return n.toLowerCase().replace(/multilingual|expressive|natural|neural|online|desktop|enhanced|premium|compact/g," ")
+    .replace(/[^a-z]+/g," ").split(" ").filter(Boolean);
+}
 function voiceGender(v){
-  const n = v.name;
-  if(/female/i.test(n)) return "f";
-  if(FEMALE_RE.test(n)) return "f";
-  if(MALE_RE.test(n)) return "m";
+  const n=v.name.toLowerCase();
+  if(/\bfemale\b/.test(n)) return "f";
+  if(/\bmale\b/.test(n)) return "m";
+  if(/^google us english$/.test(n.trim())) return "f";
+  const w=nameWords(v.name).filter(x=>!["microsoft","google","apple","english","united","states","kingdom","us","uk","en"].includes(x));
+  for(const x of w){ if(FEMALE_NAMES.includes(x)) return "f"; if(MALE_NAMES.includes(x)) return "m"; }
   return "?";
 }
 function accentOf(v){
@@ -309,7 +324,8 @@ function rank(v,g){
   let s=0; const vg=voiceGender(v);
   if(vg===g) s+=100; else if(vg==="?") s+=40;
   if(accentOf(v)==="American") s+=50; else if(accentOf(v)==="British") s+=20;
-  if(/natural|neural|online|enhanced|premium|google/i.test(v.name)) s+=8;
+  if(/natural|neural|online|enhanced|premium/i.test(v.name)) s+=8;
+  if(/multilingual/i.test(v.name)) s-=3;
   if(v.localService) s+=2;
   return s;
 }
@@ -317,7 +333,7 @@ function pickVoices(){
   VOICES = englishVoices();
   for(const g of ["f","m"]){
     const saved = store.get("voice-"+g,null);
-    let v = VOICES.find(x=>x.name===saved);
+    let v = VOICES.find(x=>x.name===saved && voiceGender(x)!==(g==="f"?"m":"f"));
     if(!v){ v = VOICES.slice().sort((a,b)=>rank(b,g)-rank(a,g))[0] || null; }
     chosen[g]=v;
   }
@@ -327,17 +343,28 @@ function pickVoices(){
 function computePitch(){
   for(const g of ["f","m"]){
     const v=chosen[g]; pitchFix[g]=1;
-    if(v && voiceGender(v)!==g){ pitchFix[g] = g==="m"?0.7:1.3; }
+    if(v && voiceGender(v)!==g && voiceGender(v)!=="?"){ pitchFix[g] = g==="m"?0.7:1.3; }
   }
 }
-function label(v){ const g=voiceGender(v); return v.name+" — "+accentOf(v)+(g==="f"?" · female":g==="m"?" · male":""); }
+function label(v){ return v.name.replace(/\s*-\s*English.*$/i,"").replace(/^(Microsoft|Google)\s+/,"")+" — "+accentOf(v); }
 function fillSelects(){
   for(const g of ["f","m"]){
     const sel=$("#v-"+g); sel.innerHTML="";
-    const list=VOICES.slice().sort((a,b)=>rank(b,g)-rank(a,g));
-    if(!list.length){sel.innerHTML="<option>No English voices found</option>";sel.disabled=true;continue;}
+    const sorted=VOICES.slice().sort((a,b)=>rank(b,g)-rank(a,g));
+    const same=sorted.filter(v=>voiceGender(v)===g), unk=sorted.filter(v=>voiceGender(v)==="?");
+    if(!same.length && !unk.length){
+      sel.innerHTML=`<option>No ${g==="f"?"female":"male"} English voice on this device</option>`; sel.disabled=true; continue;
+    }
     sel.disabled=false;
-    for(const v of list){const o=document.createElement("option");o.value=v.name;o.textContent=label(v);if(chosen[g]&&v.name===chosen[g].name)o.selected=true;sel.appendChild(o);}
+    const groups=[[g==="f"?"Female voices · American":"Male voices · American",same.filter(v=>accentOf(v)==="American")],
+                  [g==="f"?"Female voices · other accents":"Male voices · other accents",same.filter(v=>accentOf(v)!=="American")],
+                  ["Other voices (gender not known)",unk]];
+    for(const [name,list] of groups){
+      if(!list.length) continue;
+      const og=document.createElement("optgroup"); og.label=name;
+      for(const v of list){const o=document.createElement("option");o.value=v.name;o.textContent=label(v);if(chosen[g]&&v.name===chosen[g].name)o.selected=true;og.appendChild(o);}
+      sel.appendChild(og);
+    }
     sel.onchange=()=>{chosen[g]=VOICES.find(x=>x.name===sel.value)||null;store.set("voice-"+g,sel.value);computePitch();updateVoiceStatus();refreshVoiceNotes();};
   }
 }
@@ -348,16 +375,20 @@ function voiceNote(g){
   if(voiceGender(v)!==g && voiceGender(v)!=="?") parts.push(g==="m"?"no male voice: lower pitch":"no female voice: higher pitch");
   return parts.join(" · ");
 }
+function hasUS(g){return VOICES.some(v=>voiceGender(v)===g&&accentOf(v)==="American");}
 function updateVoiceStatus(){
-  const st=$("#voice-status"), sum=$("#voice-sum");
-  if(!synth){st.textContent="This browser cannot read text aloud. Try Chrome, Edge or Safari.";sum.textContent="Audio is not available in this browser.";return;}
-  if(!VOICES.length){st.textContent="No English voices found yet. If this message stays, install an English (United States) voice on your device.";sum.textContent="Looking for English voices…";return;}
+  const st=$("#voice-status"), sum=$("#voice-sum"), help=$("#voice-help");
+  if(!synth){st.textContent="This browser cannot read text aloud. Try Chrome, Edge or Safari.";sum.textContent="Audio is not available in this browser.";help.hidden=false;return;}
+  if(!VOICES.length){st.textContent="No English voices found yet. If this message stays, add an English (United States) voice to your device.";sum.textContent="Looking for English voices…";help.hidden=false;return;}
   const lines=[];
-  for(const g of ["f","m"]){const v=chosen[g];const n=voiceNote(g);
-    lines.push((g==="f"?"Women: ":"Men: ")+v.name+" ("+accentOf(v)+")"+(n&&!n.endsWith("voice")?" – "+n:""));}
-  st.textContent=lines.join(" · ");
+  for(const g of ["f","m"]){const v=chosen[g];
+    lines.push((g==="f"?"Women: ":"Men: ")+label(v)+(voiceGender(v)!==g&&voiceGender(v)!=="?"?" (pitch changed)":""));}
+  st.textContent="Now using — "+lines.join(" · ");
+  const missing=["f","m"].filter(g=>!hasUS(g));
+  help.hidden=!missing.length;
+  $("#voice-missing").textContent = missing.map(g=>g==="f"?"female":"male").join(" or ");
   const nonUS=["f","m"].filter(g=>chosen[g]&&accentOf(chosen[g])!=="American");
-  sum.textContent = nonUS.length ? "Note: the "+nonUS.map(g=>g==="f"?"female":"male").join(" and ")+" voice is "+nonUS.map(g=>accentOf(chosen[g])).join("/")+", not American." : "American English voices · speed "+rate;
+  sum.textContent = nonUS.length ? "Note: the "+nonUS.map(g=>g==="f"?"female":"male").join(" and ")+" voice is "+nonUS.map(g=>accentOf(chosen[g])).join("/")+", not American. Open for help." : "American English voices · speed "+rate;
 }
 function refreshVoiceNotes(){
   $$(".vnote[data-g]").forEach(el=>{const n=voiceNote(el.dataset.g);el.textContent=n;el.hidden=!n;});
