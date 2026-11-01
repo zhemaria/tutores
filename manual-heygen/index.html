@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<!-- Manual de HeyGen: uso y buenas prácticas · José M. Fernández · Licencia CC BY-NC-SA 4.0 (https://creativecommons.org/licenses/by-nc-sa/4.0/) -->
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual de HeyGen: uso y buenas prácticas</title>
+<meta name="author" content="José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago">
+<meta name="description" content="Manual en acordeón para crear videos con HeyGen (AI Studio): empezar de cero, guion y voz, sonido, transiciones, subtítulos, descarga y solución de problemas.">
+<meta name="license" content="CC BY-NC-SA 4.0">
+<link rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+<style>
+  :root {
+    --fondo: #ffffff;
+    --texto: #1a1a1a;
+    --suave: #4a4a4a;
+    --morado: #3f2a8c;
+    --morado-claro: #efebfb;
+    --verde: #1e6b3a;
+    --verde-claro: #e7f5ec;
+    --ambar: #5C3900;
+    --ambar-claro: #fff4dc;
+    --rojo: #8a1c1c;
+    --rojo-claro: #fdecec;
+    --borde: #c9cfe0;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--texto);
+    font-family: "Segoe UI", Verdana, Arial, sans-serif;
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+  .contenedor { max-width: 920px; margin: 0 auto; padding: 0 16px 64px; }
+  header { background: var(--morado); color: #fff; padding: 28px 16px; text-align: center; }
+  header h1 { margin: 0 0 6px; font-size: 1.9rem; }
+  header p { margin: 0; font-size: 1rem; }
+  a { color: var(--morado); }
+  a:focus, button:focus, summary:focus { outline: 3px solid #f0a500; outline-offset: 2px; }
+  .saltar { position: absolute; left: -999px; top: 8px; background: #fff; color: var(--morado); padding: 8px 12px; z-index: 10; }
+  .saltar:focus { left: 8px; }
+
+  nav.indice {
+    background: var(--morado-claro); border: 2px solid var(--morado);
+    border-radius: 10px; padding: 16px 20px; margin: 24px 0 12px;
+  }
+  nav.indice h2 { margin: 0 0 8px; font-size: 1.3rem; color: var(--morado); }
+  nav.indice ol { margin: 0; padding-left: 1.6rem; columns: 2; column-gap: 32px; }
+  nav.indice li { margin: 4px 0; break-inside: avoid; }
+  nav.indice a { font-weight: 600; text-decoration: none; }
+  nav.indice a:hover { text-decoration: underline; }
+  @media (max-width: 640px) { nav.indice ol { columns: 1; } }
+
+  .controles { display: flex; gap: 10px; flex-wrap: wrap; margin: 0 0 20px; }
+  .controles button {
+    font: inherit; font-size: 1rem; font-weight: 600; cursor: pointer;
+    background: #fff; color: var(--morado); border: 2px solid var(--morado);
+    border-radius: 8px; padding: 6px 14px;
+  }
+  .controles button:hover { background: var(--morado); color: #fff; }
+
+  details.seccion {
+    border: 2px solid var(--borde); border-radius: 12px; margin: 14px 0;
+    background: #fff; scroll-margin-top: 16px;
+  }
+  details.seccion[open] { border-color: var(--morado); }
+  details.seccion > summary {
+    list-style: none; cursor: pointer; padding: 14px 18px;
+    display: flex; align-items: center; gap: 14px;
+    font-size: 1.25rem; font-weight: 700; color: var(--morado);
+  }
+  details.seccion > summary::-webkit-details-marker { display: none; }
+  .num {
+    flex: 0 0 auto; width: 2.1rem; height: 2.1rem; border-radius: 50%;
+    background: var(--morado); color: #fff; display: grid; place-items: center;
+    font-size: 1.05rem;
+  }
+  .flecha { margin-left: auto; transition: transform .2s; }
+  details[open] > summary .flecha { transform: rotate(90deg); }
+  .cuerpo { padding: 0 22px 18px; border-top: 1px solid var(--borde); }
+  h3 { font-size: 1.15rem; margin: 22px 0 6px; color: var(--texto); }
+
+  .caja { border-radius: 10px; padding: 12px 16px; margin: 16px 0; border-left: 8px solid; }
+  .clave { background: var(--verde-claro); border-color: var(--verde); }
+  .aviso { background: var(--ambar-claro); border-color: var(--ambar); }
+  .error { background: var(--rojo-claro); border-color: var(--rojo); }
+  .caja > strong:first-child { display: block; margin-bottom: 2px; }
+
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 1rem; }
+  caption { text-align: left; font-weight: 700; padding: 4px 0 8px; }
+  th, td { border: 1px solid var(--borde); padding: 9px 11px; text-align: left; vertical-align: top; }
+  th { background: var(--morado); color: #fff; }
+  tr:nth-child(even) td { background: #f6f5fb; }
+  .tabla-scroll { overflow-x: auto; }
+  ol li, ul li { margin: 6px 0; }
+  .boton {
+    display: inline-block; background: #ececf3; border: 1px solid #9a9ab0;
+    border-radius: 5px; padding: 0 7px; font-size: .95em; font-weight: 600; white-space: nowrap;
+  }
+  .lista-control { list-style: none; padding-left: 0; }
+  .lista-control li::before { content: "☐  "; font-weight: 700; color: var(--morado); }
+  .subir { display: inline-block; margin-top: 10px; font-size: 1rem; font-weight: 600; text-decoration: none; }
+  footer { margin-top: 48px; font-size: .95rem; color: var(--suave); border-top: 1px solid var(--borde); padding-top: 16px; }
+  @media print {
+    details.seccion { break-inside: avoid; }
+    .controles, .subir, .saltar { display: none; }
+  }
+</style>
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header>
+  <h1>Manual de HeyGen: uso y buenas prácticas</h1>
+  <p>Crear videos con avatar en AI Studio · Revisado en noviembre de 2026</p>
+</header>
+
+<div class="contenedor">
+<main id="contenido">
+
+<div class="caja aviso" style="margin-top:24px">
+  <strong>Antes de empezar</strong>
+  HeyGen cambia su interfaz con frecuencia. En este manual, los nombres de los botones aparecen <strong>en inglés</strong>, tal como se ven en pantalla (por ejemplo <span class="boton">Create Video</span>). Si algún botón cambió de lugar, busque la misma palabra o el menú de <strong>tres puntos (⋯)</strong>, que es donde HeyGen suele esconder las opciones.
+</div>
+
+<nav class="indice" aria-labelledby="titulo-indice">
+  <h2 id="titulo-indice">Índice</h2>
+  <ol>
+    <li><a href="#vistazo">De un vistazo</a></li>
+    <li><a href="#estudio">Conocer el estudio (AI Studio)</a></li>
+    <li><a href="#cero">Empezar un video de cero</a></li>
+    <li><a href="#avatar">Avatar y voz clonada</a></li>
+    <li><a href="#guion">El guion: pausas y pronunciación</a></li>
+    <li><a href="#escenas">Trabajar con escenas</a></li>
+    <li><a href="#sonido">Incorporar sonido y música</a></li>
+    <li><a href="#transiciones">Transiciones y animaciones</a></li>
+    <li><a href="#medios">Imágenes, videos y fondos</a></li>
+    <li><a href="#subtitulos">Subtítulos (accesibilidad)</a></li>
+    <li><a href="#generar">Generar y descargar el video</a></li>
+    <li><a href="#practicas">Buenas prácticas para videos educativos</a></li>
+    <li><a href="#problemas">Solución de problemas</a></li>
+    <li><a href="#verificacion">Lista de verificación final</a></li>
+    <li><a href="#recursos">Recursos oficiales</a></li>
+  </ol>
+</nav>
+
+<div class="controles">
+  <button type="button" id="abrir-todo">Abrir todo</button>
+  <button type="button" id="cerrar-todo">Cerrar todo</button>
+</div>
+
+<!-- 1 -->
+<details class="seccion" id="vistazo" open>
+  <summary><span class="num" aria-hidden="true">1</span> De un vistazo <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <p>HeyGen convierte un texto en un video narrado por un avatar. El trabajo se hace en <strong>AI Studio</strong>, un editor que funciona en el navegador. El recorrido completo tiene siempre los mismos pasos:</p>
+    <ol>
+      <li><strong>Crear el proyecto</strong> y elegir la orientación (horizontal para clases y conferencias).</li>
+      <li><strong>Elegir el avatar y la voz</strong>.</li>
+      <li><strong>Escribir el guion</strong>, dividido en escenas.</li>
+      <li><strong>Vestir las escenas</strong>: fondo, imágenes, textos.</li>
+      <li><strong>Añadir música</strong> y <strong>transiciones</strong>.</li>
+      <li><strong>Previsualizar</strong>, revisar y <strong>generar</strong> el video.</li>
+      <li><strong>Descargar</strong> el MP4 y, si se desea, el archivo de subtítulos.</li>
+    </ol>
+    <div class="caja clave">
+      <strong>La regla de oro</strong>
+      Generar el video consume minutos o créditos de su plan. Revise todo con la previsualización <em>antes</em> de pulsar <span class="boton">Submit</span>; corregir después cuesta otra generación.
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 2 -->
+<details class="seccion" id="estudio">
+  <summary><span class="num" aria-hidden="true">2</span> Conocer el estudio (AI Studio) <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <p>AI Studio tiene cuatro zonas. Conviene identificarlas antes de empezar, porque casi todos los problemas se resuelven sabiendo en qué zona buscar.</p>
+    <div class="tabla-scroll">
+    <table>
+      <caption>Las cuatro zonas de AI Studio</caption>
+      <thead><tr><th scope="col">Zona</th><th scope="col">Dónde está</th><th scope="col">Para qué sirve</th></tr></thead>
+      <tbody>
+        <tr><td>Panel del guion</td><td>Izquierda</td><td>Escribir lo que dice el avatar en cada escena, añadir pausas, corregir pronunciación y escuchar cada escena con el botón ▶.</td></tr>
+        <tr><td>Lienzo</td><td>Centro</td><td>Ver y acomodar lo que aparece en pantalla: avatar, textos, imágenes, fondo.</td></tr>
+        <tr><td>Panel de herramientas</td><td>Derecha</td><td>Pestañas como <span class="boton">Avatars</span>, <span class="boton">Media</span>, <span class="boton">Music</span>, <span class="boton">Elements</span> y <span class="boton">Text</span>, de donde se arrastran los recursos al lienzo.</td></tr>
+        <tr><td>Línea de tiempo</td><td>Abajo</td><td>Ver las escenas en orden, la pista de música y los puntos entre escenas donde se colocan las transiciones.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="caja clave">
+      <strong>Truco: la barra diagonal</strong>
+      En el panel del guion, escribir <strong>/</strong> abre un menú con opciones: añadir una pausa, subir un guion ya escrito, subir o grabar audio, o generar un guion con IA.
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 3 -->
+<details class="seccion" id="cero">
+  <summary><span class="num" aria-hidden="true">3</span> Empezar un video de cero <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <ol>
+      <li>Entre en <a href="https://www.heygen.com" target="_blank" rel="noopener noreferrer">heygen.com</a> con su cuenta. Llegará al tablero (<em>dashboard</em>), donde están sus proyectos anteriores.</li>
+      <li>Pulse <span class="boton">Create Video</span> (a veces aparece como <span class="boton">Create</span> → <span class="boton">Create in AI Studio</span>).</li>
+      <li>Elija <span class="boton">Start from Scratch</span> (empezar de cero). Si aparece la opción de lienzo en blanco, se llama <span class="boton">Blank</span>.</li>
+      <li>Elija la orientación: <strong>horizontal (16:9)</strong> para clases, conferencias y YouTube; vertical (9:16) solo para redes sociales en el teléfono. Se puede cambiar después, pero el diseño se descuadra, así que conviene decidirlo al principio.</li>
+      <li>Ya dentro de AI Studio, <strong>póngale nombre al proyecto</strong> arriba del panel del guion. Un nombre claro ahorra tiempo al buscarlo después (por ejemplo: <em>Lumi – Presentación – v1</em>).</li>
+    </ol>
+    <h3>Otras maneras de empezar</h3>
+    <ul>
+      <li><strong>Plantilla (<em>template</em>)</strong>: trae escenas ya diseñadas; útil si quiere un aspecto profesional rápido. Sustituya textos, avatar y música.</li>
+      <li><strong>Subir PowerPoint o PDF</strong>: convierte cada diapositiva en una escena. Muy práctico para pasar una presentación de clase a video.</li>
+      <li><strong>Video Agent</strong>: usted describe el video y HeyGen arma un borrador completo (guion, escenas, música). Luego se abre con <span class="boton">Edit in Studio</span> para pulirlo.</li>
+    </ul>
+    <div class="caja aviso">
+      <strong>Para «volver a empezar» un proyecto que se complicó</strong>
+      No borre el que tiene: haga una <strong>copia</strong> desde el menú ⋯ del proyecto en el tablero (<span class="boton">Duplicate</span>) y trabaje en la copia. Si el problema es una sola escena, bórrela y cree una nueva en blanco; es más rápido que desarmarla.
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 4 -->
+<details class="seccion" id="avatar">
+  <summary><span class="num" aria-hidden="true">4</span> Avatar y voz clonada <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <ol>
+      <li>Abra la pestaña <span class="boton">Avatars</span> y elija su avatar personal (en la sección de avatares propios) o uno de catálogo.</li>
+      <li>Haga clic sobre el avatar en el lienzo y, en las opciones de voz, elija <strong>su voz clonada</strong>. Compruebe que el idioma de la voz coincide con el del guion.</li>
+      <li>Ajuste el tamaño arrastrando las esquinas. Puede elegir avatar a pantalla completa, en círculo o en primer plano.</li>
+      <li>Si el avatar trae fondo propio, use el quitafondos (<span class="boton">Background Remover</span>) para ponerlo sobre su propio fondo.</li>
+    </ol>
+    <div class="caja clave">
+      <strong>Buena práctica</strong>
+      Use <strong>el mismo avatar, la misma voz y la misma posición</strong> en todas las escenas de un video. Si cambian de una escena a otra, el espectador lo nota y la transición <em>Magic Match</em> (sección 8) deja de funcionar.
+    </div>
+    <div class="caja aviso">
+      <strong>La previsualización no mueve los labios</strong>
+      Animar el avatar exige mucha capacidad de cómputo, así que en el editor se oye la voz pero el avatar no se ve hablando. Es normal: el movimiento aparece solo en el video generado.
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 5 -->
+<details class="seccion" id="guion">
+  <summary><span class="num" aria-hidden="true">5</span> El guion: pausas y pronunciación <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <h3>Escribir para la voz</h3>
+    <ul>
+      <li><strong>Oraciones cortas y claras.</strong> La voz sintética tropieza con las oraciones largas llenas de subordinadas.</li>
+      <li><strong>Lea el guion en voz alta</strong> antes de pegarlo. Si suena raro dicho por usted, sonará raro dicho por el avatar.</li>
+      <li><strong>Un solo idioma por guion.</strong> Mezclar palabras de otro idioma produce resultados impredecibles. Si en un guion en inglés debe aparecer un nombre en español (por ejemplo <em>GEDparaHispanos</em> o <em>Truman</em>), corríjalo con la herramienta de pronunciación.</li>
+      <li><strong>Números y siglas</strong>: escríbalos como deben decirse cuando haya duda («twenty twenty-six», «G-E-D»).</li>
+    </ul>
+    <h3>La puntuación marca el ritmo</h3>
+    <ul>
+      <li><strong>Coma</strong>: pausa corta.</li>
+      <li><strong>Punto</strong>: pausa más larga, con entonación que baja.</li>
+      <li><strong>Guion (-)</strong>: separa sílabas para que una palabra se pronuncie con claridad.</li>
+    </ul>
+    <h3>Añadir una pausa</h3>
+    <ol>
+      <li>Coloque el cursor donde quiere la pausa.</li>
+      <li>Pulse el botón <span class="boton">Pause</span> debajo del guion, o escriba <strong>/</strong> y elija <span class="boton">Add Pause</span>.</li>
+      <li>Cada pausa vale medio segundo; con <strong>+</strong> y <strong>−</strong> se alarga o acorta de medio en medio segundo.</li>
+    </ol>
+    <div class="caja clave">
+      <strong>Regla práctica</strong>
+      Ponga una pausa de 1 a 2 segundos después de cada idea clave, para que el estudiante la asimile. No abuse: demasiadas pausas hacen el video lento y artificial.
+    </div>
+    <h3>Corregir una palabra mal pronunciada</h3>
+    <ol>
+      <li>Escuche la escena con ▶.</li>
+      <li>Haga <strong>doble clic</strong> en la palabra mal dicha y elija <span class="boton">Pronunciation</span>.</li>
+      <li>Escriba cómo debe sonar (puede separar sílabas con guiones) y vuelva a escuchar.</li>
+    </ol>
+    <p>HeyGen guarda esas correcciones en su glosario (<em>Brand Glossary</em>), así que no tendrá que repetirlas en videos futuros.</p>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 6 -->
+<details class="seccion" id="escenas">
+  <summary><span class="num" aria-hidden="true">6</span> Trabajar con escenas <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <p>Una escena es como una diapositiva: tiene su propio guion, su fondo y sus elementos. Pensar el video por escenas facilita todo lo demás (transiciones, música, correcciones).</p>
+    <ul>
+      <li><strong>Añadir</strong>: <span class="boton">Add Scene</span> → <span class="boton">Blank</span> (en blanco) o <span class="boton">From Template</span>.</li>
+      <li><strong>Duplicar</strong>: desde el menú ⋯ de la escena. Es la mejor manera de mantener el mismo diseño: duplique una escena bien hecha y cambie solo el texto.</li>
+      <li><strong>Reordenar</strong>: arrastre la escena en la línea de tiempo.</li>
+      <li><strong>Escena de silencio</strong>: una escena que solo contiene una pausa deja al avatar quieto y callado. Sirve como respiro entre bloques.</li>
+    </ul>
+    <div class="caja clave">
+      <strong>Buena práctica</strong>
+      Una idea por escena, entre 20 y 45 segundos de habla. Si una escena pasa del minuto, probablemente contiene dos ideas: divídala.
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 7 -->
+<details class="seccion" id="sonido">
+  <summary><span class="num" aria-hidden="true">7</span> Incorporar sonido y música <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <p>En HeyGen hay tres tipos de sonido, y cada uno se pone en un lugar distinto:</p>
+    <div class="tabla-scroll">
+    <table>
+      <caption>Tipos de sonido y dónde se colocan</caption>
+      <thead><tr><th scope="col">Tipo</th><th scope="col">Dónde se pone</th></tr></thead>
+      <tbody>
+        <tr><td>Voz del avatar (a partir del guion)</td><td>Panel del guion de cada escena.</td></tr>
+        <tr><td>Narración propia grabada o subida (el avatar mueve los labios con su audio)</td><td>Panel del guion: escriba <strong>/</strong> y elija subir o grabar audio.</td></tr>
+        <tr><td>Música de fondo o archivo de audio</td><td>Pestaña <span class="boton">Music</span> del panel derecho.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <h3>Añadir música de fondo</h3>
+    <ol>
+      <li>Abra la pestaña <span class="boton">Music</span> en el panel derecho.</li>
+      <li>Para usar música de HeyGen, elija una pista del catálogo (todas están autorizadas para su uso).</li>
+      <li>Para usar <strong>su propio archivo</strong>, entre en <span class="boton">My Music</span> y pulse <span class="boton">Upload</span> (o arrastre el archivo). Use formato <strong>.mp3</strong> o <strong>.wav</strong>.</li>
+      <li>La pista aparece en la línea de tiempo, debajo de las escenas.</li>
+      <li>Con el menú ⋯ de la pista puede <strong>recortarla</strong>, <strong>reemplazarla</strong> o borrarla.</li>
+      <li>Ajuste el <strong>volumen</strong> y active la <strong>entrada y salida gradual</strong> (<em>fade in / fade out</em>) para que no empiece ni termine de golpe.</li>
+    </ol>
+    <div class="caja aviso">
+      <strong>La música no se ajusta sola a la duración</strong>
+      Si la pista es más corta que el video, se acaba antes; si es más larga, hay que recortarla. Compruebe siempre el final del video.
+    </div>
+    <div class="caja clave">
+      <strong>Volumen recomendado</strong>
+      La música debe acompañar, no competir. Déjela bastante por debajo de la voz (en torno al 10–20 % del volumen). Si al escuchar tiene que esforzarse para entender al avatar, bájela más. Para estudiantes con dificultades de audición o de idioma, menos música es mejor.
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 8 -->
+<details class="seccion" id="transiciones">
+  <summary><span class="num" aria-hidden="true">8</span> Transiciones y animaciones <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <h3>Transición entre dos escenas</h3>
+    <ol>
+      <li>En la <strong>línea de tiempo de abajo</strong>, pase el ratón por el espacio <strong>entre dos escenas</strong>.</li>
+      <li>Haga clic en los <strong>tres puntos (⋯)</strong> que aparecen.</li>
+      <li>Elija <span class="boton">Add Scene Transition</span>.</li>
+      <li>Escoja un estilo: <strong>Fade</strong> (fundido), <strong>Slide</strong> (deslizamiento) o <strong>Zoom</strong>. Al pasar el ratón por cada uno verá una vista previa.</li>
+      <li>Ajuste la <strong>duración</strong> y decida si se aplica solo a esa transición o a <strong>todas las escenas</strong>.</li>
+    </ol>
+    <div class="caja aviso">
+      <strong>¿No aparecen los tres puntos?</strong>
+      Hace falta tener al menos <strong>dos escenas</strong>. Una transición va siempre <em>entre</em> escenas, nunca dentro de una.
+    </div>
+    <h3>Magic Match: transición «invisible»</h3>
+    <p>Hace que un elemento que está en dos escenas seguidas se desplace suavemente de una a otra, en vez de desaparecer y reaparecer.</p>
+    <ol>
+      <li>Copie el elemento (texto, imagen o el avatar) de la escena 1 y péguelo en la escena 2, de modo que esté visible al final de la primera y al principio de la segunda.</li>
+      <li>Haga clic en los tres puntos entre ambas escenas → <span class="boton">Add Scene Transition</span> → <span class="boton">Magic Match</span>.</li>
+    </ol>
+    <h3>Animar un elemento dentro de una escena</h3>
+    <ol>
+      <li>Haga clic en el elemento (texto, imagen, icono o avatar).</li>
+      <li>En el panel del guion aparecen unos <strong>marcadores</strong>: indican en qué palabra entra y en cuál sale el elemento. Arrástrelos para sincronizarlo con lo que dice el avatar.</li>
+      <li>Abra el menú <span class="boton">Animation</span> y elija Fade, Slide, Zoom o Pop. Con el control <strong>Duration</strong> regula la velocidad.</li>
+      <li>Pulse <span class="boton">Preview</span> para verlo en contexto.</li>
+    </ol>
+    <p>Para títulos animados, tarjetas con el nombre del ponente o citas, use <span class="boton">Elements</span> → <span class="boton">Motion</span> y arrastre el diseño al lienzo.</p>
+    <div class="caja clave">
+      <strong>Buena práctica</strong>
+      Elija <strong>un solo estilo</strong> de transición para todo el video (el fundido suave es el más seguro en material educativo) y aplíquelo a todas las escenas. Los efectos variados distraen y pueden molestar a personas sensibles al movimiento.
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 9 -->
+<details class="seccion" id="medios">
+  <summary><span class="num" aria-hidden="true">9</span> Imágenes, videos y fondos <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <ol>
+      <li>Abra la pestaña <span class="boton">Media</span>. Ahí están el catálogo de HeyGen y sus propios archivos.</li>
+      <li>Para subir los suyos, entre en <span class="boton">Uploads</span> y pulse <span class="boton">Upload</span> o arrastre los archivos (puede subir varios a la vez).</li>
+      <li>Arrastre la imagen o el video al lienzo, o úselo como <strong>fondo</strong> de la escena.</li>
+      <li>Para recortar el principio o el final de un video, use el icono de <strong>tijeras</strong> en la línea de tiempo.</li>
+    </ol>
+    <div class="caja aviso">
+      <strong>Videos de fondo que se cortan</strong>
+      La escena debe durar <strong>al menos lo mismo</strong> que el video que contiene. Si el clip dura 49 segundos y la escena 30, el clip se corta. Alargue el guion o añada una pausa al final de la escena.
+    </div>
+    <div class="caja clave">
+      <strong>Accesibilidad visual</strong>
+      Textos grandes, pocos por pantalla y con buen contraste (letra oscura sobre fondo claro o al revés). No ponga texto importante detrás del avatar ni en el borde inferior, donde irán los subtítulos.
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 10 -->
+<details class="seccion" id="subtitulos">
+  <summary><span class="num" aria-hidden="true">10</span> Subtítulos (accesibilidad) <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <p>Los subtítulos ayudan a quien no oye bien, a quien está aprendiendo el idioma, a quien ve el video sin sonido y a quien quiere repasar. En material educativo deben ir <strong>siempre</strong>.</p>
+    <p>HeyGen ofrece dos modalidades:</p>
+    <ul>
+      <li><strong>Subtítulos incrustados</strong> (<em>burned-in</em>): quedan grabados en la imagen del MP4. Se ven en cualquier sitio, pero no se pueden quitar ni corregir después.</li>
+      <li><strong>Archivo de subtítulos</strong> (<strong>.srt</strong> o <strong>.vtt</strong>): se descarga aparte y se sube junto al video a YouTube, Brightspace u otra plataforma; el espectador los activa o desactiva y usted los puede corregir.</li>
+    </ul>
+    <p>Active los subtítulos (<span class="boton">Captions</span> o <span class="boton">Subtitles</span>) en las opciones del editor o al generar el video; ahí también se elige estilo, tamaño y color.</p>
+    <div class="caja clave">
+      <strong>Recomendación</strong>
+      Para YouTube y plataformas de cursos, descargue el <strong>.srt</strong>: es más flexible y la plataforma lo lee como subtítulo accesible. Use subtítulos incrustados solo cuando el video vaya a un sitio que no acepte archivos de subtítulos.
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 11 -->
+<details class="seccion" id="generar">
+  <summary><span class="num" aria-hidden="true">11</span> Generar y descargar el video <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <ol>
+      <li>Escuche todas las escenas con ▶ y revise la <a href="#verificacion">lista de verificación final</a>.</li>
+      <li>Pulse <span class="boton">Submit</span> (o <span class="boton">Generate</span>), arriba a la derecha.</li>
+      <li>Elija la resolución (por lo general <strong>1080p</strong>) y confirme el nombre.</li>
+      <li>Espere: el video se procesa en los servidores de HeyGen y puede tardar varios minutos. Puede cerrar la página; el video seguirá generándose.</li>
+      <li>Cuando esté listo, búsquelo en <span class="boton">Projects</span> (o en <em>My Videos</em>), ábralo y pulse <span class="boton">Download</span> para obtener el <strong>MP4</strong>.</li>
+    </ol>
+    <div class="caja aviso">
+      <strong>Guarde siempre el proyecto editable</strong>
+      El MP4 es el resultado final; el proyecto en AI Studio es lo que le permite corregir. No borre el proyecto aunque ya tenga el video descargado.
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 12 -->
+<details class="seccion" id="practicas">
+  <summary><span class="num" aria-hidden="true">12</span> Buenas prácticas para videos educativos <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <h3>Planificación</h3>
+    <ul>
+      <li><strong>Escriba el guion completo fuera de HeyGen</strong> (en un documento), revíselo y después péguelo escena por escena. Editar dentro del estudio es más lento.</li>
+      <li><strong>Videos cortos</strong>: de 3 a 6 minutos para una explicación; si el tema es largo, mejor una serie de videos breves que uno extenso.</li>
+      <li><strong>Empiece con el propósito</strong>: en la primera escena, diga qué va a aprender o ver el espectador.</li>
+      <li><strong>Termine con un resumen</strong> de dos o tres ideas.</li>
+    </ul>
+    <h3>Diseño universal para el aprendizaje (DUA)</h3>
+    <ul>
+      <li>Ofrezca la información por <strong>varias vías</strong>: lo que dice el avatar, un texto clave en pantalla y una imagen que lo ilustre.</li>
+      <li><strong>Subtítulos siempre</strong> y, si es posible, la transcripción disponible aparte.</li>
+      <li><strong>Ritmo pausado</strong>, con pausas tras cada idea clave.</li>
+      <li><strong>Contraste alto</strong> y letra grande en los textos.</li>
+      <li><strong>Música baja o ninguna</strong> durante las explicaciones densas.</li>
+      <li><strong>Movimiento moderado</strong>: un solo estilo de transición, sin destellos.</li>
+    </ul>
+    <h3>Ahorrar trabajo</h3>
+    <ul>
+      <li>Cuando un video le quede bien, <strong>duplíquelo</strong> y úselo como plantilla para el siguiente: mismo avatar, fondo, música y transiciones.</li>
+      <li>Corrija la pronunciación de los nombres que usa a menudo una sola vez: quedan en el glosario.</li>
+      <li>Nombre los proyectos con un patrón fijo: <em>Tema – Parte – versión</em>.</li>
+    </ul>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 13 -->
+<details class="seccion" id="problemas">
+  <summary><span class="num" aria-hidden="true">13</span> Solución de problemas <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <div class="tabla-scroll">
+    <table>
+      <caption>Problemas frecuentes y cómo resolverlos</caption>
+      <thead><tr><th scope="col">Problema</th><th scope="col">Qué hacer</th></tr></thead>
+      <tbody>
+        <tr><td>No encuentro dónde poner música.</td><td>Pestaña <span class="boton">Music</span> del panel derecho (no <em>Media</em>). Su propio archivo va en <span class="boton">My Music</span> → <span class="boton">Upload</span>.</td></tr>
+        <tr><td>Subí la música pero no se oye.</td><td>Compruebe que la pista está en la línea de tiempo, que el volumen no está en cero y que el archivo es .mp3 o .wav. Si es otro formato, conviértalo.</td></tr>
+        <tr><td>La música se acaba antes que el video.</td><td>No se repite sola: suba una pista más larga o añada otra a continuación, y active el desvanecimiento final.</td></tr>
+        <tr><td>La música tapa la voz.</td><td>Baje el volumen de la pista hasta que la voz se entienda sin esfuerzo.</td></tr>
+        <tr><td>No puedo poner una transición.</td><td>Necesita dos escenas. Pase el ratón <em>entre</em> ellas en la línea de tiempo de abajo y use los tres puntos.</td></tr>
+        <tr><td>Magic Match no aparece o no hace nada.</td><td>El mismo elemento debe estar en las dos escenas (cópielo y péguelo). En el caso del avatar, con la misma voz y estilo.</td></tr>
+        <tr><td>El avatar no mueve los labios en la previsualización.</td><td>Es normal; solo se anima en el video generado.</td></tr>
+        <tr><td>Una palabra suena mal.</td><td>Doble clic en la palabra → <span class="boton">Pronunciation</span>. Escriba cómo suena, separando sílabas con guiones.</td></tr>
+        <tr><td>La voz se traba con nombres en otro idioma.</td><td>No mezcle idiomas; corrija esos nombres con <span class="boton">Pronunciation</span>.</td></tr>
+        <tr><td>El video de fondo se corta.</td><td>La escena dura menos que el clip. Alargue la escena o recorte el clip con las tijeras.</td></tr>
+        <tr><td>Se desordenó todo el proyecto.</td><td>Duplique el proyecto y trabaje sobre la copia, o borre solo la escena problemática y créela de nuevo en blanco.</td></tr>
+        <tr><td>Un botón de este manual no está donde dice.</td><td>HeyGen cambia a menudo. Busque la misma palabra en inglés o revise el menú ⋯; si no aparece, consulte la <a href="#recursos">academia oficial</a>.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 14 -->
+<details class="seccion" id="verificacion">
+  <summary><span class="num" aria-hidden="true">14</span> Lista de verificación final <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <p>Antes de pulsar <span class="boton">Submit</span>, compruebe:</p>
+    <ul class="lista-control">
+      <li>El proyecto tiene un nombre claro.</li>
+      <li>Mismo avatar, misma voz y misma posición en todas las escenas.</li>
+      <li>Escuché todas las escenas con ▶ y corregí la pronunciación.</li>
+      <li>Hay pausas tras las ideas clave, sin exceso.</li>
+      <li>Los textos en pantalla son grandes, legibles y con buen contraste.</li>
+      <li>Ningún video de fondo se corta antes de tiempo.</li>
+      <li>La música está baja, cubre todo el video y termina con desvanecimiento.</li>
+      <li>Las transiciones usan un solo estilo.</li>
+      <li>Los subtítulos están activados (o planeo descargar el .srt).</li>
+      <li>La resolución es la adecuada (1080p para clases y conferencias).</li>
+    </ul>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+<!-- 15 -->
+<details class="seccion" id="recursos">
+  <summary><span class="num" aria-hidden="true">15</span> Recursos oficiales <span class="flecha" aria-hidden="true">▶</span></summary>
+  <div class="cuerpo">
+    <p>Páginas oficiales de HeyGen (en inglés) para consultar cuando la interfaz cambie:</p>
+    <ul>
+      <li><a href="https://www.heygen.com/academy/ai-studio/how-to-create-a-new-project" target="_blank" rel="noopener noreferrer">HeyGen Academy: crear el primer proyecto</a></li>
+      <li><a href="https://www.heygen.com/academy/scripting" target="_blank" rel="noopener noreferrer">HeyGen Academy: escribir y editar el guion</a></li>
+      <li><a href="https://www.heygen.com/academy/ai-studio/how-to-add-transitions" target="_blank" rel="noopener noreferrer">HeyGen Academy: animaciones y transiciones</a></li>
+      <li><a href="https://help.heygen.com/en/articles/7951425-add-media-in-ai-studio" target="_blank" rel="noopener noreferrer">Centro de ayuda: añadir medios y audio en AI Studio</a></li>
+      <li><a href="https://help.heygen.com/en/articles/9574152-script-tips" target="_blank" rel="noopener noreferrer">Centro de ayuda: consejos para el guion</a></li>
+    </ul>
+    <a class="subir" href="#titulo-indice">↑ Volver al índice</a>
+  </div>
+</details>
+
+</main>
+
+<footer>
+  <p>Preparado por José M. Fernández, ABE/ASE Math Master Teacher, Harry S. Truman College — City Colleges of Chicago · 1 de noviembre de 2026</p>
+  <p>Este manual se distribuye bajo la licencia <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer license">CC BY-NC-SA 4.0</a>. HeyGen es una marca de su respectivo propietario; este material es independiente.</p>
+</footer>
+</div>
+
+<script>
+(function () {
+  var secciones = Array.prototype.slice.call(document.querySelectorAll("details.seccion"));
+  document.getElementById("abrir-todo").addEventListener("click", function () {
+    secciones.forEach(function (d) { d.open = true; });
+  });
+  document.getElementById("cerrar-todo").addEventListener("click", function () {
+    secciones.forEach(function (d) { d.open = false; });
+  });
+  function abrirDestino() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    if (!id) return;
+    var destino = document.getElementById(id);
+    if (destino && destino.tagName === "DETAILS") {
+      destino.open = true;
+      destino.scrollIntoView();
+      var s = destino.querySelector("summary");
+      if (s) s.focus({ preventScroll: true });
+    }
+  }
+  window.addEventListener("hashchange", abrirDestino);
+  abrirDestino();
+})();
+</script>
+</body>
+</html>
